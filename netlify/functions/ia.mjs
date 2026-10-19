@@ -12,7 +12,7 @@ const json = (o, status = 200) => new Response(JSON.stringify(o), { status, head
 
 async function callGemini(prompt, wantJson, signal) {
   const key = process.env.GEMINI_API_KEY; if (!key) throw new Error("sem chave");
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-flash-latest";
   const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
     method: "POST", signal, headers: { "content-type": "application/json" },
     body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: wantJson ? { responseMimeType: "application/json" } : {} }) });
