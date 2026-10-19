@@ -12,13 +12,24 @@ const json = (o, status = 200) => new Response(JSON.stringify(o), { status, head
 
 async function callGemini(prompt, wantJson, signal) {
   const key = process.env.GEMINI_API_KEY; if (!key) throw new Error("sem chave");
-  const model = process.env.GEMINI_MODEL || "gemini-flash-latest";
-  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-    method: "POST", signal, headers: { "content-type": "application/json" },
-    body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: wantJson ? { responseMimeType: "application/json" } : {} }) });
-  if (!r.ok) throw new Error("gemini " + r.status);
-  const j = await r.json(); const t = (j.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
-  if (!t) throw new Error("gemini vazio"); return t;
+  // tenta vários modelos do Gemini: se um estiver ocupado (503) ou esgotado (429), passa ao seguinte
+  const models = (process.env.GEMINI_MODEL || "gemini-flash-latest,gemini-flash-lite-latest,gemini-3.5-flash-lite").split(",").map(s => s.trim()).filter(Boolean);
+  let last = "";
+  for (const model of models) {
+    for (let tent = 0; tent < 2; tent++) {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+        method: "POST", signal, headers: { "content-type": "application/json" },
+        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: wantJson ? { responseMimeType: "application/json" } : {} }) });
+      if (r.ok) {
+        const j = await r.json(); const t = (j.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
+        if (t) return t; last = model + " vazio"; break;
+      }
+      last = model + " " + r.status;
+      if (r.status === 503 && tent === 0) { await new Promise(res => setTimeout(res, 1500)); continue; }
+      break;
+    }
+  }
+  throw new Error("gemini " + last);
 }
 async function callClaude(prompt, wantJson, signal) {
   const key = process.env.ANTHROPIC_API_KEY; if (!key) throw new Error("sem chave");
@@ -46,17 +57,21 @@ export default async (req) => {
   if (req.method !== "POST") return json({ error: "método" }, 405);
   const tok = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
   if (!tok) return json({ error: "login" }, 401);
+  // 1) confirmar que é uma conta verdadeira do site
   const v = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_API_KEY}`, {
     method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idToken: tok }) }).catch(() => null);
   if (!v || !v.ok) return json({ error: "login" }, 401);
   const user = (await v.json()).users?.[0]; if (!user?.localId) return json({ error: "login" }, 401);
   const isOwner = (user.email || "").toLowerCase() === OWNER_EMAIL && user.emailVerified;
+  // 2) pedido
   let body; try { body = await req.json(); } catch { return json({ error: "pedido" }, 400); }
   const prompt = String(body.prompt || "").slice(0, 60000); if (!prompt.trim()) return json({ error: "vazio" }, 400);
+  // 3) limite por dia
   const LIMIT = Math.max(1, parseInt(process.env.AI_DAILY_LIMIT || "40", 10));
   const store = getStore("uso-ia"); const day = new Date().toISOString().slice(0, 10); const key = `${day}/${user.localId}`;
   const used = parseInt((await store.get(key)) || "0", 10) || 0;
   if (!isOwner && used >= LIMIT) return json({ error: "limite", used, limit: LIMIT }, 429);
+  // 4) tentar as IA por ordem; se uma falhar, passa à seguinte
   const order = (process.env.AI_ORDER || "gemini,claude,openai").split(",").map(s => s.trim()).filter(p => PROVIDERS[p]);
   const errors = [];
   for (const p of order) {
