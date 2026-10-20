@@ -256,6 +256,11 @@ input[type=text],input[type=search],input[type=date],select,textarea{border:1px 
 .c3 .term{flex:1;display:grid;place-items:center;text-align:center;font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,6vw,2.4rem);line-height:1.1;text-wrap:balance;padding:14px 4px}
 .c3 .term.q{font-family:var(--body);font-weight:700;font-size:clamp(1.15rem,3.8vw,1.45rem);line-height:1.35}
 .c3 .hint{text-align:center;font-size:.8rem;color:#55506E}
+.c3 .pista{display:flex;flex-direction:column;gap:6px;align-items:center}
+.c3 .ph{background:rgba(255,255,255,.8);border-radius:10px;padding:6px 12px;font-size:.92rem;max-width:100%;text-align:center}
+.c3 .ph .mono{font-family:ui-monospace,Menlo,monospace;letter-spacing:.03em}
+.c3 .ph b{font-family:var(--body);display:block;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#55506E}
+.c3 .pbtn{background:rgba(255,255,255,.85)!important;border:0!important;color:#2A2840!important;font-weight:700}
 .c3 h2{font-size:1.25rem;margin:6px 0 2px;line-height:1.15}
 .c3 .thea{font-style:italic;color:#55506E;font-size:.9rem;margin:0;padding-left:10px;border-left:3px solid var(--stc)}
 .c3 .exp{font-size:1rem}
@@ -338,6 +343,45 @@ a.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:cent
 .li.fb .grow{gap:4px} .reply{background:var(--ok-soft);color:var(--ink);border-radius:10px;padding:6px 10px}
 .stars{color:#C8961E;letter-spacing:.05em}
 .starpick button{border:0;background:none;font-size:1.3rem;color:#C8961E;padding:0 2px;cursor:pointer}
+
+/* voz, notas e erros */
+.c3 .cbtns{display:flex;gap:6px;flex-wrap:wrap}
+.c3 .mynote{margin:0;background:#FFF4D2;border-radius:10px;padding:8px 11px;font-size:.9rem;color:#4A3B10}
+.c3 .mynote b{display:block;font-size:.8rem}
+.c3 .fr .aibtn{align-self:center}
+.errtop{display:flex;flex-direction:column;gap:10px}
+.erritem{border:1.5px solid var(--tline);border-radius:14px;background:var(--surface);overflow:hidden}
+.errhead{width:100%;display:grid;grid-template-columns:1fr auto;gap:2px 10px;text-align:left;border:0;background:none;padding:11px 14px}
+.errhead b{font-size:.98rem} .errhead .muted{grid-column:1} .errhead .chev{grid-row:1/3;grid-column:2;align-self:center;color:var(--tink)}
+.errbody{display:flex;flex-direction:column;gap:8px;padding:0 14px 14px}
+.eb{border-radius:10px;padding:8px 11px;background:var(--soft);font-size:.93rem;overflow-wrap:anywhere}
+.eb b{display:block;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.eb.you{background:var(--rev-soft)} .eb.why{background:var(--warn-soft)} .eb.ok{background:var(--ok-soft)} .eb.note{background:#FFF4D2;color:#4A3B10}
+
+/* resumo no formato Estuda Sem Stress */
+.rz{background:#fff;color:#222;border:1px solid #ddd;border-radius:6px;padding:20px 22px;font-family:"Courier New",Courier,monospace;font-size:.86rem;line-height:1.75;overflow-wrap:anywhere}
+.rz-head{display:flex;justify-content:space-between;font-family:Calibri,Arial,sans-serif;font-size:.68rem;color:#666;border-bottom:1px solid #bbb;padding-bottom:4px;margin-bottom:14px}
+.rz-title{text-align:center;font-family:inherit;font-size:1.15rem;font-weight:700;margin:6px 0 4px;letter-spacing:.02em;color:#222}
+.rz-sub{text-align:center;color:#888;letter-spacing:.35em;font-size:.72rem;margin:0 0 6px}
+.rz hr{border:0;border-top:1.5px solid #555;margin:6px 0 16px}
+.rz-h{font-weight:700;margin:12px 0 4px}
+.rz-h1{font-weight:700;border-bottom:1.5px solid #555;padding-bottom:6px;margin:30px 0 12px}
+.rz-h2{font-weight:700;margin:22px 0 10px}
+.rz-ref{font-weight:400;color:#888;font-size:.75rem}
+.rz-p{margin:0 0 12px;text-align:justify}
+.rz-ul{margin:0 0 12px;padding-left:26px}
+.rz-defs,.rz-tab{width:100%;border-collapse:collapse;margin:0 0 16px}
+.rz-defs th,.rz-defs td,.rz-tab td,.rz-tab th{border:1px solid #999;padding:8px 10px;vertical-align:top;text-align:left}
+.rz-defs th{width:30%;background:#ECECEC;font-weight:700;text-align:center;vertical-align:middle}
+.rz-tab th{background:#3F3F3F;color:#fff;font-weight:700}
+.rz-tab td:first-child{text-align:center;vertical-align:middle;overflow-wrap:normal;word-break:normal;hyphens:auto}
+.rz-tab{min-width:460px}
+.rz-scroll{overflow-x:auto}
+.rz-cap{font-weight:700;font-style:italic;margin:14px 0 8px}
+.rz-box{background:#EDEDED;border-left:5px solid #555;padding:10px 14px;margin:0 0 16px}
+.rz-box b{display:block} .rz-box p{margin:4px 0 0}
+.rz-add{color:#aaa;font-style:italic}
+@media (max-width:560px){ .rz{padding:14px 12px;font-size:.8rem} .rz-defs th{width:36%} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
 </style>
 
@@ -833,7 +877,7 @@ async function publish(nb){
   const parts = []; let cur = [], size = 0;
   cards.forEach(c => { const l = JSON.stringify(c).length; if (size + l > 200000) { parts.push(cur); cur = []; size = 0; } cur.push(c); size += l; });
   if (cur.length) parts.push(cur);
-  await CAP.db.doc("library/" + id).set({name: nb.name, n: cards.length, color: nb.color, updated: Date.now(), notes: (nb.notes||[]).slice(0,20).map(x=>({title:x.title, html:x.html})).filter(x => JSON.stringify(x).length < 20000)});
+  await CAP.db.doc("library/" + id).set({name: nb.name, n: cards.length, color: nb.color, updated: Date.now(), notes: (nb.notes||[]).slice(0,20).map(x=>({title:x.title, html:x.html, rz: x.rz || null})).filter(x => JSON.stringify(x).length < 20000)});
   for (let i = 0; i < parts.length; i++) await CAP.db.doc("library/" + id + "/parts/p" + i).set({cards: parts[i]});
   await CAP.db.doc("library/" + id + "/parts/px").set({extra: extrasOf(nb)});
   toast("Publicado na biblioteca"); loadLibrary();
@@ -875,7 +919,7 @@ async function shareNb(nb, opt){
   if (opt.cards) items.push(Object.assign({t: "x"}, extrasOf(nb)));
   if (opt.cards) nb.cards.forEach(c => items.push({t: "c", m: Number.isInteger(c.m) ? c.m : null, num: c.num || "", th: c.th || "", x: c.x || "", n: c.n || "", pt: c.pt || "", f: c.f, r: c.r, p: c.p || "", d: c.d || "", doc: shared.has(c.doc) ? c.doc : "", pg: shared.has(c.doc) ? c.pg || null : null,
     src: c.doc && !shared.has(c.doc) ? docName(nb, c.doc) + (c.pg ? " · pág. " + c.pg : "") : (c.src || "")}));
-  if (opt.notes) (nb.notes || []).forEach(n => items.push({t: "n", title: n.title, html: sanitize(n.html).slice(0, 150000)}));
+  if (opt.notes) (nb.notes || []).forEach(n => items.push({t: "n", title: n.title, html: sanitize(n.html).slice(0, 150000), rz: n.rz || null}));
   docs.forEach(d => d.pages.forEach((pg, i) => items.push({t: "p", doc: d.id, name: d.name, kind: d.kind || "", i, txt: String(pg).slice(0, 150000)})));
   const parts = splitParts(items, 180000);
   for (let k = 0; k < parts.length; k++) await CAP.db.doc(base + "/partes/p" + k).set({items: parts[k]});
@@ -897,7 +941,7 @@ async function comGet(it){
   [...parts.docs].sort((a, b) => a.id.localeCompare(b.id, undefined, {numeric: true})).forEach(p => (thaw(p.data()).items || []).forEach(x => {
     if (x.t === "c") src.cards.push({f: x.f, r: x.r, p: x.p, d: x.d, doc: x.doc, pg: x.pg, src: x.src, m: x.m, num: x.num, th: x.th, x: x.x, n: x.n, pt: x.pt});
     else if (x.t === "x") Object.assign(src, {mods: x.mods, trk: x.trk, glo: x.glo, mc: x.mc, cases: x.cases, subject: x.subject});
-    else if (x.t === "n") src.notes.push({title: x.title, html: x.html});
+    else if (x.t === "n") src.notes.push({title: x.title, html: x.html, rz: x.rz});
     else if (x.t === "p") { let d = dmap[x.doc]; if (!d) { d = dmap[x.doc] = {id: x.doc, name: x.name, kind: x.kind, pages: []}; src.docs.push(d); } d.pages[x.i] = x.txt; }
   }));
   src.docs.forEach(d => d.pages = Array.from(d.pages, p => p || ""));
@@ -906,7 +950,7 @@ async function comGet(it){
 
 // ---------- navegação
 let route = {v: "loading"};
-function go(r){ route = r; studyState = null; render(); window.scrollTo({top: 0}); }
+function go(r){ if (AUD) audioStop(true); sayStop(); route = r; studyState = null; render(); window.scrollTo({top: 0}); }
 const nbOf = id => S.notebooks.find(n => n.id === id);
 const docName = (nb, id) => ((nb.docs||[]).find(d => d.id === id) || {}).name || "documento";
 
@@ -956,7 +1000,7 @@ function viewHome(){
       <div class="shelf">${nbs.map(nbTile).join("")}<button class="nb add" data-new="${f.id}">+ Novo caderno</button></div></section>`;
   }).join("");
   const loose = S.notebooks.filter(n => !S.folders.some(f => f.id === n.folder));
-  return `<div class="hero"><h1>Os teus cadernos</h1><p class="slogan">Estudar cabe no site.</p><p>Põe os teus PDF, slides ou apontamentos e cria flashcards e esquemas, com ou sem IA, com a página de onde vem cada resposta.</p></div>
+  return `<div class="hero"><h1>Os teus cadernos</h1><p class="slogan">Estudar sem stress começa aqui.</p><p>Põe os teus PDF, slides ou apontamentos e cria flashcards e esquemas, com ou sem IA, com a página de onde vem cada resposta.</p></div>
     <div class="lock">🔒 <span>Os teus cadernos são privados: só tu os vês. Partilhas apenas o que escolheres, em «🔗 Partilhar» dentro de cada caderno.</span></div>
     ${folders}
     ${loose.length ? `<section class="fold"><header><h2>Sem pasta</h2></header><div class="shelf">${loose.map(nbTile).join("")}</div></section>` : ""}
@@ -1161,8 +1205,9 @@ async function explainCard(c){
   if (!CAP.sample || ACC_LIMIT) return otherAIExplain(c);
   dialog(`<h3>🤔 A tua dúvida</h3><p class="muted" style="margin:0">${esc(plainTxt(c.f))}</p><div class="panel rich" id="exA" style="min-height:80px">A pensar…</div>
     <label class="muted" for="exQ">Queres perguntar algo em concreto? (opcional)</label><input type="text" id="exQ" style="width:100%" placeholder="Ex.: não percebo a diferença entre…">
-    <div class="row"><button class="btn" id="exO">🤖 Perguntar a outra IA</button><span class="grow"></span><button class="btn" id="cx">Fechar</button><button class="btn fill" id="exGo">Perguntar</button></div>`, (d, close) => {
-    d.querySelector("#cx").onclick = close; d.querySelector("#exO").onclick = () => { close(); otherAIExplain(c); };
+    <div class="row">${HAS_TTS ? `<button class="btn" id="exSay">🔊 Ouvir</button>` : ""}<button class="btn" id="exO">🤖 Perguntar a outra IA</button><span class="grow"></span><button class="btn" id="cx">Fechar</button><button class="btn fill" id="exGo">Perguntar</button></div>`, (d, close) => {
+    d.querySelector("#cx").onclick = () => { sayStop(); close(); }; d.querySelector("#exO").onclick = () => { close(); otherAIExplain(c); };
+    const xs = d.querySelector("#exSay"); if (xs) xs.onclick = () => sayParts([[d.querySelector("#exA").textContent, "pt-PT"]]);
     const ask = async () => { const q = d.querySelector("#exQ").value.trim(), box = d.querySelector("#exA"); box.textContent = "A pensar…";
       try { const r = await CAP.sample(`És um explicador paciente. Um estudante tem uma dúvida sobre este flashcard. Explica de forma simples, em português de Portugal, em 3 a 6 frases, com um exemplo do dia a dia e uma dica para decorar. Não inventes matéria que contradiga a resposta.\n\nPergunta: ${plainTxt(c.f)}\nResposta: ${plainTxt(c.r)}${plainTxt(c.p) ? "\nExplicação: " + plainTxt(c.p) : ""}${q ? "\n\nDúvida concreta do estudante: " + q : ""}`, {modelTier: "default", onText: ({text}) => { box.textContent = text; }});
         box.textContent = r.text; iaUse("corrigir"); }
@@ -1302,7 +1347,7 @@ async function shareTo(base, nb, opt, extraMeta){
   const docs = (nb.docs || []).filter(d => opt.docs.includes(d.id) && d.pages), shared = new Set(docs.map(d => d.id)), items = [];
   if (opt.cards) { items.push(Object.assign({t: "x"}, extrasOf(nb))); nb.cards.forEach(c => items.push(Object.assign({t: "c"}, cardOut(c), {doc: shared.has(c.doc) ? c.doc : "", pg: shared.has(c.doc) ? c.pg || null : null,
     src: c.doc && !shared.has(c.doc) ? docName(nb, c.doc) + (c.pg ? " · pág. " + c.pg : "") : (c.src || "")}))); }
-  if (opt.notes) (nb.notes || []).forEach(n => items.push({t: "n", title: n.title, html: sanitize(n.html).slice(0, 150000)}));
+  if (opt.notes) (nb.notes || []).forEach(n => items.push({t: "n", title: n.title, html: sanitize(n.html).slice(0, 150000), rz: n.rz || null}));
   docs.forEach(d => d.pages.forEach((pg, i) => items.push({t: "p", doc: d.id, name: d.name, kind: d.kind || "", i, txt: String(pg).slice(0, 150000)})));
   const parts = splitParts(items, 180000);
   for (let k = 0; k < parts.length; k++) await CAP.db.doc(base + "/partes/p" + k).set(Object.assign({items: parts[k]}, extraMeta || {}));
@@ -1578,6 +1623,7 @@ async function simFinish(nb, timeUp){
     if (q.type === "mc") q.ok = q.ans != null && q.opts[q.ans] === q.right;
     else if (!q.ans.trim()) q.ok = false;
     else { const r = await grade(q.card, q.ans); q.ok = r.v === "certo" ? true : r.v === "quase" ? "quase" : false; q.c = r.c; }
+    if (q.ok !== true) logErr(nb, q.card, q.type === "mc" ? (q.ans == null ? "" : q.opts[q.ans]) : q.ans, q.ok === "quase" ? "quase" : "errado", q.type === "mc" ? (q.ans == null ? "Não respondeste." : "Escolheste a opção errada. A certa era: " + q.right) : q.c, "Simulação");
   }
   const ok = s.qs.filter(q => q.ok === true).length, half = s.qs.filter(q => q.ok === "quase").length, M = modsOf(nb);
   const used = s.end ? Math.round((Math.min(Date.now(), s.end) - s.start) / 60000) : Math.round((Date.now() - s.start) / 60000);
@@ -1674,10 +1720,10 @@ function glossOf(nb){
 function viewNb(){
   const nb = nbOf(route.id); if (!nb) { route = {v: "home"}; return viewHome(); }
   const f = S.folders.find(x => x.id === nb.folder);
-  const tabs = [["study","🃏 Estudar"],["sim","📝 Simulações"],["cards","✎ Flashcards"],["docs","📄 Documentos"],["notes","📒 Resumos"],["plan","⏳ Plano"],["share","🔗 Partilhar"]];
+  const tabs = [["study","🃏 Estudar"],["sim","📝 Simulações"],["errs","🔍 Erros e notas"],["cards","✎ Flashcards"],["docs","📄 Documentos"],["notes","📒 Resumos"],["plan","⏳ Plano"],["share","🔗 Partilhar"]];
   const s = nbStats(nb), stk = streak(nb);
   let inner = "";
-  if (route.tab === "study") inner = tabStudy(nb); else if (route.tab === "sim") inner = tabSim(nb); else if (route.tab === "cards") inner = tabCards(nb); else if (route.tab === "docs") inner = tabDocs(nb);
+  if (route.tab === "study") inner = tabStudy(nb); else if (route.tab === "sim") inner = tabSim(nb); else if (route.tab === "errs") inner = tabErrs(nb); else if (route.tab === "cards") inner = tabCards(nb); else if (route.tab === "docs") inner = tabDocs(nb);
   else if (route.tab === "notes") inner = tabNotes(nb); else if (route.tab === "plan") inner = tabPlan(nb); else inner = tabShare(nb);
   const eyebrow = "Flashcards de " + (nb.subject || (f && !/^(exemplo|recebidos|sem pasta)$/i.test(f.name) ? f.name : nb.name));
   return `<div class="st" style="${themeVars(nb)};display:flex;flex-direction:column;gap:16px">
@@ -1693,8 +1739,8 @@ function wireNb(){
   const nb = nbOf(route.id); if (!nb) return wireHome();
   $("#back").onclick = () => go({v: "home"});
   $("#edNb").onclick = () => nbDialog(nb);
-  document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { route.tab = b.dataset.tab; studyState = null; render(); });
-  ({study: wireStudy, sim: wireSim, cards: wireCards, docs: wireDocs, notes: wireNotes, plan: wirePlan, share: wireShare})[route.tab](nb);
+  document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { if (AUD) audioStop(true); sayStop(); route.tab = b.dataset.tab; studyState = null; render(); });
+  ({study: wireStudy, sim: wireSim, errs: wireErrs, cards: wireCards, docs: wireDocs, notes: wireNotes, plan: wirePlan, share: wireShare})[route.tab](nb);
 }
 
 // ----- estudar
@@ -1755,7 +1801,7 @@ function tabStudy(nb){
   const ctrl = `<div class="controls"><div class="row"><select id="smod" aria-label="Módulo"><option value="all">Todos os módulos (${nb.cards.length})</option>${M.names.map((n, i) => { const k = nb.cards.filter(c => M.of(c) === i).length; return k ? `<option value="${i}" ${st.mod === String(i) ? "selected" : ""}>${i+1}. ${esc(n)} (${k})</option>` : ""; }).join("")}</select>
       <input type="search" id="sq" placeholder="Procurar termo…" value="${esc(st.q)}" aria-label="Procurar termo"></div>
     <div class="row"><div class="seg">${[["all","Todos"],["todo","Por estudar"],["r","A rever"]].map(([k,l]) => `<button data-f="${k}" aria-pressed="${st.f===k}">${l}</button>`).join("")}</div>
-      <button class="btn sm tog" id="shuf" aria-pressed="${st.shuf}">Baralhar</button><button class="btn sm tog" id="inv" aria-pressed="${st.inv}">Inverter</button><button class="btn sm tog" id="wr" aria-pressed="${st.write}">✍️ Responder</button>${CAP.dl && nb.cards.length ? `<button class="btn sm" id="pdfB">⬇ PDF / Word</button>` : ""}
+      <button class="btn sm tog" id="shuf" aria-pressed="${st.shuf}">Baralhar</button><button class="btn sm tog" id="inv" aria-pressed="${st.inv}">Inverter</button><button class="btn sm tog" id="wr" aria-pressed="${st.write}">✍️ Responder</button>${HAS_TTS ? `<button class="btn sm tog" id="audB" aria-pressed="${!!AUD}">${AUD ? "⏹ Parar áudio" : "🎧 Modo áudio"}</button>` : ""}${CAP.dl && nb.cards.length ? `<button class="btn sm" id="pdfB">⬇ PDF / Word</button>` : ""}
       ${nb.cases && nb.cases.length ? `<button class="btn sm tog" id="ppB" aria-pressed="${st.pp}">🩹 Modo prova prática</button>` : ""}</div></div>`;
   if (st.pp && nb.cases && nb.cases.length) return top + ctrl + ppHtml(nb);
   if (!nb.cards.length) return countdownHtml(nb) + `<div class="empty"><strong>Ainda não há flashcards</strong>Vai a «📄 Documentos» para pores um ficheiro e criares flashcards, ou a «✎ Flashcards» para os escreveres tu.</div>`;
@@ -1765,15 +1811,19 @@ function tabStudy(nb){
   const tag = `<div class="tag"><b style="background:${col[1]}">${esc(num)}</b><span>${esc(M.names[mi])}</span>${p ? `<em class="state ${p}">${p === "s" ? "✓ Sabido" : "↺ Rever"}</em>` : ""}</div>`;
   const src = c.doc ? `<button class="src" data-src="${c.doc}" data-pg="${c.pg||""}">📖 ${esc(docName(nb, c.doc))}${c.pg ? " · pág. " + c.pg : ""}</button>` : (c.src ? `<span class="src">📖 ${esc(c.src)}</span>` : "");
   const isQ = /\?\s*$/.test(plain(c.f)) || plain(c.f).length > 60;
+  if (st.hintFor !== c.id) { st.hintFor = c.id; st.hint = 0; }
+  const hints = hintsFor(c), hn = Math.min(st.hint || 0, hints.length);
+  const hintBox = !st.inv && hints.length ? `<div class="pista">${hints.slice(0, hn).map((h, i) => `<div class="ph"><b>Pista ${i + 1}</b> ${h}</div>`).join("")}
+      ${hn < hints.length ? `<button class="btn sm pbtn" data-hint="1">💡 ${hn ? "Mais uma pista" : "Dá-me uma pista"} (${hn + 1}/${hints.length})</button>` : `<span class="muted">Já viste todas as pistas: tenta responder e vira o cartão!</span>`}</div>` : "";
   const front = st.inv
     ? `${tag}<div class="term q rich">${rich(c.r)}</div><div class="hint">Qual é o termo? · toca para virar</div>`
-    : `${tag}<div class="term${isQ ? " q" : ""} rich">${rich(c.f)}</div>${src}<div class="hint">${st.write ? "Escreve a tua resposta em baixo" : "Toca para ver a resposta"}</div>`;
+    : `${tag}<div class="term${isQ ? " q" : ""} rich">${rich(c.f)}</div>${hintBox}${HAS_TTS ? `<button class="btn sm aibtn" data-say="f">🔊 Ouvir pergunta</button>` : ""}${src}<div class="hint">${st.write ? "Escreve a tua resposta em baixo" : "Toca para ver a resposta"}</div>`;
   const back = `${tag}<h2 class="rich">${rich(c.f)}</h2>${c.th ? `<p class="thea">${esc(c.th)}</p>` : ""}<div class="exp rich">${rich(c.r)}</div>
     ${c.pt ? `<p class="ptl">🇵🇹 <span>${esc(c.pt)}</span></p>` : ""}
     ${plain(c.p).trim() ? `<div class="why rich"><b>💬 Porquê? O que significa?</b><br>${rich(c.p)}</div>` : ""}
     ${c.x ? `<p class="extra"><b>➕ Extra</b> <span class="muted">não está nos slides</span><br>${esc(c.x)}</p>` : ""}
     ${c.n ? `<p class="nota">⚠ ${esc(c.n)}</p>` : ""}
-    ${plain(c.d).trim() ? `<p class="tip">💡 ${rich(c.d)}</p>` : ""}<button class="btn sm aibtn" data-doubt="1">🤔 Tenho uma dúvida</button>${src}`;
+    ${plain(c.d).trim() ? `<p class="tip">💡 ${rich(c.d)}</p>` : ""}${(nb.cnotes || {})[c.id] ? `<p class="mynote"><b>✏️ A minha nota</b> ${esc(nb.cnotes[c.id])}</p>` : ""}<div class="cbtns">${HAS_TTS ? `<button class="btn sm aibtn" data-say="b">🔊 Ouvir explicação</button>` : ""}<button class="btn sm aibtn" data-doubt="1">🤔 Tenho uma dúvida</button><button class="btn sm aibtn" data-cnote="1">✏️ ${(nb.cnotes || {})[c.id] ? "Editar nota" : "Nota"}</button></div>${src}`;
   const ans = st.write ? `<div class="answer panel"><label class="muted" for="ans">A tua resposta</label><textarea id="ans">${esc(st.ans)}</textarea>
       <div class="row"><button class="btn fill" id="grade">Corrigir</button><span class="muted grow">${CAP.sample ? (ACC_LIMIT ? "Limite de IA de hoje atingido: correção por palavras-chave." : "Corrigido pela IA do site.") : "Correção por palavras-chave."}</span></div>
       ${st.res ? `<div class="res ${st.res.v}"><b>${st.res.v==="certo"?"✓ Certo":st.res.v==="quase"?"≈ Quase":"✗ A rever"} · ${st.res.n}%</b><br>${esc(st.res.c)}</div>` : ""}
@@ -1783,6 +1833,186 @@ function tabStudy(nb){
     <div class="rate"><button class="b-r${p==="r"?" on":""}" id="bR">↺ Rever</button><button class="b-s${p==="s"?" on":""}" id="bS">✓ Sabido</button></div>
     <div class="nav"><button class="btn" id="prev" ${st.pos===0?"disabled":""}>← Anterior</button><span class="count">${st.pos+1} / ${deck.length}</span><button class="btn" id="next" ${st.pos>=deck.length-1?"disabled":""}>Seguinte →</button></div>
     <p class="keys muted"><kbd>Espaço</kbd> virar · <kbd>←</kbd><kbd>→</kbd> navegar · <kbd>1</kbd> rever · <kbd>2</kbd> sabido</p>`;
+}
+// ---------- voz: ler cartões e explicações em voz alta (voz do próprio aparelho, sem gastar IA)
+const HAS_TTS = typeof window !== "undefined" && "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
+let VOICES = [];
+function loadVoices(){ try { VOICES = speechSynthesis.getVoices() || []; } catch(e) { VOICES = []; } }
+if (HAS_TTS) { loadVoices(); try { speechSynthesis.onvoiceschanged = loadVoices; } catch(e) {} }
+const PT_RE = /[ãõçáéíóúâêôà]|\b(que|não|é|são|uns|umas|uma|para|com|dos|das|pelo|pela|também|porque)\b/i;
+function langFor(nb, text){
+  const en = /ingl|english/i.test(((nb && nb.subject) || "") + " " + ((nb && nb.name) || ""));
+  if (!en) return "pt-PT";
+  return PT_RE.test(text) ? "pt-PT" : "en-GB";
+}
+function voiceFor(lang){
+  if (!VOICES.length) loadVoices();
+  const base = lang.slice(0, 2);
+  return VOICES.find(v => v.lang === lang) || VOICES.find(v => v.lang && v.lang.replace("_", "-").toLowerCase() === lang.toLowerCase())
+    || (lang === "pt-PT" ? VOICES.find(v => /pt[-_]PT/i.test(v.lang)) : null)
+    || VOICES.find(v => v.lang && v.lang.startsWith(base)) || null;
+}
+let SAY_TOKEN = 0;
+function sayStop(){ SAY_TOKEN++; try { speechSynthesis.cancel(); } catch(e) {} }
+// parts: [[texto, língua], ...]; divide em frases para não cortar nos textos compridos
+function sayParts(parts, onend){
+  if (!HAS_TTS) { toast("Este navegador não tem leitura em voz alta."); return; }
+  sayStop(); const tok = SAY_TOKEN;
+  const queue = [];
+  parts.forEach(([text, lang]) => { const t = String(text || "").replace(/[_•▪◦]/g, " ").replace(/\s+/g, " ").trim(); if (!t) return;
+    (t.match(/[^.!?;:\n]{1,220}[.!?;:]?/g) || [t]).forEach(s => { s = s.trim(); if (/[\p{L}\p{N}]/u.test(s)) queue.push([s, lang]); }); });
+  const next = () => {
+    if (tok !== SAY_TOKEN) return;
+    const it = queue.shift(); if (!it) { onend && onend(); return; }
+    const u = new SpeechSynthesisUtterance(it[0]); u.lang = it[1]; const v = voiceFor(it[1]); if (v) u.voice = v;
+    u.rate = SAY_RATE; u.onend = next; u.onerror = next;
+    try { speechSynthesis.speak(u); } catch(e) { next(); }
+  };
+  next();
+}
+let SAY_RATE = (() => { try { return +localStorage.getItem("ess-rate") || 1; } catch(e) { return 1; } })();
+const frontParts = (nb, c) => [[plainTxt(c.f), langFor(nb, plainTxt(c.f))]];
+function backParts(nb, c){
+  const r = plainTxt(c.r), P = [[r, langFor(nb, r)]];
+  if (c.pt) P.push(["Em português: " + c.pt, "pt-PT"]);
+  if (plainTxt(c.p).trim()) P.push(["Porquê? " + plainTxt(c.p), "pt-PT"]);
+  if (plainTxt(c.d).trim()) P.push(["Truque para decorar: " + plainTxt(c.d), langFor(nb, plainTxt(c.d))]);
+  return P;
+}
+// modo áudio: lê a pergunta, dá tempo para pensar, lê a resposta e passa ao seguinte
+let AUD = null;
+function audioStop(silent){ AUD = null; sayStop(); if (!silent && route.v === "nb" && route.tab === "study") render(); }
+function audioStart(nb){
+  const tok = AUD = {}; const st = studyState;
+  const alive = () => AUD === tok && route.v === "nb" && route.tab === "study" && studyState === st;
+  const step = () => {
+    if (!alive()) return;
+    const deck = deckOf(nb); if (!deck.length) return audioStop();
+    if (st.pos >= deck.length) st.pos = deck.length - 1;
+    const c = deck[st.pos]; st.flip = false; render();
+    sayParts(frontParts(nb, c), () => {
+      if (!alive()) return;
+      setTimeout(() => { if (!alive()) return; st.flip = true; const k = $("#card"); if (k) k.classList.add("flipped");
+        sayParts(backParts(nb, c), () => setTimeout(() => { if (!alive()) return;
+          if (st.pos < deckOf(nb).length - 1) { st.pos++; step(); } else { toast("Chegaste ao fim 🎉"); audioStop(); } }, 1500)); }, (st.think || 5) * 1000);
+    });
+  };
+  step();
+}
+
+// ---------- notas nos cartões
+function cardNoteDialog(nb, c){
+  nb.cnotes = nb.cnotes || {};
+  dialog(`<h3>✏️ A minha nota</h3><p class="muted" style="margin:0">${esc(plainTxt(c.f))}</p>
+    <textarea id="cnT" style="width:100%;min-height:140px" placeholder="Escreve aqui o que te ajuda: a tua explicação, onde te enganas, um exemplo…">${esc(nb.cnotes[c.id] || "")}</textarea>
+    <p class="muted" style="margin:0">Só tu vês as tuas notas. Aparecem no verso do cartão e em «🔍 Erros e notas».</p>
+    <div class="row">${nb.cnotes[c.id] ? `<button class="btn danger" id="cnDel">Apagar nota</button>` : ""}<span class="grow"></span><button class="btn" id="cx">Cancelar</button><button class="btn fill" id="cnOk">Guardar</button></div>`, (d, close) => {
+    d.querySelector("#cx").onclick = close;
+    d.querySelector("#cnOk").onclick = () => { const v = d.querySelector("#cnT").value.trim().slice(0, 4000); if (v) nb.cnotes[c.id] = v; else delete nb.cnotes[c.id]; save(nb); close(); render(); toast("Nota guardada"); };
+    const dl = d.querySelector("#cnDel"); if (dl) dl.onclick = () => { delete nb.cnotes[c.id]; save(nb); close(); render(); };
+  });
+}
+
+// ---------- erros: guardar cada resposta errada e perceber porquê
+function logErr(nb, c, ans, v, why, from){
+  nb.errs = (nb.errs || []).concat([{cid: c.id, ans: String(ans || "").slice(0, 1500), v, c: String(why || "").slice(0, 1500), from, at: Date.now()}]).slice(-400);
+}
+function localWhy(c, ans){
+  const stop = new Set(["que","para","como","com","uma","dos","das","nos","nas","por","mais","sao","pelo","pela","the","and","this","esta","este","isso","entre","sobre","quando","onde","tambem","muito","pode","podem","deve","devem"]);
+  const words = plainTxt(c.r).split(/[\s,;:.()«»"“”/]+/).filter(w => w.length >= 4);
+  const have = new Set(String(ans || "").split(/[\s,;:.()]+/).map(stem));
+  const miss = [], seen = new Set();
+  words.forEach(w => { const s = stem(w); if (!s || stop.has(s) || seen.has(s) || have.has(s)) return; seen.add(s); miss.push(w); });
+  if (!String(ans || "").trim()) return "Não respondeste a esta pergunta.";
+  return miss.length ? "Faltaram ideias importantes: " + miss.slice(0, 8).join(", ") + "." : "A tua resposta tem as palavras certas mas pode não ter a ideia completa: compara com a resposta.";
+}
+function errGroups(nb){
+  const done = nb.errDone || {}, by = {};
+  (nb.errs || []).forEach(e => { if (done[e.cid] && done[e.cid] >= e.at) return; (by[e.cid] = by[e.cid] || []).push(e); });
+  nb.cards.forEach(c => { if (nb.prog[c.id] === "r" && !by[c.id] && !(done[c.id])) by[c.id] = []; });
+  return Object.entries(by).map(([cid, L]) => ({c: nb.cards.find(x => x.id === cid), L: L.sort((a, b) => b.at - a.at)})).filter(g => g.c)
+    .sort((a, b) => ((b.L[0] || {}).at || 0) - ((a.L[0] || {}).at || 0));
+}
+let errOpen = {};
+function tabErrs(nb){
+  const G = errGroups(nb), notes = Object.entries(nb.cnotes || {}).map(([cid, t]) => ({c: nb.cards.find(x => x.id === cid), t})).filter(x => x.c);
+  const totalWrong = G.reduce((s, g) => s + g.L.length, 0);
+  const item = g => { const c = g.c, last = g.L[0], open = errOpen[c.id];
+    return `<div class="erritem"><button class="errhead" data-eo="${c.id}" aria-expanded="${!!open}"><b>${esc(plainTxt(c.f))}</b><span class="muted">${g.L.length ? `${g.L.length} ${g.L.length === 1 ? "erro" : "erros"} · ${esc(last.from)} · ${new Date(last.at).toLocaleDateString("pt-PT")}` : "marcado como «Rever»"}</span><span class="chev">${open ? "▴" : "▾"}</span></button>
+      ${open ? `<div class="errbody">
+        ${last ? `<div class="eb you"><b>O que respondeste</b>${last.ans ? esc(last.ans) : "<i>sem resposta</i>"}</div><div class="eb why"><b>Porque está errado</b>${last.c ? esc(last.c) + "<br>" : ""}<i>${esc(localWhy(c, last.ans))}</i></div>` : ""}
+        <div class="eb ok"><b>Resposta certa</b><span class="rich">${rich(c.r)}</span></div>
+        ${plainTxt(c.p).trim() ? `<div class="eb"><b>💬 Porquê?</b><span class="rich">${rich(c.p)}</span></div>` : ""}
+        ${plainTxt(c.d).trim() ? `<div class="eb"><b>💡 Truque</b>${esc(plainTxt(c.d))}</div>` : ""}
+        ${(nb.cnotes || {})[c.id] ? `<div class="eb note"><b>✏️ A tua nota</b>${esc(nb.cnotes[c.id])}</div>` : ""}
+        <div class="row">${HAS_TTS ? `<button class="btn sm" data-esay="${c.id}">🔊 Ouvir explicação</button>` : ""}<button class="btn sm" data-ewhy="${c.id}">🤔 Explica-me o meu erro</button><button class="btn sm" data-enote="${c.id}">✏️ Nota</button><span class="grow"></span><button class="btn sm fill" data-edone="${c.id}">✓ Já percebi</button></div>
+      </div>` : ""}</div>`; };
+  return `<div class="panel errtop"><h3>🔍 Os meus erros</h3>
+      <p class="muted" style="margin:0">Aqui ficam as respostas que erraste no ✍️ Responder e nas 📝 Simulações, e os cartões que marcaste como «Rever». Abre cada um para veres o que respondeste, porque está errado e a explicação.</p>
+      <div class="stats"><span class="pill rev">${G.length} ${G.length === 1 ? "cartão" : "cartões"} com erros</span>${totalWrong ? `<span class="pill todo">${totalWrong} ${totalWrong === 1 ? "resposta errada" : "respostas erradas"}</span>` : ""}</div>
+      ${G.length ? `<div class="row"><button class="btn fill" id="eStudy">▶ Estudar só estes</button>${HAS_TTS ? `<button class="btn" id="eListen">🎧 Ouvir todos</button>` : ""}</div>` : ""}</div>
+    ${G.length ? `<div class="list">${G.map(item).join("")}</div>` : `<div class="empty"><strong>Sem erros por agora 🎉</strong>Quando errares no «✍️ Responder» ou numa simulação, o erro aparece aqui com o motivo.</div>`}
+    <div class="panel" style="display:flex;flex-direction:column;gap:8px"><h3>📝 Bloco de apontamentos</h3>
+      <p class="muted" style="margin:0">Escreve o que quiseres enquanto estudas: dúvidas para a aula, coisas a rever, resumos rápidos. Guarda sozinho.</p>
+      ${rte("qnote", nb.quick || "", "Escreve aqui os teus apontamentos…")}<span class="muted" id="qsaved"></span></div>
+    ${notes.length ? `<div class="panel"><h3>✏️ As minhas notas nos cartões</h3><div class="list">${notes.map(x => `<div class="li"><div class="grow"><b>${esc(plainTxt(x.c.f))}</b><span>${esc(x.t)}</span></div><button class="btn sm" data-enote="${x.c.id}">✎</button></div>`).join("")}</div></div>` : ""}`;
+}
+function wireErrs(nb){
+  document.querySelectorAll("[data-eo]").forEach(b => b.onclick = () => { errOpen[b.dataset.eo] = !errOpen[b.dataset.eo]; render(); });
+  const card = id => nb.cards.find(c => c.id === id);
+  document.querySelectorAll("[data-esay]").forEach(b => b.onclick = () => { const c = card(b.dataset.esay), g = errGroups(nb).find(x => x.c === c), last = g && g.L[0];
+    const P = [["Pergunta: " + plainTxt(c.f), langFor(nb, plainTxt(c.f))]];
+    if (last) P.push(["Respondeste: " + (last.ans || "nada"), langFor(nb, last.ans || "")], [last.c || localWhy(c, last.ans), "pt-PT"]);
+    P.push(["A resposta certa é: ", "pt-PT"]); sayParts(P.concat(backParts(nb, c))); });
+  document.querySelectorAll("[data-enote]").forEach(b => b.onclick = () => cardNoteDialog(nb, card(b.dataset.enote)));
+  document.querySelectorAll("[data-edone]").forEach(b => b.onclick = () => { const id = b.dataset.edone; nb.errDone = nb.errDone || {}; nb.errDone[id] = Date.now(); if (nb.prog[id] === "r") nb.prog[id] = "s"; save(nb); toast("Boa! Saiu da lista de erros."); render(); });
+  document.querySelectorAll("[data-ewhy]").forEach(b => b.onclick = () => { const c = card(b.dataset.ewhy), g = errGroups(nb).find(x => x.c === c); errWhyDialog(nb, c, g && g.L[0]); });
+  const es = $("#eStudy"); if (es) es.onclick = () => { const ids = errGroups(nb).map(g => g.c.id); ids.forEach(id => { if (nb.prog[id] !== "r") nb.prog[id] = "r"; }); save(nb); route.tab = "study"; studyState = null; render(); studyState.f = "r"; render(); };
+  const el = $("#eListen"); if (el) el.onclick = () => { const G = errGroups(nb); let i = 0; const tok = {}; AUD = tok;
+    const nxt = () => { if (AUD !== tok || route.tab !== "errs") return; const g = G[i++]; if (!g) { AUD = null; return toast("Fim dos erros 🎧"); }
+      sayParts([["Pergunta: " + plainTxt(g.c.f), langFor(nb, plainTxt(g.c.f))], ["Resposta: ", "pt-PT"]].concat(backParts(nb, g.c)), () => setTimeout(nxt, 1200)); };
+    nxt(); toast("A ler os teus erros… carrega noutro separador para parar."); };
+  const ed = $("#qnote"); if (ed) { wireRte($("#tab")); let tq = null;
+    const keep = () => { clearTimeout(tq); tq = setTimeout(() => { nb.quick = sanitize(ed.innerHTML).slice(0, 200000); save(nb); const s = $("#qsaved"); if (s) s.textContent = "Guardado ✓"; }, 700); };
+    ed.addEventListener("input", keep); ed.addEventListener("blur", keep); }
+}
+async function errWhyDialog(nb, c, last){
+  const ans = last ? last.ans : "";
+  const base = localWhy(c, ans);
+  dialog(`<h3>🤔 Porque é que errei?</h3><p class="muted" style="margin:0">${esc(plainTxt(c.f))}</p>
+    <div class="eb you"><b>O que respondeste</b>${ans ? esc(ans) : "<i>sem resposta</i>"}</div>
+    <div class="panel rich" id="ewA" style="min-height:80px">${CAP.sample && !ACC_LIMIT ? "A pensar…" : esc(base)}</div>
+    <div class="row">${HAS_TTS ? `<button class="btn" id="ewSay">🔊 Ouvir</button>` : ""}<button class="btn" id="ewO">🤖 Perguntar a outra IA</button><span class="grow"></span><button class="btn fill" id="cx">Fechar</button></div>`, async (d, close) => {
+    d.querySelector("#cx").onclick = () => { sayStop(); close(); };
+    const box = d.querySelector("#ewA");
+    const s = d.querySelector("#ewSay"); if (s) s.onclick = () => sayParts([[box.textContent, "pt-PT"]]);
+    d.querySelector("#ewO").onclick = () => { close(); otherAICheck(c, ans); };
+    if (!CAP.sample || ACC_LIMIT) return;
+    try { const r = await CAP.sample(`És um explicador paciente. Um estudante errou este flashcard. Em português de Portugal, de forma simples e simpática, em 4 a 7 frases: 1) diz o que estava certo na resposta dele (se alguma coisa), 2) explica exatamente o que estava errado ou faltou e porquê, 3) explica a ideia certa com um exemplo do dia a dia, 4) dá uma dica curta para não voltar a errar. Não inventes matéria que contradiga a resposta oficial.
+
+Pergunta: ${plainTxt(c.f)}
+Resposta oficial: ${plainTxt(c.r)}
+${plainTxt(c.p) ? "Explicação: " + plainTxt(c.p) + "\n" : ""}Resposta do estudante: ${ans || "(não respondeu)"}`, {modelTier: "default"});
+      box.textContent = r.text; iaUse("corrigir");
+      if (last) { last.c = r.text.slice(0, 1500); save(nb); }
+    } catch(e) { if (e && e.code === "rate_limited") accLimit(); box.textContent = base + (e && e.code === "rate_limited" ? " (Chegaste ao limite de IA de hoje: esta é a explicação sem IA.)" : " (A IA não respondeu agora: esta é a explicação sem IA.)"); }
+  });
+}
+
+// pistas antes de responder: 1) truque/explicação curta, 2) primeiras letras, 3) metade da resposta
+function hintsFor(c){
+  const ans = plainTxt(c.r).replace(/\s+/g, " ").trim(); if (!ans) return [];
+  const H = [], tip = plainTxt(c.d).trim();
+  const lines = plainTxt(c.r).split("\n").map(s => s.replace(/^[•\-\d.)\s]+/, "").trim()).filter(Boolean);
+  if (tip) H.push("💡 " + esc(tip));
+  else if (lines.length > 1) H.push(`A resposta tem <b>${lines.length}</b> partes.`);
+  else { const w = ans.split(" ").length; H.push(`A resposta tem cerca de <b>${w}</b> ${w === 1 ? "palavra" : "palavras"}.`); }
+  const first = (lines.length > 1 ? lines : [ans.split(/(?<=[.;:])\s/)[0]]).slice(0, 6);
+  const mask = s => s.split(" ").map(w => { const m = w.match(/^([^\p{L}\p{N}]*)([\p{L}\p{N}])([\p{L}\p{N}]*)(.*)$/u); return m ? m[1] + m[2] + "_".repeat(Math.min(m[3].length, 8)) + m[4] : w; }).join(" ");
+  H.push(`<span class="mono">${first.map(s => esc(mask(s.slice(0, 140)))).join("<br>")}</span>`);
+  const words = ans.split(" "), half = Math.min(14, Math.max(1, Math.ceil(words.length / 2)));
+  if (words.length > 2) H.push(esc(words.slice(0, half).join(" ")) + " …");
+  return H;
 }
 function sizeCard(){ const c = $("#card"); if (!c) return; const f = c.querySelector(".fr"), b = c.querySelector(".bk");
   const h = Math.max(320, f.scrollHeight, b.scrollHeight); c.style.height = h + "px"; }
@@ -1799,12 +2029,16 @@ function wireStudy(nb){
   const sh = $("#shuf"); if (sh) sh.onclick = () => { st.shuf = !st.shuf; st.order = nb.cards.map(c => c.id).sort(() => Math.random() - .5); st.pos = 0; st.flip = false; render(); };
   const iv = $("#inv"); if (iv) iv.onclick = () => { st.inv = !st.inv; st.flip = false; render(); };
   const wr = $("#wr"); if (wr) wr.onclick = () => { st.write = !st.write; st.res = null; render(); };
+  const ab = $("#audB"); if (ab) ab.onclick = () => { if (AUD) audioStop(); else { st.write = false; audioStart(nb); toast("🎧 Modo áudio: ouve a pergunta, pensa na resposta, e o site lê-a a seguir."); } };
   const pdb = $("#pdfB"); if (pdb) pdb.onclick = () => pdfDialog(nb);
   const pb = $("#ppB"); if (pb) pb.onclick = () => { st.pp = !st.pp; if (st.pp && !st.ppS) ppNew(nb, 0); render(); };
   if (st.pp) return wirePP(nb);
   const card = $("#card"); if (!card) return;
   sizeCard(); setTimeout(sizeCard, 300);
-  card.onclick = e => { if (e.target.closest("[data-src]")) return; if (e.target.closest("[data-doubt]")) { e.stopPropagation(); return explainCard(deck[st.pos]); } st.flip = !st.flip; card.classList.toggle("flipped", st.flip); };
+  card.onclick = e => { if (e.target.closest("[data-src]")) return; if (e.target.closest("[data-doubt]")) { e.stopPropagation(); return explainCard(deck[st.pos]); }
+    const sy = e.target.closest("[data-say]"); if (sy) { e.stopPropagation(); const cc = deck[st.pos]; return sayParts(sy.dataset.say === "f" ? frontParts(nb, cc) : backParts(nb, cc)); }
+    if (e.target.closest("[data-cnote]")) { e.stopPropagation(); return cardNoteDialog(nb, deck[st.pos]); }
+    if (e.target.closest("[data-hint]")) { e.stopPropagation(); st.hint = (st.hint || 0) + 1; return render(); } st.flip = !st.flip; card.classList.toggle("flipped", st.flip); };
   card.onkeydown = e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); card.click(); } };
   document.querySelectorAll("[data-src]").forEach(b => b.onclick = e => { e.stopPropagation(); showPage(nb, b.dataset.src, +b.dataset.pg || 1); });
   const c = deck[st.pos];
@@ -1820,7 +2054,7 @@ function wireStudy(nb){
   $("#next").onclick = () => { st.pos++; st.flip = false; st.res = null; st.ans = ""; render(); };
   const a = $("#ans"); if (a) a.oninput = () => st.ans = a.value;
   const og = $("#oaiG"); if (og) og.onclick = () => otherAICheck(c, st.ans);
-  const g = $("#grade"); if (g) g.onclick = async () => { if (!st.ans.trim()) return; g.disabled = true; g.textContent = "A corrigir…"; st.res = await grade(c, st.ans); st.flip = true; if (st.res.v === "certo") nb.prog[c.id] = "s"; else nb.prog[c.id] = "r"; save(nb); render(); };
+  const g = $("#grade"); if (g) g.onclick = async () => { if (!st.ans.trim()) return; g.disabled = true; g.textContent = "A corrigir…"; st.res = await grade(c, st.ans); if (st.res.v !== "certo") logErr(nb, c, st.ans, st.res.v, st.res.c, "Responder"); st.flip = true; if (st.res.v === "certo") nb.prog[c.id] = "s"; else nb.prog[c.id] = "r"; save(nb); render(); };
 }
 // modo prova prática: pôr os passos pela ordem certa
 function ppNew(nb, i){ const C = nb.cases[i]; const order = C.s.map((_, k) => k).sort(() => Math.random() - .5); studyState.ppS = {i, order, pick: [], checked: false}; }
@@ -2078,6 +2312,119 @@ ${text}`, {modelTier: "complex", signal: ctl.signal});
     };
   });
 }
+// ---------- resumos no formato do Estuda Sem Stress (igual para todos): título, índice, secções numeradas,
+// tabelas de definições (termo cinzento | explicação), caixas NOTA / EXEMPLO / DEFINIÇÃO, tabelas com cabeçalho escuro e listas.
+const RZ_PROMPT = (lab, nivel) => `És um professor a fazer um RESUMO DE ESTUDO COMPLETO para um aluno do ensino ${nivel}, em português de Portugal (ortografia atual), só com a informação do texto. Ignora a capa, o nome e contactos do professor, datas, o sumário/índice, a bibliografia, rodapés e slides de «Questões/Dúvidas».
+
+Organiza a matéria em secções (temas grandes) e subsecções. Usa SEMPRE estes blocos, escolhendo o melhor para cada parte:
+- "defs": pares termo → explicação. Usa para definições, características, tipos, funções, aplicações, causas… (é o bloco principal).
+- "lista": tópicos curtos.
+- "tabela": quando há comparações ou classificações com várias colunas (ex.: níveis, tipos, fases) — com cabeçalho.
+- "caixa": destaque com título curto em maiúsculas: "DEFINIÇÃO", "NOTA", "EXEMPLO DA AULA", "ATENÇÃO" (confusão comum a evitar) ou "PARA DECORAR".
+- "p": um parágrafo curto de introdução.
+Regras: frases claras e completas; não cortes listas nem classificações; mantém os termos técnicos; não inventes matéria. Se acrescentares um exemplo que não está no texto, termina-o com " [acrescentado]". Indica a ${lab} de onde vem cada secção em "ref" (ex.: "${lab}s 3–5").
+
+Responde SÓ com JSON neste formato:
+{"secoes":[{"titulo":"A visão holística: Homem, Saúde, Doença","ref":"${lab}s 2–4","blocos":[
+  {"t":"p","texto":"…"},
+  {"t":"defs","linhas":[["Origem do termo","Vem do grego holos, que significa «todo»."],["Oposto: reducionismo","…"]]}],
+ "subsecoes":[{"titulo":"Principais características do holismo","blocos":[
+  {"t":"defs","linhas":[["Visão de totalidade","…"]]},
+  {"t":"caixa","titulo":"NOTA","texto":"…"},
+  {"t":"tabela","titulo":"Níveis de prevenção","cabecalho":["Nível","Quando atua","Exemplos"],"linhas":[["Primária","…","…"]]},
+  {"t":"lista","itens":["…","…"]}]}]}]}
+
+TEXTO:
+`;
+const rzS = v => String(v == null ? "" : v);
+function rzClean(data){ // normaliza o que a IA devolve
+  const blk = b => { if (!b || typeof b !== "object") return null; const t = rzS(b.t || b.tipo).toLowerCase();
+    if (t === "p" || t === "paragrafo") return rzS(b.texto).trim() ? {t: "p", texto: rzS(b.texto)} : null;
+    if (t === "lista") { const it = (b.itens || []).map(rzS).filter(Boolean); return it.length ? {t: "lista", itens: it} : null; }
+    if (t === "defs" || t === "definicoes") { const L = (b.linhas || []).filter(r => Array.isArray(r) && r.length >= 2).map(r => [rzS(r[0]), rzS(r.slice(1).join(" "))]); return L.length ? {t: "defs", linhas: L} : null; }
+    if (t === "caixa" || t === "nota") return rzS(b.texto).trim() ? {t: "caixa", titulo: rzS(b.titulo || "NOTA").toUpperCase().slice(0, 40), texto: rzS(b.texto)} : null;
+    if (t === "tabela") { const h = (b.cabecalho || []).map(rzS), L = (b.linhas || []).filter(Array.isArray).map(r => r.map(rzS)); return L.length ? {t: "tabela", titulo: rzS(b.titulo), cabecalho: h, linhas: L} : null; }
+    return null; };
+  const sec = s => ({titulo: rzS(s.titulo).trim() || "Tema", ref: rzS(s.ref), blocos: (s.blocos || []).map(blk).filter(Boolean), subsecoes: (s.subsecoes || []).map(x => ({titulo: rzS(x.titulo).trim() || "", blocos: (x.blocos || []).map(blk).filter(Boolean)})).filter(x => x.titulo || x.blocos.length)});
+  return ((data && data.secoes) || (Array.isArray(data) ? data : [])).map(sec).filter(s => s.blocos.length || s.subsecoes.length);
+}
+const rzMark = s => esc(s).replace(/\[acrescentado\]/gi, '<span class="rz-add">[acrescentado]</span>');
+function rzBlocksHtml(B, num){
+  let tn = 0;
+  return B.map(b => {
+    if (b.t === "p") return `<p class="rz-p">${rzMark(b.texto)}</p>`;
+    if (b.t === "lista") return `<ul class="rz-ul">${b.itens.map(i => `<li>${rzMark(i)}</li>`).join("")}</ul>`;
+    if (b.t === "defs") return `<table class="rz-defs">${b.linhas.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${rzMark(v)}</td></tr>`).join("")}</table>`;
+    if (b.t === "caixa") return `<div class="rz-box"><b>${esc(b.titulo)}</b><p>${rzMark(b.texto)}</p></div>`;
+    if (b.t === "tabela") { tn++; return `${b.titulo ? `<p class="rz-cap">Tabela ${num.tab++}: ${esc(b.titulo)}</p>` : ""}<div class="rz-scroll"><table class="rz-tab">${b.cabecalho.length ? `<tr>${b.cabecalho.map(h => `<th>${esc(h).toUpperCase()}</th>`).join("")}</tr>` : ""}${b.linhas.map(r => `<tr>${r.map((c, i) => i === 0 ? `<td><b>${esc(c)}</b></td>` : `<td>${rzMark(c)}</td>`).join("")}</tr>`).join("")}</table></div>`; }
+    return "";
+  }).join("");
+}
+function rzHtml(rz, subject){
+  const num = {tab: 1}, S = rz.secoes || [];
+  return `<div class="rz"><div class="rz-head"><span>${esc(subject).toUpperCase()}</span></div>
+    <h2 class="rz-title">${esc(rz.titulo || subject).toUpperCase()}</h2><p class="rz-sub">RESUMO COMPLETO</p><hr>
+    <p class="rz-h">ÍNDICE</p><ul class="rz-ul">${S.map((s, i) => `<li>${i + 1}. ${esc(s.titulo)}</li>`).join("")}</ul>
+    ${rz.fonte ? `<p class="rz-p">Nota: resumo feito a partir de «${esc(rz.fonte)}».</p>` : ""}
+    ${S.map((s, i) => `<section><p class="rz-h1">${i + 1}. ${esc(s.titulo).toUpperCase()}${s.ref ? ` <span class="rz-ref">(${esc(s.ref)})</span>` : ""}</p>
+      ${rzBlocksHtml(s.blocos, num)}
+      ${s.subsecoes.map((x, j) => `${x.titulo ? `<p class="rz-h2">${i + 1}.${j + 1}. ${esc(x.titulo).toUpperCase()}</p>` : ""}${rzBlocksHtml(x.blocos, num)}`).join("")}</section>`).join("")}</div>`;
+}
+// Word no mesmo formato (Courier New, cinzento e branco, cabeçalho com disciplina e PÁG. x/y)
+function rzDocx(rz, subject){
+  const F = 'w:ascii="Courier New" w:hAnsi="Courier New" w:cs="Courier New"';
+  const run = (t, o) => { o = o || {}; return `<w:r><w:rPr><w:rFonts ${F}/>${o.b ? "<w:b/>" : ""}${o.i ? "<w:i/>" : ""}${o.caps ? "<w:caps/>" : ""}${o.sp ? `<w:spacing w:val="${o.sp}"/>` : ""}<w:color w:val="${o.color || "222222"}"/><w:sz w:val="${(o.size || 9.5) * 2}"/></w:rPr><w:t xml:space="preserve">${xesc(t)}</w:t></w:r>`; };
+  const runs = (t, o) => rzS(t).split(/(\[acrescentado\])/i).map(s => /^\[acrescentado\]$/i.test(s) ? run(s, {i: 1, color: "AAAAAA", size: (o && o.size) || 9.5}) : run(s, o)).join("");
+  const para = (inner, o) => { o = o || {}; return `<w:p><w:pPr>${o.style ? `<w:pStyle w:val="${o.style}"/>` : ""}${o.shade ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.shade}"/>` : ""}${o.bar ? `<w:pBdr><w:left w:val="single" w:sz="36" w:space="10" w:color="555555"/></w:pBdr><w:ind w:left="200" w:right="0"/>` : ""}${o.rule ? `<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="6" w:color="555555"/></w:pBdr>` : ""}${o.num ? `<w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>` : ""}<w:spacing w:before="${o.before || 0}" w:after="${o.after == null ? 120 : o.after}" w:line="360" w:lineRule="auto"/>${o.center ? '<w:jc w:val="center"/>' : o.left ? '<w:jc w:val="left"/>' : '<w:jc w:val="both"/>'}${o.keep ? "<w:keepNext/>" : ""}</w:pPr>${inner}</w:p>`; };
+  const cellB = 'w:val="single" w:sz="4" w:space="0" w:color="999999"';
+  const tbl = (rows, widths) => `<w:tbl><w:tblPr><w:tblW w:w="${widths.reduce((a, b) => a + b, 0)}" w:type="dxa"/><w:tblBorders><w:top ${cellB}/><w:left ${cellB}/><w:bottom ${cellB}/><w:right ${cellB}/><w:insideH ${cellB}/><w:insideV ${cellB}/></w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${widths.map(w => `<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows}</w:tbl>`;
+  const tc = (inner, w, fill, center) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${fill}"/>` : ""}${center ? '<w:vAlign w:val="center"/>' : ""}</w:tcPr>${inner}</w:tc>`;
+  const cp = (inner, center) => para(inner, {after: 0, center, left: !center});
+  const W = 9638; let tabN = 1;
+  const blocks = B => B.map(b => {
+    if (b.t === "p") return para(runs(b.texto));
+    if (b.t === "lista") return b.itens.map(i => para(runs(i), {num: 1, after: 60})).join("");
+    if (b.t === "defs") return tbl(b.linhas.map(([k, v]) => `<w:tr><w:trPr><w:cantSplit/></w:trPr>${tc(cp(run(k, {b: 1}), true), 2800, "ECECEC", true)}${tc(cp(runs(v)), W - 2800)}</w:tr>`).join(""), [2800, W - 2800]) + para("", {after: 200});
+    if (b.t === "caixa") return para(run(b.titulo, {b: 1}), {shade: "EDEDED", bar: 1, after: 0, before: 120, keep: 1}) + para(runs(b.texto), {shade: "EDEDED", bar: 1, after: 240});
+    if (b.t === "tabela") { const n = Math.max(b.cabecalho.length, ...b.linhas.map(r => r.length)); const first = Math.round(W * (n > 2 ? .2 : .3)), rest = Math.floor((W - first) / Math.max(1, n - 1));
+      const widths = [first].concat(Array(Math.max(0, n - 1)).fill(rest));
+      const head = b.cabecalho.length ? `<w:tr><w:trPr><w:tblHeader/></w:trPr>${widths.map((w, i) => tc(cp(run(rzS(b.cabecalho[i]).toUpperCase(), {b: 1, color: "FFFFFF"})), w, "3F3F3F")).join("")}</w:tr>` : "";
+      const body = b.linhas.map(r => `<w:tr><w:trPr><w:cantSplit/></w:trPr>${widths.map((w, i) => tc(cp(i === 0 ? run(rzS(r[i]), {b: 1}) : runs(rzS(r[i]))), w, null, i === 0)).join("")}</w:tr>`).join("");
+      return (b.titulo ? para(run(`Tabela ${tabN++}: ${b.titulo}`, {b: 1, i: 1}), {before: 200, keep: 1}) : "") + tbl(head + body, widths) + para("", {after: 200}); }
+    return "";
+  }).join("");
+  const S = rz.secoes || [];
+  let body = para(run((rz.titulo || subject).toUpperCase(), {b: 1, size: 14}), {center: 1, before: 200, after: 120})
+    + para(run("RESUMO COMPLETO", {size: 9, color: "888888", sp: 60}), {center: 1, after: 120, rule: 1})
+    + para(run("ÍNDICE", {b: 1}), {before: 240})
+    + S.map((s, i) => para(run(`${i + 1}. ${s.titulo}`), {num: 1, after: 40})).join("")
+    + (rz.fonte ? para(run(`Nota: resumo feito a partir de «${rz.fonte}».`), {before: 240}) : "");
+  S.forEach((s, i) => {
+    body += para(run(`${i + 1}. ${s.titulo}`.toUpperCase(), {b: 1}) + (s.ref ? run(`  (${s.ref})`, {color: "888888", size: 8.5}) : ""), {rule: 1, before: 480, after: 200, keep: 1});
+    body += blocks(s.blocos);
+    s.subsecoes.forEach((x, j) => { if (x.titulo) body += para(run(`${i + 1}.${j + 1}. ${x.titulo}`.toUpperCase(), {b: 1}), {before: 360, after: 160, keep: 1}); body += blocks(x.blocos); });
+  });
+  const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const hdrRun = (t) => `<w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:caps/><w:color w:val="666666"/><w:sz w:val="16"/></w:rPr><w:t xml:space="preserve">${xesc(t)}</w:t></w:r>`;
+  const fld = c => `<w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:color w:val="666666"/><w:sz w:val="16"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:instrText xml:space="preserve"> ${c} </w:instrText></w:r><w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:color w:val="666666"/><w:sz w:val="16"/></w:rPr><w:t>1</w:t></w:r><w:r><w:rPr><w:sz w:val="16"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r>`;
+  const header = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:hdr ${NS}><w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="4" w:color="BBBBBB"/></w:pBdr><w:tabs><w:tab w:val="right" w:pos="9638"/></w:tabs></w:pPr>${hdrRun(subject)}<w:r><w:tab/></w:r>${hdrRun("PÁG. ")}${fld("PAGE")}${hdrRun("/")}${fld("NUMPAGES")}</w:p></w:hdr>`;
+  const numbering = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:numbering ${NS}><w:abstractNum w:abstractNumId="0"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="720" w:hanging="300"/></w:pPr><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New"/></w:rPr></w:lvl></w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num></w:numbering>`;
+  const doc = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${NS}><w:body>${body}<w:sectPr><w:headerReference w:type="default" r:id="rIdH"/><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1300" w:right="1134" w:bottom="1134" w:left="1134" w:header="567" w:footer="567" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const te = new TextEncoder();
+  return zipStore([
+    {name: "[Content_Types].xml", data: te.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/><Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/></Types>')},
+    {name: "_rels/.rels", data: te.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>')},
+    {name: "word/_rels/document.xml.rels", data: te.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rIdH" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/><Relationship Id="rIdN" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/></Relationships>')},
+    {name: "word/document.xml", data: te.encode(doc)}, {name: "word/header1.xml", data: te.encode(header)}, {name: "word/numbering.xml", data: te.encode(numbering)}]);
+}
+function rzSubject(nb){ const f = S.folders.find(x => x.id === nb.folder); return nb.subject || nb.name || (f && f.name) || "Resumo"; }
+async function rzDownload(nb, n){
+  if (!CAP.dl) return toast("Não foi possível descarregar aqui.");
+  const bytes = rzDocx(n.rz, rzSubject(nb));
+  const name = (n.title || "Resumo").replace(/[^\p{L}\p{N} ._–-]/gu, "").trim().slice(0, 80) + ".docx";
+  try { await CAP.dl.save({filename: name, data: bytes}); toast("Word guardado"); } catch(e) { toast("Não foi possível guardar o ficheiro."); }
+}
+
 function sumDialog(nb, d){
   if (!CAP.sample) return toast("Entra na tua conta para usar a IA do site.");
   if (!d.pages) return toast("O texto deste documento não está neste dispositivo.");
@@ -2085,7 +2432,8 @@ function sumDialog(nb, d){
   const N = d.pages.length;
   dialog(`<h3>✨ Resumo de «${esc(d.name)}»</h3>
     <div class="row"><label class="muted">De ${lab} <input type="text" id="s1" value="1" style="width:60px" inputmode="numeric"></label><label class="muted">até <input type="text" id="s2" value="${Math.min(N, IA_PAGES)}" style="width:60px" inputmode="numeric"></label></div>
-    <p class="muted" id="ss">Resumo organizado por temas, com a ${lab} entre parênteses. Cada resumo lê até ${IA_PAGES} ${lab}s.</p><div class="prog"><i id="sp" style="width:0"></i></div>
+    <label class="muted">Nível<select id="sl"><option value="secundário">Ensino secundário</option><option value="superior" selected>Ensino superior</option></select></label>
+    <p class="muted" id="ss">Resumo completo no formato do ${BRAND}: índice, secções numeradas, tabelas de definições, caixas de nota e exemplos. Podes descarregá-lo em Word. Cada resumo lê até ${IA_PAGES} ${lab}s.</p><div class="prog"><i id="sp" style="width:0"></i></div>
     <div class="row"><span class="grow"></span><button class="btn" id="cx">Fechar</button><button class="btn fill" id="go">Fazer resumo</button></div>`, (dlg, close) => {
     dlg.querySelector("#cx").onclick = close;
     dlg.querySelector("#go").onclick = async ev => {
@@ -2093,11 +2441,12 @@ function sumDialog(nb, d){
       const planB = why => { if (autoNote(nb, d, a, b, lab)) { close(); route.tab = "notes"; render(); toast(why + " Fiz um esquema sem IA em «📒 Resumos»."); } else dlg.querySelector("#ss").textContent = why + " Também não encontrei estrutura para um esquema sem IA."; };
       if (ACC_LIMIT) return planB("Chegaste ao limite de IA de hoje.");
       ev.target.disabled = true; iaUse("criar");
-      const parts = chunks(d, a, b, 9000); let html = "";
-      for (let k = 0; k < parts.length; k++) { dlg.querySelector("#sp").style.width = (k/parts.length*100) + "%"; dlg.querySelector("#ss").textContent = `A resumir parte ${k+1} de ${parts.length}…`;
-        try { const t = await CAP.sample.json(`Faz um resumo de estudo em português de Portugal, só com a informação do texto. Ignora a capa, contactos do professor, sumário, bibliografia, rodapés e slides de dúvidas: resume só a matéria. Organiza por temas com títulos curtos e listas. No fim de cada ponto põe a ${lab} entre parênteses, ex.: (${lab} 4). Responde só com JSON: {"html": "<h3>Tema</h3><ul><li>…</li></ul>…"} usando apenas as etiquetas h3, p, ul, ol, li, b, i. Põe a <b>negrito</b> os termos-chave, mantém todas as listas e classificações completas, e acrescenta uma linha «<b>Atenção:</b>» quando houver uma confusão comum a evitar. Escreve com ortografia atual.\n\nTEXTO:\n` + parts[k].map(([i,t]) => `[${lab.toUpperCase()} ${i}]\n${t}`).join("\n\n"), {modelTier: "complex"}); html += sanitize(t.html || ""); }
+      const parts = chunks(d, a, b, 9000), lvl = dlg.querySelector("#sl").value; let secs = [];
+      for (let k = 0; k < parts.length; k++) { dlg.querySelector("#sp").style.width = (k/parts.length*100) + "%"; dlg.querySelector("#ss").textContent = `A resumir parte ${k+1} de ${parts.length}… (pode demorar 1 a 2 minutos)`;
+        try { const r = await CAP.sample.json(RZ_PROMPT(lab, lvl) + parts[k].map(([i,t]) => `[${lab.toUpperCase()} ${i}]\n${t}`).join("\n\n"), {modelTier: "complex"}); secs = secs.concat(rzClean(r)); }
         catch(e) { if (e && e.code === "rate_limited") { accLimit(); break; } if (e && e.code === "not_granted") break; } }
-      if (html) { nb.notes.push({id: uid(), title: "Resumo · " + d.name + (a > 1 || b < N ? ` (${lab}s ${a}–${b})` : ""), html}); save(nb); close(); route.tab = "notes"; render(); toast("Resumo criado em «📒 Resumos»"); }
+      if (secs.length) { const rz = {titulo: rzSubject(nb), fonte: d.name + (a > 1 || b < N ? ` (${lab}s ${a}–${b})` : ""), secoes: secs};
+        nb.notes.push({id: uid(), title: "Resumo · " + d.name + (a > 1 || b < N ? ` (${lab}s ${a}–${b})` : ""), rz, html: rzHtml(rz, rzSubject(nb))}); save(nb); close(); route.tab = "notes"; render(); toast("Resumo criado em «📒 Resumos». Podes descarregá-lo em Word."); }
       else { ev.target.disabled = false; planB(ACC_LIMIT ? "Chegaste ao limite de IA de hoje." : "A IA não respondeu agora."); } };
   });
 }
@@ -2109,16 +2458,17 @@ function tabNotes(nb){
     return `<div class="panel" style="display:flex;flex-direction:column;gap:10px"><input type="text" id="nt" value="${esc(n.title)}" placeholder="Título do resumo"> ${rte("nh", n.html, "Escreve aqui o teu resumo…")}
       <div class="row"><button class="btn danger" id="ndel">Apagar</button><span class="grow"></span><button class="btn" id="ncx">Cancelar</button><button class="btn fill" id="nok">Guardar</button></div></div>`; }
   return `<div class="row"><span class="grow muted">Resumos com formatação (negrito, cores, marcador, listas…).</span><button class="btn fill" id="addN">+ Novo resumo</button></div>
-    ${(nb.notes||[]).map(n => `<article class="note"><div class="row"><h3 class="grow">${esc(n.title || "Sem título")}</h3><button class="btn sm" data-edn="${n.id}">✎ Editar</button></div><div class="rich">${sanitize(n.html)}</div></article>`).join("") || `<p class="muted">Ainda sem resumos. Cria um aqui ou usa «✨ Resumo» num documento.</p>`}`;
+    ${(nb.notes||[]).map(n => `<article class="note"><div class="row"><h3 class="grow">${esc(n.title || "Sem título")}</h3>${n.rz && CAP.dl ? `<button class="btn sm pri" data-rzw="${n.id}">⬇ Word</button>` : ""}<button class="btn sm" data-edn="${n.id}">✎ Editar</button></div>${n.rz ? rzHtml(n.rz, rzSubject(nb)) : `<div class="rich">${sanitize(n.html)}</div>`}</article>`).join("") || `<p class="muted">Ainda sem resumos. Cria um aqui ou usa «✨ Resumo» num documento.</p>`}`;
 }
 function wireNotes(nb){
   if (editingNote) { wireRte($("#tab"));
     $("#ncx").onclick = () => { if (editingNote === "new") editingNote = null; editingNote = null; render(); };
-    $("#nok").onclick = () => { const v = {title: $("#nt").value.trim() || "Resumo", html: sanitize($("#nh").innerHTML)}; const n = nb.notes.find(x => x.id === editingNote); if (n) Object.assign(n, v); else nb.notes.push(Object.assign({id: uid()}, v)); save(nb); editingNote = null; render(); };
+    $("#nok").onclick = () => { const v = {title: $("#nt").value.trim() || "Resumo", html: sanitize($("#nh").innerHTML)}; const n = nb.notes.find(x => x.id === editingNote); if (n) { Object.assign(n, v); delete n.rz; } else nb.notes.push(Object.assign({id: uid()}, v)); save(nb); editingNote = null; render(); };
     $("#ndel").onclick = () => { nb.notes = nb.notes.filter(x => x.id !== editingNote); save(nb); editingNote = null; render(); };
     return; }
   $("#addN").onclick = () => { editingNote = "new"; render(); };
   document.querySelectorAll("[data-edn]").forEach(b => b.onclick = () => { editingNote = b.dataset.edn; render(); });
+  document.querySelectorAll("[data-rzw]").forEach(b => b.onclick = () => { const n = nb.notes.find(x => x.id === b.dataset.rzw); if (n) rzDownload(nb, n); });
 }
 
 // ----- plano
@@ -2173,7 +2523,7 @@ function wireShare(nb){
     render(); };
   const off = $("#shOff"); if (off) off.onclick = async () => { if (!off.dataset.sure) { off.dataset.sure = 1; off.textContent = "Carrega outra vez para confirmar"; return; }
     off.disabled = true; try { await unshareNb(nb); toast("Já não está partilhado"); } catch(err) { toast("Não foi possível agora."); } render(); };
-  const e = $("#exp"); if (e) e.onclick = async () => { const data = JSON.parse(JSON.stringify(nb)); data.prog = {}; data.log = {}; delete data.goal; delete data.synced;
+  const e = $("#exp"); if (e) e.onclick = async () => { const data = JSON.parse(JSON.stringify(nb)); data.prog = {}; data.log = {}; delete data.goal; delete data.synced; delete data.errs; delete data.errDone; delete data.cnotes; delete data.quick; delete data.sims;
     try { await CAP.dl.save({filename: nb.name.replace(/[^\p{L}\p{N} _-]/gu, "").trim() + ".estojo.json", data: JSON.stringify({estojo: 1, nb: data})}); toast("Ficheiro guardado"); } catch(err) { if (err && err.code !== "cancelled") toast("Não foi possível guardar o ficheiro."); } };
   const p = $("#pub"); if (p) p.onclick = async () => { p.disabled = true; p.textContent = "A publicar…"; try { await publish(nb); } catch(err) { toast("Não foi possível publicar."); } p.disabled = false; p.textContent = "⭐ Publicar em destaque"; };
 }
@@ -2189,7 +2539,7 @@ function addCopy(src){
   const docMap = {}; const docs = (src.docs||[]).map(d => { const id = uid(); docMap[d.id] = id; return Object.assign({}, d, {id, synced: 0}); });
   const nb = {id: uid(), folder: f.id, name: src.name, color: src.color || 0, created: Date.now(), exams: src.exams || [], docs,
     cards: (src.cards||[]).map(c => Object.assign({}, c, {id: uid(), f: sanitize(c.f), r: sanitize(c.r), p: sanitize(c.p||""), doc: docMap[c.doc] || "", src: c.src || ""})),
-    notes: (src.notes||[]).map(n => ({id: uid(), title: n.title, html: sanitize(n.html)})), prog: {}, log: {}};
+    notes: (src.notes||[]).map(n => { const o = {id: uid(), title: String(n.title || ""), html: sanitize(n.html)}; if (n.rz && typeof n.rz === "object") o.rz = {titulo: String(n.rz.titulo || ""), fonte: String(n.rz.fonte || ""), secoes: rzClean(n.rz)}; return o; }), prog: {}, log: {}};
   const strs = a => Array.isArray(a) ? a.map(x => String(x == null ? "" : x).slice(0, 2000)) : null;
   if (Array.isArray(src.mods)) nb.mods = strs(src.mods).slice(0, 60);
   if (Array.isArray(src.trk)) nb.trk = src.trk.slice(0, 60).map(strs);
