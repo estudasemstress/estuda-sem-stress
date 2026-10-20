@@ -10,28 +10,25 @@ const FIREBASE_API_KEY = process.env.FIREBASE_API_KEY || "AIzaSyCl7YAiXb_TVZzUXS
 const OWNER_EMAIL = (process.env.OWNER_EMAIL || "estudasemstress@gmail.com").toLowerCase();
 const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { "content-type": "application/json" } });
 
-async function callGemini(prompt, wantJson, signal) {
+async function callGemini(prompt, wantJson, deadline) {
   const key = process.env.GEMINI_API_KEY; if (!key) throw new Error("sem chave");
-  // tenta vários modelos do Gemini: se um estiver ocupado (503) ou esgotado (429), passa ao seguinte
-  const models = (process.env.GEMINI_MODEL || "gemini-flash-latest,gemini-flash-lite-latest,gemini-3.5-flash-lite").split(",").map(s => s.trim()).filter(Boolean);
+  // primeiro o modelo rápido; se falhar ou estiver ocupado, tenta o seguinte — sempre dentro do tempo limite
+  const models = (process.env.GEMINI_MODEL || "gemini-flash-lite-latest,gemini-flash-latest").split(",").map(s => s.trim()).filter(Boolean);
   let last = "";
   for (const model of models) {
-    for (let tent = 0; tent < 2; tent++) {
+    const left = deadline - Date.now(); if (left < 3000) break;
+    try {
       const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-        method: "POST", signal, headers: { "content-type": "application/json" },
+        method: "POST", signal: AbortSignal.timeout(left - 1000), headers: { "content-type": "application/json" },
         body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: wantJson ? { responseMimeType: "application/json" } : {} }) });
-      if (r.ok) {
-        const j = await r.json(); const t = (j.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
-        if (t) return t; last = model + " vazio"; break;
-      }
-      last = model + " " + r.status;
-      if (r.status === 503 && tent === 0) { await new Promise(res => setTimeout(res, 1500)); continue; }
-      break;
-    }
+      if (r.ok) { const j = await r.json(); const t = (j.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join(""); if (t) return t; last = model + " vazio"; continue; }
+      last = model + " " + r.status + " " + (await r.text()).slice(0, 160).replace(/\s+/g, " ");
+    } catch (e) { last = model + " " + (e.name === "TimeoutError" || e.name === "AbortError" ? "demorou demasiado" : e.message); }
   }
   throw new Error("gemini " + last);
 }
-async function callClaude(prompt, wantJson, signal) {
+async function callClaude(prompt, wantJson, deadline) {
+  const signal = AbortSignal.timeout(Math.max(1000, deadline - Date.now() - 1000));
   const key = process.env.ANTHROPIC_API_KEY; if (!key) throw new Error("sem chave");
   const model = process.env.CLAUDE_MODEL || "claude-haiku-5-5";
   const r = await fetch("https://api.anthropic.com/v1/messages", {
@@ -41,7 +38,8 @@ async function callClaude(prompt, wantJson, signal) {
   const j = await r.json(); const t = (j.content || []).map(c => c.text || "").join("");
   if (!t) throw new Error("claude vazio"); return t;
 }
-async function callOpenAI(prompt, wantJson, signal) {
+async function callOpenAI(prompt, wantJson, deadline) {
+  const signal = AbortSignal.timeout(Math.max(1000, deadline - Date.now() - 1000));
   const key = process.env.OPENAI_API_KEY; if (!key) throw new Error("sem chave");
   const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
   const r = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -72,11 +70,13 @@ export default async (req) => {
   const used = parseInt((await store.get(key)) || "0", 10) || 0;
   if (!isOwner && used >= LIMIT) return json({ error: "limite", used, limit: LIMIT }, 429);
   // 4) tentar as IA por ordem; se uma falhar, passa à seguinte
+  const deadline = Date.now() + 23000; // o Netlify corta aos ~26-30 s: respondemos sempre antes
   const order = (process.env.AI_ORDER || "gemini,claude,openai").split(",").map(s => s.trim()).filter(p => PROVIDERS[p]);
   const errors = [];
   for (const p of order) {
+    if (deadline - Date.now() < 3000) { errors.push(p + ": sem tempo"); continue; }
     try {
-      const text = await PROVIDERS[p](prompt, !!body.json, AbortSignal.timeout(55000));
+      const text = await PROVIDERS[p](prompt, !!body.json, deadline);
       await store.set(key, String(used + 1));
       return json({ text, provider: p, used: used + 1, limit: isOwner ? null : LIMIT });
     } catch (e) { errors.push(p + ": " + e.message); }
