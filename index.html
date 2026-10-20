@@ -346,7 +346,15 @@ a.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:cent
 
 
 .c3 .fcb{justify-content:center}
-.c3 .fr .mynote{align-self:stretch;text-align:left}
+.c3 .fr .mynote{align-self:stretch;text-align:center}
+.c3 .bk>h2{text-align:left}
+.mt .gd{margin:2px 0 4px;line-height:1.5} .gq{display:flex;flex-direction:column;gap:6px} .gq details{background:rgba(255,255,255,.7);border-radius:10px;padding:7px 10px} .gq summary{cursor:pointer;font-weight:600} .gq p{margin:6px 0 0} .gtp{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#fff;border-radius:6px;padding:1px 6px;color:#5A4FA0}
+mark.hl{color:inherit;border-radius:3px;padding:0 1px;-webkit-box-decoration-break:clone;box-decoration-break:clone;cursor:pointer}
+.hl-am{background:#FFEC8A} .hl-rs{background:#FBC8DA} .hl-vd{background:#BDEBCD} .hl-az{background:#C6DDFA} .hl-li{background:#DCCDFA}
+.hlpal{position:fixed;z-index:80;display:flex;align-items:center;gap:6px;background:var(--surface);border:1.5px solid var(--tline);border-radius:999px;padding:6px 9px;box-shadow:0 8px 24px rgba(40,30,80,.22)}
+.hlpal .hlt{font-size:1.1rem} .hlb{width:28px;height:28px;border-radius:50%;border:2px solid rgba(0,0,0,.12);cursor:pointer;padding:0}
+.c3 .bk{-webkit-user-select:text;user-select:text}
+details.mt>summary{cursor:pointer} details.mt>summary .muted{display:block;font-weight:400;font-size:.85rem} .mt .mtk{margin:8px 0 2px;font-weight:700;font-size:.85rem}
 .chatbox{display:flex;flex-direction:column;gap:10px}
 .cmsgs{display:flex;flex-direction:column;gap:8px;min-height:160px;max-height:52vh;overflow:auto;padding:4px 2px}
 .cmsg{max-width:88%;border-radius:14px;padding:8px 12px;font-size:.94rem;line-height:1.45;display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
@@ -1809,6 +1817,7 @@ function wireNb(){
   $("#back").onclick = () => go({v: "home"});
   $("#edNb").onclick = () => nbDialog(nb);
   document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => { if (AUD) audioStop(true); sayStop(); route.tab = b.dataset.tab; studyState = null; render(); });
+  if (route.tab !== "study") { HLCTX = null; hlHide(); }
   ({study: wireStudy, sim: wireSim, errs: wireErrs, cards: wireCards, docs: wireDocs, notes: wireNotes, plan: wirePlan, share: wireShare})[route.tab](nb);
 }
 
@@ -1835,13 +1844,47 @@ function modsHtml(nb, M){
     return `<button class="mrow" data-mod="${i}"><span class="mn"><b style="background:${M.col[i][1]}">${i+1}</b>${esc(name)}</span><span class="mc">${ok}/${cs.length}${rv ? ` · ${rv} a rever` : ""}</span><span class="bar"><i style="width:${ok/cs.length*100}%;background:var(--ok-bar)"></i><i style="width:${rv/cs.length*100}%;background:var(--rev-bar)"></i></span></button>`; }).join("");
   return `<details class="det" data-det="mods" ${openDet.mods ? "open" : ""}><summary>📊 Progresso por módulo</summary><div class="mlist">${rows}</div><p class="muted">Toca num módulo para estudar só esse.</p></details>`;
 }
+let openMt = {};
+const GUIDE_PROMPT = `És um professor experiente e simpático que prepara alunos para testes e frequências. Recebes TODOS os flashcards de um módulo. Faz um guia de estudo deste módulo que ajude mesmo a perceber e a ter boa nota. Usa APENAS a matéria dos cartões: não inventes matéria nova e não ponhas nada só para encher — cada linha tem de ser útil para ESTE módulo. Português de Portugal, linguagem simples, descontraída e clara (como um colega que percebe muito disto).
+Responde APENAS com JSON neste formato:
+{"dia": "uma comparação com o dia a dia que ajude a perceber a ideia geral do módulo (2 a 4 frases)",
+ "explica": [{"t": "tema", "x": "o que isto quer dizer, por palavras simples, em 1 a 3 frases"}],
+ "truques": ["sigla, frase engraçada, rima ou comparação que ajuda a lembrar algo concreto (diz o que ajuda a lembrar)"],
+ "responder": ["dica concreta para responder a perguntas deste módulo num teste: palavras-chave que o professor espera, como organizar a resposta, erros comuns a evitar"],
+ "perguntas": [{"q": "pergunta tal como pode sair num teste ou frequência", "tipo": "definição | enumerar | comparar | explicar | caso prático | verdadeiro ou falso", "r": "como responder: resposta modelo curta com as palavras-chave"}]}
+Regras: "explica" tem de cobrir TODOS os temas que aparecem nos cartões (junta cartões parecidos; no máximo 14 temas). "truques": 5 a 10. "responder": 3 a 6. "perguntas": 5 a 8, de tipos variados.`;
+async function makeGuide(nb, M, i){
+  if (!CAP.sample || ACC_LIMIT) throw {code: ACC_LIMIT ? "rate_limited" : "no_ai"};
+  let txt = ""; const cs = nb.cards.filter(c => M.of(c) === i);
+  for (const c of cs) { const line = `- ${plain(c.f)}: ${plain(c.r).slice(0, 320)}\n`; if (txt.length + line.length > 12000) break; txt += line; }
+  const r = await CAP.sample(GUIDE_PROMPT + `\n\nMódulo: ${M.names[i]}\n\nFlashcards:\n` + txt, {modelTier: "default"});
+  iaUse("criar"); const g = parseJsonLoose(r.text); if (!g || typeof g !== "object") throw {code: "bad"};
+  const S = (x, n) => String(x || "").trim().slice(0, n), A = (x, n) => Array.isArray(x) ? x.slice(0, n) : [];
+  const out = {dia: S(g.dia, 900), explica: A(g.explica, 16).map(e => ({t: S(e && e.t, 120), x: S(e && (e.x || e.texto), 600)})).filter(e => e.t && e.x),
+    truques: A(g.truques, 12).map(t => S(typeof t === "string" ? t : t && (t.t || t.truque), 500)).filter(Boolean),
+    responder: A(g.responder, 8).map(t => S(typeof t === "string" ? t : t && t.t, 500)).filter(Boolean),
+    perguntas: A(g.perguntas, 10).map(q => ({q: S(q && q.q, 400), tipo: S(q && q.tipo, 40), r: S(q && q.r, 900)})).filter(q => q.q), at: Date.now()};
+  if (!out.explica.length && !out.truques.length) throw {code: "bad"};
+  nb.guide = nb.guide || {}; nb.guide[i] = out; save(nb); return out;
+}
+function guideHtml(g){
+  return `${g.dia ? `<p class="mtk">🏠 No dia a dia</p><p class="gd">${esc(g.dia)}</p>` : ""}
+    ${g.explica.length ? `<p class="mtk">📖 O que tens de perceber</p><ul>${g.explica.map(e => `<li><b>${esc(e.t)}:</b> ${esc(e.x)}</li>`).join("")}</ul>` : ""}
+    ${g.truques.length ? `<p class="mtk">🔤 Truques para decorar</p><ul>${g.truques.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+    ${g.responder.length ? `<p class="mtk">✍️ Como responder no teste</p><ul>${g.responder.map(t => `<li>${esc(t)}</li>`).join("")}</ul>` : ""}
+    ${g.perguntas.length ? `<p class="mtk">❓ Perguntas que podem sair <span class="muted">(tenta responder antes de abrir)</span></p><div class="gq">${g.perguntas.map(q => `<details><summary>${q.tipo ? `<span class="gtp">${esc(q.tipo)}</span> ` : ""}${esc(q.q)}</summary><p>${esc(q.r)}</p></details>`).join("")}</div>` : ""}`;
+}
 function tricksHtml(nb, M){
   const st = studyState, one = st.mod !== "all" ? +st.mod : null;
   const list = M.names.map((name, i) => { if (one !== null && i !== one) return "";
-    const own = (nb.trk && nb.trk[i]) || [];
-    const auto = own.length ? [] : nb.cards.filter(c => M.of(c) === i && plain(c.d).trim()).slice(0, 12).map(c => `<b>${esc(plain(c.f))}</b>: ${esc(plain(c.d))}`);
-    const items = own.map(x => esc(x)).concat(auto); if (!items.length) return "";
-    return `<div class="mt" style="background:${M.col[i][0]}"><b>${i+1}. ${esc(name)}</b><ul>${items.map(x => `<li>${x}</li>`).join("")}</ul></div>`; }).join("");
+    const own = ((nb.trk && nb.trk[i]) || []).map(x => esc(x)), seen = new Set(((nb.trk && nb.trk[i]) || []).map(x => plain(x).trim()));
+    const cardT = nb.cards.filter(c => M.of(c) === i && plain(c.d).trim() && !seen.has(plain(c.d).trim())).map(c => `<b>${esc(cardNum(nb, M, c))} ${esc(plain(c.f))}</b>: ${esc(plain(c.d))}`);
+    const g = (nb.guide || {})[i], n = own.length + cardT.length + (g ? g.truques.length : 0); if (!nb.cards.some(c => M.of(c) === i)) return "";
+    return `<details class="mt" data-mt="${i}" style="background:${M.col[i][0]}" ${one !== null || openMt[i] ? "open" : ""}><summary><b>${i+1}. ${esc(name)}</b> <span class="muted">· ${n} ${n === 1 ? "truque" : "truques"}</span></summary>
+      ${g ? guideHtml(g) : `<p class="gd muted">Carrega no botão e a IA faz o guia deste módulo: um exemplo do dia a dia, a explicação simples de tudo o que aparece nos cartões, truques, como responder e as perguntas que podem sair no teste.</p>`}
+      <button class="btn sm ${g ? "" : "fill"}" data-trkai="${i}" style="margin-top:6px">${g ? "↻ Refazer o guia com IA" : "✨ Criar o guia deste módulo"}</button>
+      ${own.length ? `<p class="mtk">⭐ Os grandes truques do módulo</p><ul>${own.map(x => `<li>${x}</li>`).join("")}</ul>` : ""}
+      ${cardT.length ? `<p class="mtk">🃏 Truque de cada cartão</p><ul>${cardT.map(x => `<li>${x}</li>`).join("")}</ul>` : ""}</details>`; }).join("");
   return `<details class="det" data-det="trk" ${openDet.trk ? "open" : ""}><summary>🧠 Truques para decorar</summary>
     <div class="gen">${GEN_TIPS.map(([t, d]) => `<div><b>${esc(t)}</b>${esc(d)}</div>`).join("")}</div>
     ${list ? `<h4>${one === null ? "Truques de cada módulo" : "Truques deste módulo"}</h4>${list}` : `<p class="muted">Os truques aparecem aqui quando os cartões têm «💡 Truque». Os ✨ Flashcards com IA já os trazem.</p>`}</details>`;
@@ -2039,7 +2082,7 @@ function tabErrs(nb){
     return `<div class="erritem"><button class="errhead" data-eo="${c.id}" aria-expanded="${!!open}"><b><span class="enum">${esc(cardNum(nb, M, c))}</span> ${esc(plainTxt(c.f))}</b><span class="muted">${g.L.length ? `${g.L.length} ${g.L.length === 1 ? "erro" : "erros"} · ${esc(last.from)} · ${new Date(last.at).toLocaleDateString("pt-PT")}` : "marcado como «Rever»"}</span><span class="chev">${open ? "▴" : "▾"}</span></button>
       ${open ? `<div class="errbody">
         ${last ? `<div class="eb you"><b>O que respondeste</b>${last.ans ? esc(last.ans) : "<i>sem resposta</i>"}</div><div class="eb why"><b>Porque está errado</b>${last.c ? esc(last.c) + "<br>" : ""}<i>${esc(localWhy(c, last.ans))}</i></div>` : ""}
-        <div class="eb ok"><b>Resposta certa</b><span class="rich">${rich(c.r)}</span></div>
+        <div class="eb ok"><b>Resposta certa</b><span class="rich" data-hlr="${c.id}">${rich(c.r)}</span></div>
         ${plainTxt(c.p).trim() ? `<div class="eb"><b>💬 Porquê?</b><span class="rich">${rich(c.p)}</span></div>` : ""}
         ${helpHtml(nb, c)}
         ${plainTxt(c.d).trim() ? `<div class="eb"><b>💡 Truque</b>${esc(plainTxt(c.d))}</div>` : ""}
@@ -2061,6 +2104,7 @@ function tabErrs(nb){
     ${notes.length ? `<div class="panel"><h3>✏️ As minhas notas nos cartões</h3><div class="list">${notes.map(x => `<div class="li"><div class="grow"><b>${esc(plainTxt(x.c.f))}</b><span>${esc(x.t)}</span></div><button class="btn sm" data-enote="${x.c.id}">✎</button></div>`).join("")}</div></div>` : ""}`;
 }
 function wireErrs(nb){
+  HLCTX = null; document.querySelectorAll("[data-hlr]").forEach(el => applyHl(nb, nb.cards.find(c => c.id === el.dataset.hlr), el));
   document.querySelectorAll("[data-eo]").forEach(b => b.onclick = () => { errOpen[b.dataset.eo] = !errOpen[b.dataset.eo]; render(); });
   const card = id => nb.cards.find(c => c.id === id);
   document.querySelectorAll("[data-esay]").forEach(b => b.onclick = () => { const c = card(b.dataset.esay), g = errGroups(nb).find(x => x.c === c), last = g && g.L[0];
@@ -2125,9 +2169,52 @@ function hintsFor(c){
 }
 function sizeCard(){ const c = $("#card"); if (!c) return; const f = c.querySelector(".fr"), b = c.querySelector(".bk");
   const h = Math.max(320, f.scrollHeight, b.scrollHeight); c.style.height = h + "px"; }
+// ---------- sublinhar a parte de trás do cartão (cores pastel)
+const HL = [["am", "Amarelo"], ["rs", "Rosa"], ["vd", "Verde"], ["az", "Azul"], ["li", "Lilás"]];
+let HLCTX = null, hlTimer = null;
+function markText(root, phrase, cls, idx){
+  const nodes = [], walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode: n => n.parentElement.closest("button,.cbtns,.src,.ctag,mark") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT});
+  let full = "", n; while ((n = walk.nextNode())) { nodes.push({n, s: full.length}); full += n.nodeValue; }
+  const norm = x => x.replace(/\s+/g, " ");
+  let pos = full.indexOf(phrase), len = phrase.length;
+  if (pos < 0) { const f2 = norm(full), p2 = f2.indexOf(norm(phrase)); if (p2 < 0) return false;
+    let i = 0, j = 0; const map = []; while (i < full.length) { map[j] = i; if (/\s/.test(full[i])) { while (i < full.length && /\s/.test(full[i])) i++; } else i++; j++; } map[j] = full.length;
+    pos = map[p2]; len = map[p2 + norm(phrase).length] - pos; }
+  const end = pos + len;
+  nodes.forEach(({n, s: st}) => { const ns = st, ne = st + n.nodeValue.length; if (ne <= pos || ns >= end) return;
+    const a = Math.max(pos, ns) - ns, b = Math.min(end, ne) - ns; let mid = n; if (a > 0) mid = n.splitText(a); if (b - a < mid.nodeValue.length) mid.splitText(b - a);
+    const m = document.createElement("mark"); m.className = "hl hl-" + cls; m.dataset.hli = idx; mid.parentNode.insertBefore(m, mid); m.appendChild(mid); });
+  return true;
+}
+function applyHl(nb, c, root){ if (!root) return; ((nb.hl || {})[c.id] || []).forEach((h, i) => markText(root, h.t, h.c, i)); }
+function hlHide(){ const p = document.getElementById("hlPal"); if (p) p.remove(); }
+function hlShow(rect, html, wire){ hlHide(); const p = document.createElement("div"); p.id = "hlPal"; p.className = "hlpal"; p.innerHTML = html; document.body.appendChild(p);
+  const w = p.offsetWidth, x = Math.max(8, Math.min(window.innerWidth - w - 8, rect.left + rect.width / 2 - w / 2)), y = rect.top > 70 ? rect.top - 52 : rect.bottom + 10;
+  p.style.left = x + "px"; p.style.top = y + "px"; p.onmousedown = e => e.preventDefault(); wire(p); }
+function hlCheck(){
+  if (!HLCTX) return; const sel = window.getSelection(); const txt = String(sel || "").trim();
+  const back = document.querySelector(HLCTX.sel); if (!back || !txt || txt.length < 2 || !sel.rangeCount || !back.contains(sel.anchorNode) || !back.contains(sel.focusNode)) { if (!txt) setTimeout(() => { if (!String(window.getSelection()).trim() && !document.querySelector("#hlPal.rm")) hlHide(); }, 150); return; }
+  const {nb, c} = HLCTX;
+  hlShow(sel.getRangeAt(0).getBoundingClientRect(), `<span class="hlt">🖍</span>${HL.map(([k, l]) => `<button class="hlb hl-${k}" data-hlc="${k}" aria-label="Sublinhar a ${l}"></button>`).join("")}`, p => {
+    p.querySelectorAll("[data-hlc]").forEach(b => b.onclick = () => { nb.hl = nb.hl || {}; (nb.hl[c.id] = nb.hl[c.id] || []).push({t: txt.slice(0, 400), c: b.dataset.hlc});
+      nb.hl[c.id] = nb.hl[c.id].slice(-40); save(nb); window.getSelection().removeAllRanges(); hlHide(); render(); }); });
+}
+document.addEventListener("selectionchange", () => { clearTimeout(hlTimer); hlTimer = setTimeout(hlCheck, 350); });
+document.addEventListener("pointerdown", e => { if (!e.target.closest("#hlPal,mark.hl")) { const p = document.getElementById("hlPal"); if (p && p.classList.contains("rm")) hlHide(); } });
+function hlRemoveAsk(nb, c, m){
+  const i = +m.dataset.hli; hlShow(m.getBoundingClientRect(), `<button class="btn sm" data-hlx>🧽 Tirar sublinhado</button>${HL.map(([k, l]) => `<button class="hlb hl-${k}" data-hlc="${k}" aria-label="Mudar para ${l}"></button>`).join("")}`, p => {
+    p.classList.add("rm");
+    p.querySelector("[data-hlx]").onclick = () => { nb.hl[c.id].splice(i, 1); save(nb); hlHide(); render(); };
+    p.querySelectorAll("[data-hlc]").forEach(b => b.onclick = () => { nb.hl[c.id][i].c = b.dataset.hlc; save(nb); hlHide(); render(); }); });
+}
+
 function wireStudy(nb){
   const st = studyState, deck = deckOf(nb);
   document.querySelectorAll("[data-det]").forEach(d => d.ontoggle = () => { openDet[d.dataset.det] = d.open; if (d.dataset.det === "dic" && d.open) fillDict(nb); });
+  document.querySelectorAll("[data-mt]").forEach(d => d.ontoggle = () => { openMt[d.dataset.mt] = d.open; });
+  document.querySelectorAll("[data-trkai]").forEach(b => b.onclick = async () => { const i = +b.dataset.trkai, t = b.textContent; b.disabled = true; b.textContent = "A preparar o guia… (uns 10 a 20 segundos)"; openMt[i] = true;
+    try { await makeGuide(nb, modsOf(nb), i); toast("Guia do módulo pronto 🧠"); render(); }
+    catch(e) { if (e && e.code === "rate_limited") { accLimit(); toast("Chegaste ao limite de IA de hoje."); } else if (e && e.code === "no_ai") toast("Entra na tua conta para usar a IA."); else toast("A IA não respondeu agora. Tenta daqui a pouco."); b.disabled = false; b.textContent = t; } });
   if (openDet.dic) fillDict(nb);
   const cg = $("#cdGo"); if (cg) cg.onclick = () => { st.f = nb.cards.some(c => !nb.prog[c.id]) ? "todo" : "r"; st.pos = 0; st.flip = false; render(); setTimeout(() => { const k = $("#card"); k && k.scrollIntoView({behavior: "smooth", block: "center"}); }, 50); };
   const cd = $("#cdDates"); if (cd) cd.onclick = () => { route.tab = "plan"; studyState = null; render(); };
@@ -2144,7 +2231,10 @@ function wireStudy(nb){
   if (st.pp) return wirePP(nb);
   const card = $("#card"); if (!card) return;
   sizeCard(); setTimeout(sizeCard, 300);
-  card.onclick = e => { if (e.target.closest("[data-src]")) return; if (e.target.closest("[data-doubt]")) { e.stopPropagation(); return explainCard(deck[st.pos], nb); }
+  const cc0 = deck[st.pos]; if (cc0) { applyHl(nb, cc0, card.querySelector(".bk")); HLCTX = {nb, c: cc0, sel: "#card .bk"}; } else HLCTX = null; hlHide();
+  card.onclick = e => { if (e.target.closest("[data-src]")) return;
+    const mk = e.target.closest("mark.hl"); if (mk && st.flip) { e.stopPropagation(); return hlRemoveAsk(nb, deck[st.pos], mk); }
+    const sl = window.getSelection(); if (String(sl || "").trim() && card.contains(sl.anchorNode)) return; if (e.target.closest("[data-doubt]")) { e.stopPropagation(); return explainCard(deck[st.pos], nb); }
     const sy = e.target.closest("[data-say]"); if (sy) { e.stopPropagation(); const cc = deck[st.pos]; return sayParts(sy.dataset.say === "f" ? frontParts(nb, cc) : backParts(nb, cc)); }
     if (e.target.closest("[data-cnote]")) { e.stopPropagation(); return cardNoteDialog(nb, deck[st.pos]); }
     if (e.target.closest("[data-hint]")) { e.stopPropagation(); st.hint = (st.hint || 0) + 1; return render(); } st.flip = !st.flip; card.classList.toggle("flipped", st.flip); };
@@ -2779,7 +2869,7 @@ function wireShare(nb){
     render(); };
   const off = $("#shOff"); if (off) off.onclick = async () => { if (!off.dataset.sure) { off.dataset.sure = 1; off.textContent = "Carrega outra vez para confirmar"; return; }
     off.disabled = true; try { await unshareNb(nb); toast("Já não está partilhado"); } catch(err) { toast("Não foi possível agora."); } render(); };
-  const e = $("#exp"); if (e) e.onclick = async () => { const data = JSON.parse(JSON.stringify(nb)); data.prog = {}; data.log = {}; delete data.goal; delete data.synced; delete data.errs; delete data.errDone; delete data.chats; delete data.errHelp; delete data.plans; delete data.cnotes; delete data.quick; delete data.sims;
+  const e = $("#exp"); if (e) e.onclick = async () => { const data = JSON.parse(JSON.stringify(nb)); data.prog = {}; data.log = {}; delete data.goal; delete data.synced; delete data.errs; delete data.errDone; delete data.chats; delete data.errHelp; delete data.hl; delete data.plans; delete data.cnotes; delete data.quick; delete data.sims;
     try { await CAP.dl.save({filename: nb.name.replace(/[^\p{L}\p{N} _-]/gu, "").trim() + ".estojo.json", data: JSON.stringify({estojo: 1, nb: data})}); toast("Ficheiro guardado"); } catch(err) { if (err && err.code !== "cancelled") toast("Não foi possível guardar o ficheiro."); } };
   const p = $("#pub"); if (p) p.onclick = async () => { p.disabled = true; p.textContent = "A publicar…"; try { await publish(nb); } catch(err) { toast("Não foi possível publicar."); } p.disabled = false; p.textContent = "⭐ Publicar em destaque"; };
 }
