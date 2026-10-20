@@ -344,6 +344,18 @@ a.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:cent
 .stars{color:#C8961E;letter-spacing:.05em}
 .starpick button{border:0;background:none;font-size:1.3rem;color:#C8961E;padding:0 2px;cursor:pointer}
 
+
+.c3 .fcb{justify-content:center}
+.c3 .fr .mynote{align-self:stretch;text-align:left}
+.chatbox{display:flex;flex-direction:column;gap:10px}
+.cmsgs{display:flex;flex-direction:column;gap:8px;min-height:160px;max-height:52vh;overflow:auto;padding:4px 2px}
+.cmsg{max-width:88%;border-radius:14px;padding:8px 12px;font-size:.94rem;line-height:1.45;display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
+.cmsg.ai{align-self:flex-start;background:var(--soft);border-radius:14px 14px 14px 4px}
+.cmsg.me{align-self:flex-end;background:var(--accent-soft);border-radius:14px 14px 4px 14px}
+.cmsg .linkbtn{align-self:flex-start;font-size:.75rem;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.typing i{animation:blink 1.2s infinite;font-style:normal} .typing i:nth-child(2){animation-delay:.2s} .typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 /* voz, notas e erros */
 .c3 .cbtns{display:flex;gap:6px;flex-wrap:wrap}
 .c3 .mynote{margin:0;background:#FFF4D2;border-radius:10px;padding:8px 11px;font-size:.9rem;color:#4A3B10}
@@ -356,6 +368,11 @@ a.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:cent
 .errbody{display:flex;flex-direction:column;gap:8px;padding:0 14px 14px}
 .eb{border-radius:10px;padding:8px 11px;background:var(--soft);font-size:.93rem;overflow-wrap:anywhere}
 .eb b{display:block;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.errmod{display:flex;flex-direction:column;gap:8px;border-left:4px solid var(--mc);padding-left:10px}
+.errmodh{display:flex;align-items:center;gap:8px} .errmodh .mnum{background:var(--accent);color:var(--surface);border-radius:8px;min-width:26px;height:26px;display:grid;place-items:center;font-weight:800;font-size:.85rem}
+.enum{color:var(--muted);font-weight:700;font-size:.85rem;margin-right:2px}
+.eb.learn{background:#EAF3FF;color:#1E2F4A;display:flex;flex-direction:column;gap:6px} .eb.learn b{color:#3B5A8A} .eb.learn .lp{line-height:1.5}
+.eb.learn .mn{background:#fff;border:1.5px dashed #8DB3E8;border-radius:10px;padding:6px 9px;line-height:1.45}
 .eb.you{background:var(--rev-soft)} .eb.why{background:var(--warn-soft)} .eb.ok{background:var(--ok-soft)} .eb.note{background:#FFF4D2;color:#4A3B10}
 
 /* resumo no formato Estuda Sem Stress */
@@ -383,6 +400,28 @@ a.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:cent
 .rz-add{color:#aaa;font-style:italic}
 @media (max-width:560px){ .rz{padding:14px 12px;font-size:.8rem} .rz-defs th{width:36%} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+/* plano */
+.plan{display:flex;flex-direction:column;gap:12px} .plan select{margin-left:6px} .plmods{max-height:260px;overflow:auto}
+.wdays{gap:6px;margin-top:6px} .plwarn{margin:0;background:var(--warn-soft);border-radius:10px;padding:8px 11px}
+.pdays{display:flex;flex-direction:column;gap:8px}
+.pday{border:1.5px solid var(--tline);border-radius:12px;background:var(--surface);padding:8px 12px}
+.pday summary{cursor:pointer;padding:2px 0} .pday.today{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)} .pday.test{border-style:dashed;border-color:var(--rev)}
+.ptask{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--tline)} .ptask label{flex:1;min-width:0;display:flex;gap:8px;align-items:flex-start} .ptask.done span{text-decoration:line-through;opacity:.6}
+/* cronómetro */
+.tmrpill{position:fixed;right:calc(14px + env(safe-area-inset-right, 0px));bottom:calc(14px + env(safe-area-inset-bottom, 0px));z-index:60;border:0;border-radius:999px;padding:10px 15px;font-weight:800;font-size:.95rem;background:var(--accent);color:var(--surface);box-shadow:0 6px 18px rgba(40,30,80,.28);font-variant-numeric:tabular-nums;cursor:pointer}
+.tmrpill.idle{font-size:1.2rem;padding:9px 13px} .tmrpill.break{background:var(--ok)} .tmrpill.back{background:var(--rev);animation:tmp 1s infinite} .tmrpill.held{background:var(--muted)}
+@keyframes tmp{50%{transform:scale(1.08)}}
+.tmrpanel{position:fixed;right:calc(14px + env(safe-area-inset-right, 0px));bottom:calc(70px + env(safe-area-inset-bottom, 0px));z-index:61;width:min(360px,calc(100vw - 28px));display:flex;flex-direction:column;gap:10px;box-shadow:0 12px 40px rgba(40,30,80,.25)}
+.tmbig{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:6px 0} .tmbig b{font-size:2.6rem;font-variant-numeric:tabular-nums;color:var(--accent);line-height:1.15!important}
+#tmS b{font-size:inherit;color:var(--ink)} body::after{content:"";display:block;height:70px}
+.tmbtns,.tmset{gap:6px;flex-wrap:wrap} .tmday{margin:0;font-size:.85rem}
+@media print{.tmrpill,.tmrpanel{display:none}}
+/* leitura fácil (dislexia): espaçamento 2,0 em todos os textos */
+html.dys body :is(p,li,span,div,td,th,label,blockquote,textarea,input,select,b,i,em,strong,a,h1,h2,h3,h4,.rich,[contenteditable]){line-height:2!important}
+html.dys body :is(p,li,td,.rich,.eb,.cmsg,.term,.tip,textarea,[contenteditable]){word-spacing:.12em}
+html.dys body :is(.btn,.btn *,.pill,.pill *,.mnum,.enum,.chev,.chip,.chips button){line-height:1.3!important}
+html.dys body :is(.errhead,.errhead *){line-height:1.8!important}
+#dysB.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
 </style>
 
 </head>
@@ -390,6 +429,7 @@ a.btn{text-decoration:none;color:var(--ink);display:inline-flex;align-items:cent
 <div class="wrap" id="app"></div>
 
 <script>
+let LH2 = false; let DYS = false; try { DYS = localStorage.getItem("ess-dys") === "1"; } catch(e) {} document.documentElement.classList.toggle("dys", DYS);
 "use strict";
 // ---------- utilidades
 const $ = (s, r = document) => r.querySelector(s);
@@ -966,7 +1006,7 @@ function render(){
   const a = $("#app");
   const head = `<div class="top"><button class="brand" id="home"><b>${BRAND}</b><span>de estudantes para estudantes</span></button>
     <button class="btn sm ia${ACC_LIMIT ? " zero" : ""}" id="iaB" title="Como funciona a IA">${iaPillText()}</button>
-    <button class="btn sm" id="libB">📚 Biblioteca</button><button class="btn sm" id="grB">👥 Grupos</button><button class="btn sm" id="acB">${CAP.uid ? "👤 " + esc((CAP.name || "Conta").split(" ")[0]) : "👤 Entrar"}</button><button class="btn sm" id="abB">💬 Dúvidas e sobre mim</button><button class="btn sm" id="invB">🔗 Convidar</button><button class="btn sm" id="helpB">❓ Como funciona</button></div>${iaBar()}`;
+    <button class="btn sm" id="libB">📚 Biblioteca</button><button class="btn sm" id="grB">👥 Grupos</button><button class="btn sm" id="acB">${CAP.uid ? "👤 " + esc((CAP.name || "Conta").split(" ")[0]) : "👤 Entrar"}</button><button class="btn sm" id="abB">💬 Dúvidas e sobre mim</button><button class="btn sm" id="invB">🔗 Convidar</button><button class="btn sm" id="helpB">❓ Como funciona</button><button class="btn sm${DYS ? " on" : ""}" id="dysB" aria-pressed="${DYS}" title="Espaçamento entre linhas de 2,0 em todos os textos">🔤 Leitura fácil${DYS ? " ✓" : ""}</button></div>${iaBar()}`;
   let body = "";
   if (route.v === "loading") { a.innerHTML = `<div class="poster"><div class="paper" style="min-height:60vh;display:grid;place-items:center"><h1 class="ptitle">${BRAND}</h1><p class="hand">a abrir…</p></div></div>`; return; }
   if (route.v === "login") { a.innerHTML = viewLogin(); wireLogin(); return; }
@@ -981,6 +1021,7 @@ function render(){
   $("#libB").onclick = () => go({v: "lib"});
   $("#grB").onclick = () => { stopGroup(); loadGroups(); go({v: "groups"}); }; $("#acB").onclick = accountDialog;
   $("#iaB").onclick = iaInfo; $("#invB").onclick = inviteDialog; $("#helpB").onclick = () => tour(0);
+  $("#dysB").onclick = () => { DYS = !DYS; try { localStorage.setItem("ess-dys", DYS ? "1" : "0"); } catch(e) {} document.documentElement.classList.toggle("dys", DYS); toast(DYS ? "Leitura fácil ligada: espaçamento 2,0 entre linhas" : "Leitura fácil desligada"); render(); };
   const ib = $("#impB"); if (ib) ib.onclick = importDialog;
   const abB = $("#abB"); if (abB) abB.onclick = () => go({v: "about"});
   if (route.v === "home") wireHome(); else if (route.v === "nb") wireNb(); else if (route.v === "lib") wireLib(); else if (route.v === "about") wireAbout(); else if (route.v === "groups") wireGroups(); else if (route.v === "group") wireGroup();
@@ -1066,7 +1107,7 @@ const xesc = s => String(s == null ? "" : s).replace(/[\u0000-\u0008\u000B\u000C
 const hx = c => String(c || "").replace("#", "").toUpperCase();
 function wRun(text, o){ o = o || {}; const pr = `<w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>${o.b ? "<w:b/>" : ""}${o.i ? "<w:i/>" : ""}${o.color ? `<w:color w:val="${hx(o.color)}"/>` : ""}<w:sz w:val="${Math.round((o.size || 11) * 2)}"/></w:rPr>`;
   return String(text).split("\n").map((l, k) => `${k ? "<w:r><w:br/></w:r>" : ""}<w:r>${pr}<w:t xml:space="preserve">${xesc(l)}</w:t></w:r>`).join(""); }
-function wPara(runs, o){ o = o || {}; return `<w:p><w:pPr>${o.shade ? `<w:shd w:val="clear" w:color="auto" w:fill="${hx(o.shade)}"/>` : ""}${o.bar ? `<w:pBdr><w:left w:val="single" w:sz="24" w:space="8" w:color="${hx(o.bar)}"/></w:pBdr>` : ""}<w:spacing w:before="${o.before || 0}" w:after="${o.after == null ? 80 : o.after}"/>${o.center ? '<w:jc w:val="center"/>' : ""}${o.keep ? "<w:keepNext/>" : ""}</w:pPr>${runs}</w:p>`; }
+function wPara(runs, o){ o = o || {}; return `<w:p><w:pPr>${o.shade ? `<w:shd w:val="clear" w:color="auto" w:fill="${hx(o.shade)}"/>` : ""}${o.bar ? `<w:pBdr><w:left w:val="single" w:sz="24" w:space="8" w:color="${hx(o.bar)}"/></w:pBdr>` : ""}<w:spacing w:before="${o.before || 0}" w:after="${o.after == null ? 80 : o.after}"${LH2 ? ' w:line="480" w:lineRule="auto"' : ""}/>${o.center ? '<w:jc w:val="center"/>' : ""}${o.keep ? "<w:keepNext/>" : ""}</w:pPr>${runs}</w:p>`; }
 function flashDocx(o){
   const INK = "2A2840", MUT = "6E6A86"; let body = "";
   body += wPara(wRun(o.eyebrow.toUpperCase(), {b: 1, size: 8.5, color: MUT}), {after: 40});
@@ -1201,18 +1242,45 @@ Pergunta: ${plainTxt(c.f)}
 Resposta oficial: ${plainTxt(c.r)}
 A minha resposta: ${ans || "(ainda não respondi)"}`);
 }
-async function explainCard(c){
+// conversa com a IA sobre um cartão: várias perguntas seguidas, fica guardada no cartão
+async function explainCard(c, nb){
   if (!CAP.sample || ACC_LIMIT) return otherAIExplain(c);
-  dialog(`<h3>🤔 A tua dúvida</h3><p class="muted" style="margin:0">${esc(plainTxt(c.f))}</p><div class="panel rich" id="exA" style="min-height:80px">A pensar…</div>
-    <label class="muted" for="exQ">Queres perguntar algo em concreto? (opcional)</label><input type="text" id="exQ" style="width:100%" placeholder="Ex.: não percebo a diferença entre…">
-    <div class="row">${HAS_TTS ? `<button class="btn" id="exSay">🔊 Ouvir</button>` : ""}<button class="btn" id="exO">🤖 Perguntar a outra IA</button><span class="grow"></span><button class="btn" id="cx">Fechar</button><button class="btn fill" id="exGo">Perguntar</button></div>`, (d, close) => {
-    d.querySelector("#cx").onclick = () => { sayStop(); close(); }; d.querySelector("#exO").onclick = () => { close(); otherAIExplain(c); };
-    const xs = d.querySelector("#exSay"); if (xs) xs.onclick = () => sayParts([[d.querySelector("#exA").textContent, "pt-PT"]]);
-    const ask = async () => { const q = d.querySelector("#exQ").value.trim(), box = d.querySelector("#exA"); box.textContent = "A pensar…";
-      try { const r = await CAP.sample(`És um explicador paciente. Um estudante tem uma dúvida sobre este flashcard. Explica de forma simples, em português de Portugal, em 3 a 6 frases, com um exemplo do dia a dia e uma dica para decorar. Não inventes matéria que contradiga a resposta.\n\nPergunta: ${plainTxt(c.f)}\nResposta: ${plainTxt(c.r)}${plainTxt(c.p) ? "\nExplicação: " + plainTxt(c.p) : ""}${q ? "\n\nDúvida concreta do estudante: " + q : ""}`, {modelTier: "default", onText: ({text}) => { box.textContent = text; }});
-        box.textContent = r.text; iaUse("corrigir"); }
-      catch(e) { if (e && e.code === "rate_limited") { accLimit(); box.textContent = "Chegaste ao limite de IA de hoje. Carrega em «🤖 Perguntar a outra IA» para usares o ChatGPT, o Gemini ou outra."; } else box.textContent = "A IA não respondeu agora. Experimenta «🤖 Perguntar a outra IA»."; } };
-    d.querySelector("#exGo").onclick = ask; ask(); });
+  nb = nb || nbOf(route.id); nb.chats = nb.chats || {};
+  const H = nb.chats[c.id] = (nb.chats[c.id] || []).slice(-30);
+  const ctx = `És um explicador paciente e simpático a falar com um estudante, em português de Portugal (trata-o por tu). Estão a conversar sobre este flashcard:
+Pergunta do cartão: ${plainTxt(c.f)}
+Resposta: ${plainTxt(c.r)}${plainTxt(c.p) ? "\nExplicação: " + plainTxt(c.p) : ""}${plainTxt(c.d) ? "\nTruque: " + plainTxt(c.d) : ""}
+Regras: responde de forma simples e curta (3 a 6 frases, ou uma lista curta), com exemplos do dia a dia quando ajudar; responde só ao que o estudante perguntar; não contradigas a resposta do cartão; se ele pedir, faz-lhe uma pergunta de treino ou uma mnemónica.`;
+  dialog(`<div class="chatbox"><div class="row" style="align-items:flex-start"><div class="grow"><h3 style="margin:0">💬 Conversa sobre o cartão</h3><p class="muted" style="margin:2px 0 0">${esc(plainTxt(c.f))}</p></div><button class="btn sm" id="cx" aria-label="Fechar">✕</button></div>
+    <div class="cmsgs" id="cm" aria-live="polite"></div>
+    <div class="chips" id="cq">${["Explica de forma mais simples", "Dá-me um exemplo", "Faz-me uma pergunta de treino", "Dá-me um truque para decorar"].map(q => `<button class="btn sm" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>
+    <form class="row" id="cf"><input type="text" id="ci" class="grow" maxlength="800" placeholder="Escreve a tua dúvida…" autocomplete="off"><button class="btn fill" id="cs">Enviar</button></form>
+    <div class="row"><button class="btn sm" id="cO">🤖 Perguntar a outra IA</button>${H.length ? `<button class="btn sm" id="cClr">🗑 Apagar conversa</button>` : ""}<span class="grow"></span><span class="muted" style="font-size:.78rem">A conversa fica guardada neste cartão.</span></div></div>`, (d, close) => {
+    const box = d.querySelector("#cm"), inp = d.querySelector("#ci"), sendB = d.querySelector("#cs");
+    let busy = false;
+    const draw = (pending) => {
+      box.innerHTML = (H.length ? "" : `<p class="muted">Pergunta o que quiseres sobre este cartão. Podes fazer várias perguntas seguidas.</p>`) + H.map((m, i) => `<div class="cmsg ${m.r === "u" ? "me" : "ai"}"><span>${esc(m.t).replace(/\n/g, "<br>")}</span>${m.r === "a" && HAS_TTS ? `<button class="linkbtn" data-say="${i}">🔊 ouvir</button>` : ""}</div>`).join("")
+        + (pending ? `<div class="cmsg ai"><span class="typing">A pensar<i>.</i><i>.</i><i>.</i></span></div>` : "");
+      box.querySelectorAll("[data-say]").forEach(b => b.onclick = () => sayParts([[H[+b.dataset.say].t, "pt-PT"]]));
+      box.scrollTop = box.scrollHeight;
+    };
+    const ask = async q => {
+      if (busy) return; busy = true; sendB.disabled = true;
+      if (q) H.push({r: "u", t: q.slice(0, 800)});
+      draw(true);
+      const conv = H.slice(-12).map(m => (m.r === "u" ? "Estudante: " : "Explicador: ") + m.t).join("\n\n");
+      const prompt = ctx + "\n\n" + (conv ? "CONVERSA ATÉ AGORA:\n" + conv + "\n\nResponde à última mensagem do estudante." : "O estudante abriu a conversa sem perguntar nada: explica este cartão de forma simples, com um exemplo e uma dica para decorar, e no fim pergunta se ficou alguma dúvida.");
+      try { const r = await CAP.sample(prompt, {modelTier: "default"}); H.push({r: "a", t: String(r.text || "").trim().slice(0, 4000)}); iaUse("corrigir"); }
+      catch(e) { if (e && e.code === "rate_limited") accLimit();
+        H.push({r: "a", t: e && e.code === "rate_limited" ? "Chegaste ao limite de IA de hoje. Carrega em «🤖 Perguntar a outra IA» para continuares com o ChatGPT, o Gemini ou outra." : "Não consegui responder agora. Tenta outra vez daqui a pouco, ou usa «🤖 Perguntar a outra IA»."}); }
+      nb.chats[c.id] = H.slice(-30); save(nb); busy = false; sendB.disabled = false; draw(false); inp.focus();
+    };
+    d.querySelector("#cf").onsubmit = e => { e.preventDefault(); const q = inp.value.trim(); if (!q) return; inp.value = ""; ask(q); };
+    d.querySelectorAll("[data-q]").forEach(b => b.onclick = () => ask(b.dataset.q));
+    d.querySelector("#cx").onclick = () => { sayStop(); close(); };
+    d.querySelector("#cO").onclick = () => { close(); otherAIExplain(c); };
+    const clr = d.querySelector("#cClr"); if (clr) clr.onclick = () => { H.length = 0; delete nb.chats[c.id]; save(nb); draw(false); };
+    draw(false); if (!H.length) ask(""); });
 }
 function otherAIExplain(c){
   otherAIDialog("Tirar uma dúvida com outra IA", `Sou estudante e tenho uma dúvida sobre este flashcard. Explica-me de forma simples, em português de Portugal, com um exemplo do dia a dia e uma forma fácil de decorar.
@@ -1479,7 +1547,7 @@ function flashPdf(o){
       if (c.n) blocks.push({font: 1, size: 9.5, color: "#7A5C10", lines: pdfWrap("Atenção: " + c.n, 1, 9.5, tw)});
       if (plainTxt(c.d)) blocks.push({font: 1, size: 9.5, color: "#4A4560", lines: pdfWrap("Truque: " + plainTxt(c.d), 1, 9.5, tw)});
       if (c.src) blocks.push({font: 0, size: 8.5, color: MUT, lines: pdfWrap("Fonte: " + c.src, 0, 8.5, tw)});
-      const lh = b => b.size * 1.32, h = blocks.reduce((s, b) => s + b.lines.length * lh(b) + 3, 0) + 14;
+      const lh = b => b.size * (LH2 ? 2 : 1.32), h = blocks.reduce((s, b) => s + b.lines.length * lh(b) + 3, 0) + 14;
       const modH = c.mod !== lastMod ? 34 : 0;
       if (y - h - modH < M + 10) newPage();
       if (c.mod !== lastMod) { lastMod = c.mod; doc.rect(M, y - 24, W - 2*M, 24, c.col[0]); doc.rect(M, y - 24, 5, 24, c.col[1]); doc.text(pdfText(c.mod), M + 14, y - 16, 1, 11, INK); y -= 34; }
@@ -1502,9 +1570,9 @@ function flashPdf(o){
           doc.text(pdfText((c.num ? c.num + " · " : "") + c.mod).slice(0, 60), x + pad, y + ch - pad - 6, 0, 7.5, MUT);
           if (side === "frente") {
             let size = 15, lines = pdfWrap(plainTxt(c.f), 1, size, tw);
-            while (lines.length * size * 1.25 > ch - 50 && size > 8) { size -= 1; lines = pdfWrap(plainTxt(c.f), 1, size, tw); }
-            let yy = y + ch / 2 + (lines.length * size * 1.25) / 2 - size;
-            lines.forEach(l => { doc.text(l, x + (cw - pdfW(l, 1, size)) / 2, yy, 1, size, INK); yy -= size * 1.25; });
+            while (lines.length * size * (LH2 ? 2 : 1.25) > ch - 50 && size > 8) { size -= 1; lines = pdfWrap(plainTxt(c.f), 1, size, tw); }
+            let yy = y + ch / 2 + (lines.length * size * (LH2 ? 2 : 1.25)) / 2 - size;
+            lines.forEach(l => { doc.text(l, x + (cw - pdfW(l, 1, size)) / 2, yy, 1, size, INK); yy -= size * (LH2 ? 2 : 1.25); });
           } else {
             const parts = [[plainTxt(c.r), 0], c.pt ? ["PT: " + c.pt, 2] : null, plainTxt(c.d) ? ["Truque: " + plainTxt(c.d), 1] : null, c.src ? ["Fonte: " + c.src, 0] : null].filter(Boolean);
             let size = 10, all;
@@ -1512,7 +1580,7 @@ function flashPdf(o){
             all = lay(size); const tot = s => all.reduce((n, b) => n + b.lines.length, 0) * s * 1.25 + parts.length * 3;
             while (tot(size) > ch - 34 && size > 6) { size -= .5; all = lay(size); }
             let yy = y + ch - pad - 22;
-            all.forEach((b, bi) => { b.lines.forEach(l => { if (yy > y + 8) doc.text(l, x + pad, yy, b.f, bi === parts.length - 1 && c.src ? Math.min(size, 8) : size, bi === 0 ? INK : "#4A4560"); yy -= size * 1.25; }); yy -= 3; });
+            all.forEach((b, bi) => { b.lines.forEach(l => { if (yy > y + 8) doc.text(l, x + pad, yy, b.f, bi === parts.length - 1 && c.src ? Math.min(size, 8) : size, bi === 0 ? INK : "#4A4560"); yy -= size * (LH2 ? 2 : 1.25); }); yy -= 3; });
           }
         });
       });
@@ -1529,6 +1597,7 @@ function pdfDialog(nb){
     <label class="muted">Que cartões?<select id="pw"><option value="all">Todos (${nb.cards.length})</option>${st.mod !== "all" ? `<option value="mod" selected>Só o módulo ${+st.mod + 1}: ${esc(M.names[+st.mod])}</option>` : ""}<option value="r">Só os «A rever» (${nb.cards.filter(c => nb.prog[c.id] === "r").length})</option><option value="todo">Só os por estudar (${nb.cards.filter(c => !nb.prog[c.id]).length})</option></select></label>
     <div class="checks"><label><input type="radio" name="pm" value="ler" checked> <span><b>Para ler</b>: lista com pergunta, resposta, «Porquê?», truque e fonte, organizada por módulos.</span></label>
       <label><input type="radio" name="pm" value="recortar"> <span><b>Para recortar</b>: no PDF, 8 cartões por folha com frente e verso; no Word, uma tabela com pergunta e resposta lado a lado para dobrar.</span></label></div>
+    <label class="muted"><input type="checkbox" id="plh" ${DYS ? "checked" : ""}> Espaçamento de 2,0 entre linhas (leitura fácil)</label>
     <p class="muted" id="pmsg">No PDF os emojis não aparecem; no Word aparecem e podes editar tudo.</p>
     <div class="row"><span class="grow"></span><button class="btn" id="cx">Fechar</button><button class="btn fill" id="go">⬇ Descarregar</button></div>`, (d, close) => {
     d.querySelector("#cx").onclick = close; let fmt = "pdf";
@@ -1542,7 +1611,7 @@ function pdfDialog(nb){
       const cards = ordered.map(c => { const mi = M.of(c); return {f: c.f, r: c.r, p: c.p, d: c.d, x: c.x, n: c.n, pt: c.pt, num: cardNum(nb, M, c), mod: `${mi + 1}. ${M.names[mi]}`, col: M.col[mi],
         src: c.doc ? docName(nb, c.doc) + (c.pg ? " · pág. " + c.pg : "") : (c.src || "")}; });
       const o = {mode, title: nb.name, eyebrow: "Flashcards de " + (nb.subject || (f ? f.name : nb.name)), ink: t[5], date: new Date().toLocaleDateString("pt-PT"), cards};
-      const bytes = fmt === "docx" ? flashDocx(o) : flashPdf(o);
+      LH2 = d.querySelector("#plh").checked; let bytes; try { bytes = fmt === "docx" ? flashDocx(o) : flashPdf(o); } finally { LH2 = false; }
       const name = (nb.name.replace(/[^\p{L}\p{N} _-]/gu, "").trim() || "flashcards") + (mode === "ler" ? " - para ler" : " - para recortar") + "." + fmt;
       try { await CAP.dl.save({filename: name, data: bytes}); toast(fmt === "docx" ? "Word guardado" : "PDF guardado"); close(); }
       catch(err) { d.querySelector("#pmsg").textContent = err && err.code === "declined" ? "Cancelaste a gravação." : "Não foi possível guardar o PDF aqui."; }
@@ -1817,13 +1886,13 @@ function tabStudy(nb){
       ${hn < hints.length ? `<button class="btn sm pbtn" data-hint="1">💡 ${hn ? "Mais uma pista" : "Dá-me uma pista"} (${hn + 1}/${hints.length})</button>` : `<span class="muted">Já viste todas as pistas: tenta responder e vira o cartão!</span>`}</div>` : "";
   const front = st.inv
     ? `${tag}<div class="term q rich">${rich(c.r)}</div><div class="hint">Qual é o termo? · toca para virar</div>`
-    : `${tag}<div class="term${isQ ? " q" : ""} rich">${rich(c.f)}</div>${hintBox}${HAS_TTS ? `<button class="btn sm aibtn" data-say="f">🔊 Ouvir pergunta</button>` : ""}${src}<div class="hint">${st.write ? "Escreve a tua resposta em baixo" : "Toca para ver a resposta"}</div>`;
+    : `${tag}<div class="term${isQ ? " q" : ""} rich">${rich(c.f)}</div>${hintBox}${(nb.cnotes || {})[c.id] ? `<div class="mynote"><b>✏️ A minha nota</b>${esc(nb.cnotes[c.id])}</div>` : ""}<div class="cbtns fcb">${HAS_TTS ? `<button class="btn sm aibtn" data-say="f">🔊 Ouvir pergunta</button>` : ""}<button class="btn sm aibtn" data-cnote="1">✏️ ${(nb.cnotes || {})[c.id] ? "Editar nota" : "Nota"}</button></div>${src}<div class="hint">${st.write ? "Escreve a tua resposta em baixo" : "Toca para ver a resposta"}</div>`;
   const back = `${tag}<h2 class="rich">${rich(c.f)}</h2>${c.th ? `<p class="thea">${esc(c.th)}</p>` : ""}<div class="exp rich">${rich(c.r)}</div>
     ${c.pt ? `<p class="ptl">🇵🇹 <span>${esc(c.pt)}</span></p>` : ""}
     ${plain(c.p).trim() ? `<div class="why rich"><b>💬 Porquê? O que significa?</b><br>${rich(c.p)}</div>` : ""}
     ${c.x ? `<p class="extra"><b>➕ Extra</b> <span class="muted">não está nos slides</span><br>${esc(c.x)}</p>` : ""}
     ${c.n ? `<p class="nota">⚠ ${esc(c.n)}</p>` : ""}
-    ${plain(c.d).trim() ? `<p class="tip">💡 ${rich(c.d)}</p>` : ""}${(nb.cnotes || {})[c.id] ? `<p class="mynote"><b>✏️ A minha nota</b> ${esc(nb.cnotes[c.id])}</p>` : ""}<div class="cbtns">${HAS_TTS ? `<button class="btn sm aibtn" data-say="b">🔊 Ouvir explicação</button>` : ""}<button class="btn sm aibtn" data-doubt="1">🤔 Tenho uma dúvida</button><button class="btn sm aibtn" data-cnote="1">✏️ ${(nb.cnotes || {})[c.id] ? "Editar nota" : "Nota"}</button></div>${src}`;
+    ${plain(c.d).trim() ? `<p class="tip">💡 ${rich(c.d)}</p>` : ""}<div class="cbtns">${HAS_TTS ? `<button class="btn sm aibtn" data-say="b">🔊 Ouvir explicação</button>` : ""}<button class="btn sm aibtn" data-doubt="1">💬 Tirar dúvidas</button></div>${src}`;
   const ans = st.write ? `<div class="answer panel"><label class="muted" for="ans">A tua resposta</label><textarea id="ans">${esc(st.ans)}</textarea>
       <div class="row"><button class="btn fill" id="grade">Corrigir</button><span class="muted grow">${CAP.sample ? (ACC_LIMIT ? "Limite de IA de hoje atingido: correção por palavras-chave." : "Corrigido pela IA do site.") : "Correção por palavras-chave."}</span></div>
       ${st.res ? `<div class="res ${st.res.v}"><b>${st.res.v==="certo"?"✓ Certo":st.res.v==="quase"?"≈ Quase":"✗ A rever"} · ${st.res.n}%</b><br>${esc(st.res.c)}</div>` : ""}
@@ -1904,8 +1973,8 @@ function audioStart(nb){
 function cardNoteDialog(nb, c){
   nb.cnotes = nb.cnotes || {};
   dialog(`<h3>✏️ A minha nota</h3><p class="muted" style="margin:0">${esc(plainTxt(c.f))}</p>
-    <textarea id="cnT" style="width:100%;min-height:140px" placeholder="Escreve aqui o que te ajuda: a tua explicação, onde te enganas, um exemplo…">${esc(nb.cnotes[c.id] || "")}</textarea>
-    <p class="muted" style="margin:0">Só tu vês as tuas notas. Aparecem no verso do cartão e em «🔍 Erros e notas».</p>
+    <textarea id="cnT" style="width:100%;min-height:140px" placeholder="Ideias-chave para te lembrares (ex.: «Axial = eixo: cabeça, coluna, tórax · 80 ossos»)">${esc(nb.cnotes[c.id] || "")}</textarea>
+    <p class="muted" style="margin:0">Só tu vês as tuas notas. Aparecem na frente do cartão, para te ajudarem a lembrar antes de virares, e em «🔍 Erros e notas». Dica: escreve só as ideias-chave.</p>
     <div class="row">${nb.cnotes[c.id] ? `<button class="btn danger" id="cnDel">Apagar nota</button>` : ""}<span class="grow"></span><button class="btn" id="cx">Cancelar</button><button class="btn fill" id="cnOk">Guardar</button></div>`, (d, close) => {
     d.querySelector("#cx").onclick = close;
     d.querySelector("#cnOk").onclick = () => { const v = d.querySelector("#cnT").value.trim().slice(0, 4000); if (v) nb.cnotes[c.id] = v; else delete nb.cnotes[c.id]; save(nb); close(); render(); toast("Nota guardada"); };
@@ -1930,19 +1999,49 @@ function errGroups(nb){
   const done = nb.errDone || {}, by = {};
   (nb.errs || []).forEach(e => { if (done[e.cid] && done[e.cid] >= e.at) return; (by[e.cid] = by[e.cid] || []).push(e); });
   nb.cards.forEach(c => { if (nb.prog[c.id] === "r" && !by[c.id] && !(done[c.id])) by[c.id] = []; });
+  const pos = {}; nb.cards.forEach((c, i) => pos[c.id] = i);
   return Object.entries(by).map(([cid, L]) => ({c: nb.cards.find(x => x.id === cid), L: L.sort((a, b) => b.at - a.at)})).filter(g => g.c)
-    .sort((a, b) => ((b.L[0] || {}).at || 0) - ((a.L[0] || {}).at || 0));
+    .sort((a, b) => pos[a.c.id] - pos[b.c.id]);
+}
+// ---------- «perceber, não decorar»: explicação simples + exemplo do dia a dia + mnemónica
+const HELP_PROMPT = `És um explicador simpático que ajuda estudantes a PERCEBER a matéria e não só a decorar. Para cada cartão, escreve em português de Portugal, com linguagem simples e descontraída (como um colega a explicar no café, nada de linguagem de livro):
+- "s": o que isto quer dizer, por palavras simples, em 1 a 3 frases. NÃO copies a resposta oficial: explica a ideia por outras palavras.
+- "e": uma comparação ou exemplo do dia a dia (casa, cozinha, desporto, telemóvel, escola, família…) que ajude a imaginar a ideia, em 1 a 3 frases.
+- "m": uma mnemónica curta e fácil de lembrar (sigla com as primeiras letras, frase engraçada, rima ou imagem mental) para lembrar a resposta. Se a resposta tiver uma lista, faz uma sigla ou frase com as primeiras letras e explica cada letra.
+Nunca inventes matéria que contradiga a resposta oficial. Responde APENAS com JSON: [{"id":"...","s":"...","e":"...","m":"..."}]`;
+const helpCard = (nb, c) => `id: ${c.id}\nPergunta: ${plainTxt(c.f)}\nResposta oficial: ${plainTxt(c.r).slice(0, 900)}${plainTxt(c.p).trim() ? "\nExplicação: " + plainTxt(c.p).slice(0, 500) : ""}`;
+function localMnemo(c){
+  const items = plainTxt(c.r).split(/\n|;|,|•|\s-\s|\s\+\s|\be\b(?=\s+[A-ZÁÉÍÓÚa-z])/).map(x => x.replace(/^[\s\-–•\d.)]+/, "").trim()).filter(x => x.length > 1 && x.length < 60);
+  if (items.length < 3 || items.length > 10) return "";
+  const L = items.map(x => x[0].toUpperCase());
+  return `Sigla com as primeiras letras: «${L.join("")}» → ${items.map((x, i) => `${L[i]} = ${x}`).join(" · ")}. Dica: inventa uma frase engraçada em que cada palavra comece por estas letras.`;
+}
+function parseHelp(t){ let a = parseJsonLoose(t); if (a && !Array.isArray(a)) a = a.cards || a.cartoes || [a]; return Array.isArray(a) ? a.filter(x => x && x.id) : []; }
+async function makeHelp(nb, cards){
+  if (!CAP.sample || ACC_LIMIT) throw {code: ACC_LIMIT ? "rate_limited" : "no_ai"};
+  const r = await CAP.sample(HELP_PROMPT + "\n\nCartões:\n\n" + cards.map(c => helpCard(nb, c)).join("\n\n"), {modelTier: "default"});
+  iaUse("corrigir"); const out = parseHelp(r.text); nb.errHelp = nb.errHelp || {}; let n = 0;
+  out.forEach(x => { const c = cards.find(k => k.id === String(x.id)); if (!c) return; nb.errHelp[c.id] = {s: String(x.s || "").slice(0, 900), e: String(x.e || "").slice(0, 900), m: String(x.m || "").slice(0, 700)}; n++; });
+  if (!n && cards.length === 1 && r.text.trim()) { nb.errHelp[cards[0].id] = {s: r.text.trim().slice(0, 1500), e: "", m: ""}; n = 1; }
+  save(nb); return n;
+}
+function helpHtml(nb, c){
+  const h = (nb.errHelp || {})[c.id], lm = localMnemo(c);
+  if (!h) return `<div class="eb learn"><b>🧠 Perceber, não decorar</b><span class="muted">Uma explicação por palavras simples, com um exemplo do dia a dia e uma mnemónica para te lembrares.</span>${lm ? `<span class="mn">🔤 ${esc(lm)}</span>` : ""}<div class="row" style="margin-top:6px"><button class="btn sm fill" data-ehelp="${c.id}">✨ Explica-me de forma simples</button></div></div>`;
+  return `<div class="eb learn"><b>🧠 Perceber, não decorar</b>${h.s ? `<span class="lp"><i>Por palavras simples:</i> ${esc(h.s)}</span>` : ""}${h.e ? `<span class="lp"><i>🏠 No dia a dia:</i> ${esc(h.e)}</span>` : ""}${h.m ? `<span class="mn">🔤 <i>Mnemónica:</i> ${esc(h.m)}</span>` : lm ? `<span class="mn">🔤 ${esc(lm)}</span>` : ""}
+    <div class="row" style="margin-top:6px">${HAS_TTS ? `<button class="btn sm" data-hsay="${c.id}">🔊 Ouvir</button>` : ""}<button class="btn sm" data-ehelp="${c.id}">↻ Outra explicação</button></div></div>`;
 }
 let errOpen = {};
 function tabErrs(nb){
-  const G = errGroups(nb), notes = Object.entries(nb.cnotes || {}).map(([cid, t]) => ({c: nb.cards.find(x => x.id === cid), t})).filter(x => x.c);
+  const M = modsOf(nb), G = errGroups(nb), notes = Object.entries(nb.cnotes || {}).map(([cid, t]) => ({c: nb.cards.find(x => x.id === cid), t})).filter(x => x.c);
   const totalWrong = G.reduce((s, g) => s + g.L.length, 0);
   const item = g => { const c = g.c, last = g.L[0], open = errOpen[c.id];
-    return `<div class="erritem"><button class="errhead" data-eo="${c.id}" aria-expanded="${!!open}"><b>${esc(plainTxt(c.f))}</b><span class="muted">${g.L.length ? `${g.L.length} ${g.L.length === 1 ? "erro" : "erros"} · ${esc(last.from)} · ${new Date(last.at).toLocaleDateString("pt-PT")}` : "marcado como «Rever»"}</span><span class="chev">${open ? "▴" : "▾"}</span></button>
+    return `<div class="erritem"><button class="errhead" data-eo="${c.id}" aria-expanded="${!!open}"><b><span class="enum">${esc(cardNum(nb, M, c))}</span> ${esc(plainTxt(c.f))}</b><span class="muted">${g.L.length ? `${g.L.length} ${g.L.length === 1 ? "erro" : "erros"} · ${esc(last.from)} · ${new Date(last.at).toLocaleDateString("pt-PT")}` : "marcado como «Rever»"}</span><span class="chev">${open ? "▴" : "▾"}</span></button>
       ${open ? `<div class="errbody">
         ${last ? `<div class="eb you"><b>O que respondeste</b>${last.ans ? esc(last.ans) : "<i>sem resposta</i>"}</div><div class="eb why"><b>Porque está errado</b>${last.c ? esc(last.c) + "<br>" : ""}<i>${esc(localWhy(c, last.ans))}</i></div>` : ""}
         <div class="eb ok"><b>Resposta certa</b><span class="rich">${rich(c.r)}</span></div>
         ${plainTxt(c.p).trim() ? `<div class="eb"><b>💬 Porquê?</b><span class="rich">${rich(c.p)}</span></div>` : ""}
+        ${helpHtml(nb, c)}
         ${plainTxt(c.d).trim() ? `<div class="eb"><b>💡 Truque</b>${esc(plainTxt(c.d))}</div>` : ""}
         ${(nb.cnotes || {})[c.id] ? `<div class="eb note"><b>✏️ A tua nota</b>${esc(nb.cnotes[c.id])}</div>` : ""}
         <div class="row">${HAS_TTS ? `<button class="btn sm" data-esay="${c.id}">🔊 Ouvir explicação</button>` : ""}<button class="btn sm" data-ewhy="${c.id}">🤔 Explica-me o meu erro</button><button class="btn sm" data-enote="${c.id}">✏️ Nota</button><span class="grow"></span><button class="btn sm fill" data-edone="${c.id}">✓ Já percebi</button></div>
@@ -1951,7 +2050,11 @@ function tabErrs(nb){
       <p class="muted" style="margin:0">Aqui ficam as respostas que erraste no ✍️ Responder e nas 📝 Simulações, e os cartões que marcaste como «Rever». Abre cada um para veres o que respondeste, porque está errado e a explicação.</p>
       <div class="stats"><span class="pill rev">${G.length} ${G.length === 1 ? "cartão" : "cartões"} com erros</span>${totalWrong ? `<span class="pill todo">${totalWrong} ${totalWrong === 1 ? "resposta errada" : "respostas erradas"}</span>` : ""}</div>
       ${G.length ? `<div class="row"><button class="btn fill" id="eStudy">▶ Estudar só estes</button>${HAS_TTS ? `<button class="btn" id="eListen">🎧 Ouvir todos</button>` : ""}</div>` : ""}</div>
-    ${G.length ? `<div class="list">${G.map(item).join("")}</div>` : `<div class="empty"><strong>Sem erros por agora 🎉</strong>Quando errares no «✍️ Responder» ou numa simulação, o erro aparece aqui com o motivo.</div>`}
+    ${G.length ? M.names.map((name, mi) => { const gs = G.filter(g => M.of(g.c) === mi); if (!gs.length) return "";
+        const miss = gs.filter(g => !(nb.errHelp || {})[g.c.id]).length;
+        return `<section class="errmod" style="--mc:${(M.col[mi] || [])[1] || "var(--accent)"};--ml:${(M.col[mi] || [])[0] || "var(--soft)"}"><div class="errmodh"><span class="mnum">${mi + 1}</span><b class="grow">${esc(name)}</b><span class="muted">${gs.length} ${gs.length === 1 ? "cartão" : "cartões"}</span></div>
+          ${miss ? `<button class="btn sm" data-ehmod="${mi}">✨ Explicar de forma simples os ${miss} ${miss === 1 ? "cartão" : "cartões"} deste módulo</button>` : ""}
+          <div class="list">${gs.map(item).join("")}</div></section>`; }).join("") : `<div class="empty"><strong>Sem erros por agora 🎉</strong>Quando errares no «✍️ Responder» ou numa simulação, o erro aparece aqui com o motivo.</div>`}
     <div class="panel" style="display:flex;flex-direction:column;gap:8px"><h3>📝 Bloco de apontamentos</h3>
       <p class="muted" style="margin:0">Escreve o que quiseres enquanto estudas: dúvidas para a aula, coisas a rever, resumos rápidos. Guarda sozinho.</p>
       ${rte("qnote", nb.quick || "", "Escreve aqui os teus apontamentos…")}<span class="muted" id="qsaved"></span></div>
@@ -1967,6 +2070,12 @@ function wireErrs(nb){
   document.querySelectorAll("[data-enote]").forEach(b => b.onclick = () => cardNoteDialog(nb, card(b.dataset.enote)));
   document.querySelectorAll("[data-edone]").forEach(b => b.onclick = () => { const id = b.dataset.edone; nb.errDone = nb.errDone || {}; nb.errDone[id] = Date.now(); if (nb.prog[id] === "r") nb.prog[id] = "s"; save(nb); toast("Boa! Saiu da lista de erros."); render(); });
   document.querySelectorAll("[data-ewhy]").forEach(b => b.onclick = () => { const c = card(b.dataset.ewhy), g = errGroups(nb).find(x => x.c === c); errWhyDialog(nb, c, g && g.L[0]); });
+  const runHelp = async (b, cards) => { const t = b.textContent; b.disabled = true; b.textContent = "A preparar explicações…";
+    try { const ch = cards.slice(0, 12); const n = await makeHelp(nb, ch); toast(n ? "Pronto! Abre os cartões para veres 🧠" : "A IA não respondeu bem. Tenta outra vez."); if (n && cards.length > ch.length) toast("Fiz 12 de cada vez: carrega outra vez para os restantes."); cards.forEach(c => { if (cards.length === 1) errOpen[c.id] = true; }); render(); }
+    catch(e) { if (e && e.code === "rate_limited") { accLimit(); toast("Chegaste ao limite de IA de hoje. Usa a mnemónica sem IA ou «🤖 outra IA»."); } else if (e && e.code === "no_ai") toast("Entra na tua conta para usar a IA."); else toast("A IA não respondeu agora. Tenta daqui a pouco."); b.disabled = false; b.textContent = t; } };
+  document.querySelectorAll("[data-ehelp]").forEach(b => b.onclick = () => runHelp(b, [card(b.dataset.ehelp)]));
+  document.querySelectorAll("[data-ehmod]").forEach(b => b.onclick = () => { const M = modsOf(nb), mi = +b.dataset.ehmod; runHelp(b, errGroups(nb).filter(g => M.of(g.c) === mi && !(nb.errHelp || {})[g.c.id]).map(g => g.c)); });
+  document.querySelectorAll("[data-hsay]").forEach(b => b.onclick = () => { const h = nb.errHelp[b.dataset.hsay]; sayParts([[h.s, "pt-PT"], [h.e ? "No dia a dia: " + h.e : "", "pt-PT"], [h.m ? "Mnemónica: " + h.m : "", "pt-PT"]].filter(x => x[0])); });
   const es = $("#eStudy"); if (es) es.onclick = () => { const ids = errGroups(nb).map(g => g.c.id); ids.forEach(id => { if (nb.prog[id] !== "r") nb.prog[id] = "r"; }); save(nb); route.tab = "study"; studyState = null; render(); studyState.f = "r"; render(); };
   const el = $("#eListen"); if (el) el.onclick = () => { const G = errGroups(nb); let i = 0; const tok = {}; AUD = tok;
     const nxt = () => { if (AUD !== tok || route.tab !== "errs") return; const g = G[i++]; if (!g) { AUD = null; return toast("Fim dos erros 🎧"); }
@@ -2035,7 +2144,7 @@ function wireStudy(nb){
   if (st.pp) return wirePP(nb);
   const card = $("#card"); if (!card) return;
   sizeCard(); setTimeout(sizeCard, 300);
-  card.onclick = e => { if (e.target.closest("[data-src]")) return; if (e.target.closest("[data-doubt]")) { e.stopPropagation(); return explainCard(deck[st.pos]); }
+  card.onclick = e => { if (e.target.closest("[data-src]")) return; if (e.target.closest("[data-doubt]")) { e.stopPropagation(); return explainCard(deck[st.pos], nb); }
     const sy = e.target.closest("[data-say]"); if (sy) { e.stopPropagation(); const cc = deck[st.pos]; return sayParts(sy.dataset.say === "f" ? frontParts(nb, cc) : backParts(nb, cc)); }
     if (e.target.closest("[data-cnote]")) { e.stopPropagation(); return cardNoteDialog(nb, deck[st.pos]); }
     if (e.target.closest("[data-hint]")) { e.stopPropagation(); st.hint = (st.hint || 0) + 1; return render(); } st.flip = !st.flip; card.classList.toggle("flipped", st.flip); };
@@ -2375,7 +2484,7 @@ function rzDocx(rz, subject){
   const F = 'w:ascii="Courier New" w:hAnsi="Courier New" w:cs="Courier New"';
   const run = (t, o) => { o = o || {}; return `<w:r><w:rPr><w:rFonts ${F}/>${o.b ? "<w:b/>" : ""}${o.i ? "<w:i/>" : ""}${o.caps ? "<w:caps/>" : ""}${o.sp ? `<w:spacing w:val="${o.sp}"/>` : ""}<w:color w:val="${o.color || "222222"}"/><w:sz w:val="${(o.size || 9.5) * 2}"/></w:rPr><w:t xml:space="preserve">${xesc(t)}</w:t></w:r>`; };
   const runs = (t, o) => rzS(t).split(/(\[acrescentado\])/i).map(s => /^\[acrescentado\]$/i.test(s) ? run(s, {i: 1, color: "AAAAAA", size: (o && o.size) || 9.5}) : run(s, o)).join("");
-  const para = (inner, o) => { o = o || {}; return `<w:p><w:pPr>${o.style ? `<w:pStyle w:val="${o.style}"/>` : ""}${o.shade ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.shade}"/>` : ""}${o.bar ? `<w:pBdr><w:left w:val="single" w:sz="36" w:space="10" w:color="555555"/></w:pBdr><w:ind w:left="200" w:right="0"/>` : ""}${o.rule ? `<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="6" w:color="555555"/></w:pBdr>` : ""}${o.num ? `<w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>` : ""}<w:spacing w:before="${o.before || 0}" w:after="${o.after == null ? 120 : o.after}" w:line="360" w:lineRule="auto"/>${o.center ? '<w:jc w:val="center"/>' : o.left ? '<w:jc w:val="left"/>' : '<w:jc w:val="both"/>'}${o.keep ? "<w:keepNext/>" : ""}</w:pPr>${inner}</w:p>`; };
+  const para = (inner, o) => { o = o || {}; return `<w:p><w:pPr>${o.style ? `<w:pStyle w:val="${o.style}"/>` : ""}${o.shade ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.shade}"/>` : ""}${o.bar ? `<w:pBdr><w:left w:val="single" w:sz="36" w:space="10" w:color="555555"/></w:pBdr><w:ind w:left="200" w:right="0"/>` : ""}${o.rule ? `<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="6" w:color="555555"/></w:pBdr>` : ""}${o.num ? `<w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>` : ""}<w:spacing w:before="${o.before || 0}" w:after="${o.after == null ? 120 : o.after}" w:line="${DYS ? 480 : 360}" w:lineRule="auto"/>${o.center ? '<w:jc w:val="center"/>' : o.left ? '<w:jc w:val="left"/>' : '<w:jc w:val="both"/>'}${o.keep ? "<w:keepNext/>" : ""}</w:pPr>${inner}</w:p>`; };
   const cellB = 'w:val="single" w:sz="4" w:space="0" w:color="999999"';
   const tbl = (rows, widths) => `<w:tbl><w:tblPr><w:tblW w:w="${widths.reduce((a, b) => a + b, 0)}" w:type="dxa"/><w:tblBorders><w:top ${cellB}/><w:left ${cellB}/><w:bottom ${cellB}/><w:right ${cellB}/><w:insideH ${cellB}/><w:insideV ${cellB}/></w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${widths.map(w => `<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows}</w:tbl>`;
   const tc = (inner, w, fill, center) => `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${fill}"/>` : ""}${center ? '<w:vAlign w:val="center"/>' : ""}</w:tcPr>${inner}</w:tc>`;
@@ -2479,7 +2588,7 @@ function tabPlan(nb){
   if (next) { const g = goalFor(nb, next), n = daysTo(next.d); goal = `<div class="panel"><h3>${n===0?"É hoje":`Faltam <b>${n}</b> dias`}: ${esc(next.n)} (${fmtD(next.d)})</h3>
     <p>Hoje: <b>${g.done}</b> de <b>${g.goal}</b> flashcards ${g.done>=g.goal?"✓ objetivo cumprido!":""}</p><div class="prog"><i style="width:${Math.min(100,g.done/g.goal*100)}%;background:var(--ok-bar)"></i></div>
     <p class="muted">Faltam ${g.left} flashcards por saber; dividi-os pelos dias que faltam.</p><button class="btn pri" id="goS">▶ Estudar agora</button></div>`; }
-  return goal + `<div class="panel"><h3>Datas dos testes</h3><div class="list" id="exl">${ex.map((e, i) => `<div class="row"><input type="text" class="grow" value="${esc(e.n)}" data-i="${i}" data-k="n" aria-label="Nome do teste"><input type="date" value="${e.d}" data-i="${i}" data-k="d" aria-label="Data"><button class="btn sm danger" data-x="${i}" aria-label="Apagar">🗑</button></div>`).join("") || `<p class="muted">Sem datas.</p>`}</div>
+  return goal + planHtml(nb) + `<div class="panel"><h3>Datas dos testes</h3><div class="list" id="exl">${ex.map((e, i) => `<div class="row"><input type="text" class="grow" value="${esc(e.n)}" data-i="${i}" data-k="n" aria-label="Nome do teste"><input type="date" value="${e.d}" data-i="${i}" data-k="d" aria-label="Data"><button class="btn sm danger" data-x="${i}" aria-label="Apagar">🗑</button></div>`).join("") || `<p class="muted">Sem datas.</p>`}</div>
     <div class="row" style="margin-top:10px"><button class="btn" id="addE">+ Acrescentar teste</button><span class="grow"></span><button class="btn fill" id="saveE">Guardar datas</button></div></div>`;
 }
 function wirePlan(nb){
@@ -2489,7 +2598,154 @@ function wirePlan(nb){
   $("#addE").onclick = () => { ex.push({n: "Teste", d: dkey(new Date(Date.now() + 7*86400000))}); render(); };
   $("#saveE").onclick = () => { nb.exams = ex.filter(e => e.n && /^\d{4}-\d{2}-\d{2}$/.test(e.d)); save(nb); toast("Datas guardadas"); render(); };
   const g = $("#goS"); if (g) g.onclick = () => { route.tab = "study"; studyState = null; render(); studyState.f = nb.cards.some(c => !nb.prog[c.id]) ? "todo" : "r"; render(); };
+  wirePlanner(nb);
 }
+
+// ---------- planeamento de estudo até ao dia do teste
+const WD = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"], WDL = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+const planKey = e => e.n + "|" + e.d;
+let planSel = null, planForm = null;
+function buildPlan(nb, e, cfg){
+  const M = modsOf(nb), days = [];
+  for (let d = today0(); d < parseD(e.d); d.setDate(d.getDate() + 1)) if (!cfg.off.includes(d.getDay())) days.push(dkey(d));
+  const mods = cfg.mods.map(mi => { const cs = nb.cards.filter(c => M.of(c) === mi); return {mi, name: M.names[mi], total: cs.length, left: cs.filter(c => nb.prog[c.id] !== "s").length}; }).filter(m => m.total);
+  const N = days.length, out = days.map(d => ({d, tasks: []}));
+  const T = (t, k, min, extra) => Object.assign({id: uid(), t, k, min, done: false}, extra || {});
+  if (N) {
+    const fin = N >= 3 ? 1 : 0, rev = N >= 6 ? Math.max(1, Math.round(N * .2)) : 0, learnN = N - fin - rev;
+    const left = mods.reduce((s, m) => s + m.left, 0), q = Math.max(1, Math.ceil(left / learnN));
+    let di = 0, room = q;
+    mods.forEach(m => { let n = m.left; if (!n) { out[Math.min(di, learnN - 1)].tasks.push(T(`Revisão rápida do módulo ${m.mi + 1}: ${m.name} (já sabes tudo!)`, "learn", 10, {mi: m.mi, f: "all"})); return; }
+      while (n > 0) { const take = Math.min(n, room); out[di].tasks.push(T(`Estudar o módulo ${m.mi + 1}: ${m.name} — ${take} ${take === 1 ? "cartão" : "cartões"}`, "learn", Math.ceil(take * 1.5), {mi: m.mi, f: "todo", n: take}));
+        n -= take; room -= take; if (room <= 0 && di < learnN - 1) { di++; room = q; } else if (room <= 0) room = Infinity; } });
+    for (let i = 1; i < learnN; i++) out[i].tasks.unshift(T("Rever os cartões «A rever» dos dias anteriores", "rev", 10));
+    for (let i = 0; i < learnN; i++) out[i].tasks.push(T("Escrever 1 ou 2 ideias-chave na ✏️ nota dos cartões mais difíceis", "note", 5));
+    for (let i = learnN; i < learnN + rev; i++) { const m = mods[(i - learnN) % Math.max(1, mods.length)];
+      out[i].tasks.push(T("Rever todos os «A rever»", "rev", 15), T("Abrir 🔍 Erros e notas e perceber cada erro (🧠 Perceber, não decorar)", "errs", 15));
+      if (m) out[i].tasks.push(T(`Treinar com ✍️ Responder o módulo ${m.mi + 1}: ${m.name}`, "write", 20, {mi: m.mi})); }
+    if (fin) out[N - 1].tasks.push(T("Fazer uma 📝 Simulação de exame com tempo", "sim", 30), T("Ver os erros da simulação em 🔍 Erros e notas", "errs", 15), T("Ler as tuas notas e mnemónicas — e dormir bem! 😴", "note", 10));
+  }
+  out.push({d: e.d, test: true, tasks: [T("Manhã do teste: 15 minutos a ler as tuas ✏️ notas e 🧠 mnemónicas. Respira fundo, tu consegues! 💪", "note", 15)]});
+  const need = out.length > 1 ? Math.max(...out.slice(0, -1).map(x => x.tasks.reduce((s, t) => s + t.min, 0))) : 0;
+  return {cfg, days: out, at: Date.now(), need};
+}
+function planTask(t){ const go = {learn: "▶ Começar", rev: "▶ Rever", write: "▶ Treinar", sim: "▶ Simulação", errs: "▶ Abrir erros"}[t.k];
+  return `<div class="ptask${t.done ? " done" : ""}"><label><input type="checkbox" data-pt="${t.id}" ${t.done ? "checked" : ""}> <span>${esc(t.t)} <span class="muted">· ~${t.min} min</span></span></label>${go && !t.done ? `<button class="btn sm" data-pgo="${t.id}">${go}</button>` : ""}</div>`; }
+function planHtml(nb){
+  const ex = (nb.exams || []).filter(e => /^\d{4}-\d{2}-\d{2}$/.test(e.d) && daysTo(e.d) >= 0).sort((a, b) => a.d < b.d ? -1 : 1);
+  const head = `<h3>🗓️ O meu plano de estudo</h3>`;
+  if (!ex.length) return `<div class="panel">${head}<p class="muted" style="margin:0">Primeiro acrescenta a data do teste em baixo, em «Datas dos testes». Depois eu ajudo-te a dividir a matéria pelos dias que faltam.</p></div>`;
+  if (!planSel || !ex.some(e => planKey(e) === planSel)) planSel = planKey(ex[0]);
+  const e = ex.find(x => planKey(x) === planSel), P = (nb.plans || {})[planSel], M = modsOf(nb);
+  const pick = ex.length > 1 ? `<label class="muted">Para que teste?<select id="plSel">${ex.map(x => `<option value="${esc(planKey(x))}" ${planKey(x) === planSel ? "selected" : ""}>${esc(x.n)} (${fmtD(x.d)})</option>`).join("")}</select></label>` : `<p style="margin:0"><b>${esc(e.n)}</b> · ${fmtD(e.d)} · ${daysTo(e.d) === 0 ? "é hoje" : `faltam ${daysTo(e.d)} dias`}</p>`;
+  if (!P || planForm === planSel) { const c = (P && P.cfg) || {mods: M.names.map((_, i) => i), mins: 60, off: []};
+    return `<div class="panel plan">${head}${pick}
+      <p class="muted" style="margin:0">Responde a 3 perguntas e eu faço o plano dia a dia até ao teste. Primeiro aprendes a matéria aos bocadinhos, depois revês os erros e na véspera fazes uma simulação.</p>
+      <div><b>1. Que módulos saem no teste?</b><div class="checks plmods">${M.names.map((n, i) => `<label><input type="checkbox" data-plm="${i}" ${c.mods.includes(i) ? "checked" : ""}> <span>${i + 1}. ${esc(n)} <span class="muted">(${nb.cards.filter(x => M.of(x) === i).length})</span></span></label>`).join("")}</div></div>
+      <label><b>2. Quanto tempo consegues estudar por dia?</b><select id="plMin">${[20, 30, 45, 60, 90, 120, 180].map(m => `<option value="${m}" ${c.mins === m ? "selected" : ""}>${m < 60 ? m + " minutos" : m / 60 + (m === 60 ? " hora" : " horas").replace(".5", ",5")}</option>`).join("")}</select></label>
+      <div><b>3. Há dias em que NÃO podes estudar?</b> <span class="muted">(por exemplo, dias de trabalho)</span><div class="row wdays">${[1,2,3,4,5,6,0].map(d => `<button type="button" class="btn sm tog" data-plo="${d}" aria-pressed="${c.off.includes(d)}">${WD[d]}</button>`).join("")}</div></div>
+      <div class="row"><span class="grow"></span>${P ? `<button class="btn" id="plCx">Cancelar</button>` : ""}<button class="btn fill" id="plMake">✨ Criar o meu plano</button></div></div>`; }
+  const all = P.days.flatMap(d => d.tasks), done = all.filter(t => t.done).length, tk = dkey(new Date());
+  const late = P.days.filter(d => d.d < tk).flatMap(d => d.tasks).filter(t => !t.done).length;
+  const warn = P.need > P.cfg.mins ? `<p class="plwarn">⚠️ Há dias com cerca de <b>${P.need} min</b> de estudo e tu disseste ${P.cfg.mins} min. Se conseguires, estuda um bocadinho mais ou começa já hoje.</p>` : "";
+  return `<div class="panel plan">${head}${pick}
+    <div class="prog"><i style="width:${all.length ? done / all.length * 100 : 0}%;background:var(--ok-bar)"></i></div><p class="muted" style="margin:0">${done} de ${all.length} tarefas feitas · ⏱️ dica: estuda em blocos de 25 min com 5 min de pausa (usa o cronómetro).</p>
+    ${warn}${late ? `<p class="plwarn">Ficaram ${late} ${late === 1 ? "tarefa" : "tarefas"} por fazer em dias que já passaram. Não faz mal! Carrega em <b>↻ Refazer a partir de hoje</b> e eu volto a dividir o que falta.</p>` : ""}
+    <div class="pdays">${P.days.map(d => { const past = d.d < tk, isT = d.d === tk, dd = parseD(d.d), ok = d.tasks.every(t => t.done);
+      return `<details class="pday${isT ? " today" : ""}${d.test ? " test" : ""}" ${isT || (!past && P.days.find(x => x.d >= tk) === d) ? "open" : ""}><summary><b>${d.test ? "🎯 Dia do teste" : isT ? "⭐ Hoje" : WDL[dd.getDay()][0].toUpperCase() + WDL[dd.getDay()].slice(1)}</b> <span class="muted">${fmtD(d.d)} · ${d.tasks.reduce((s, t) => s + t.min, 0)} min</span>${ok ? " ✅" : past ? " ⏰" : ""}</summary>${d.tasks.map(planTask).join("")}</details>`; }).join("")}</div>
+    <div class="row"><button class="btn" id="plRe">↻ Refazer a partir de hoje</button><button class="btn" id="plEd">✎ Mudar respostas</button><span class="grow"></span><button class="btn sm danger" id="plDel">Apagar plano</button></div></div>`;
+}
+function wirePlanner(nb){
+  const s = $("#plSel"); if (s) s.onchange = () => { planSel = s.value; planForm = null; render(); };
+  document.querySelectorAll("[data-plo]").forEach(b => b.onclick = () => b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") !== "true"));
+  const ex = () => (nb.exams || []).find(e => planKey(e) === planSel);
+  const mk = $("#plMake"); if (mk) mk.onclick = () => { const mods = [...document.querySelectorAll("[data-plm]:checked")].map(x => +x.dataset.plm);
+    if (!mods.length) return toast("Escolhe pelo menos um módulo.");
+    const off = [...document.querySelectorAll("[data-plo]")].filter(b => b.getAttribute("aria-pressed") === "true").map(b => +b.dataset.plo);
+    if (off.length === 7) return toast("Precisas de pelo menos um dia para estudar 🙂");
+    nb.plans = nb.plans || {}; nb.plans[planSel] = buildPlan(nb, ex(), {mods, mins: +$("#plMin").value, off}); planForm = null; save(nb); toast("Plano criado! 🗓️"); render(); };
+  const cx = $("#plCx"); if (cx) cx.onclick = () => { planForm = null; render(); };
+  const ed = $("#plEd"); if (ed) ed.onclick = () => { planForm = planSel; render(); };
+  const re = $("#plRe"); if (re) re.onclick = () => { const P = nb.plans[planSel]; nb.plans[planSel] = buildPlan(nb, ex(), P.cfg); save(nb); toast("Plano refeito com o que falta 💪"); render(); };
+  const dl = $("#plDel"); if (dl) dl.onclick = () => { if (!dl.dataset.sure) { dl.dataset.sure = 1; dl.textContent = "Confirmar"; return; } delete nb.plans[planSel]; save(nb); render(); };
+  const find = id => { for (const d of nb.plans[planSel].days) for (const t of d.tasks) if (t.id === id) return t; };
+  document.querySelectorAll("[data-pt]").forEach(b => b.onchange = () => { find(b.dataset.pt).done = b.checked; save(nb); if (b.checked) toast("Boa! ✅"); render(); });
+  document.querySelectorAll("[data-pgo]").forEach(b => b.onclick = () => { const t = find(b.dataset.pgo); if (TMR.mode === "idle") tmrStart();
+    if (t.k === "sim") { route.tab = "sim"; return render(); } if (t.k === "errs") { route.tab = "errs"; return render(); }
+    route.tab = "study"; studyState = null; render(); if (t.mi != null) studyState.mod = String(t.mi); studyState.f = t.k === "rev" ? "r" : t.f || "all"; if (t.k === "write") studyState.write = true; studyState.pos = 0;
+    if (t.k === "learn" && t.f === "todo" && !nb.cards.some(c => modsOf(nb).of(c) === t.mi && !nb.prog[c.id])) studyState.f = "all"; render(); });
+}
+
+// ---------- cronómetro de estudo com alarmes de pausa
+const TMR_K = "ess-timer", TDAY_K = "ess-tday";
+let TMR = {mode: "idle", t0: 0, study: 25, brk: 5, cycles: 0, held: 0, open: false};
+try { Object.assign(TMR, JSON.parse(localStorage.getItem(TMR_K) || "{}")); } catch(e) {}
+TMR.open = false;
+const tmrSave = () => { try { localStorage.setItem(TMR_K, JSON.stringify(TMR)); } catch(e) {} };
+const tday = () => { try { const o = JSON.parse(localStorage.getItem(TDAY_K) || "{}"); return o; } catch(e) { return {}; } };
+function tdayAdd(sec){ const o = tday(), k = dkey(new Date()); o[k] = (o[k] || 0) + sec; const keys = Object.keys(o).sort(); while (keys.length > 60) delete o[keys.shift()]; try { localStorage.setItem(TDAY_K, JSON.stringify(o)); } catch(e) {} }
+const mmss = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(x).padStart(2, "0"); };
+const hmin = s => { const m = Math.floor(s / 60); return m < 60 ? m + " min" : Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0") + " min"; };
+let ACTX = null, lastTick = Date.now(), ringT = null;
+function beep(n){ try { ACTX = ACTX || new (window.AudioContext || window.webkitAudioContext)(); ACTX.resume && ACTX.resume();
+  for (let i = 0; i < (n || 3); i++) [0, .22].forEach((o, j) => { const t = ACTX.currentTime + i * .7 + o, g = ACTX.createGain(), os = ACTX.createOscillator(); os.type = "sine"; os.frequency.value = j ? 1046 : 784; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.35, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .2); os.connect(g); g.connect(ACTX.destination); os.start(t); os.stop(t + .22); }); } catch(e) {} }
+function alarm(title, text){ beep(4); try { navigator.vibrate && navigator.vibrate([300, 150, 300, 150, 300]); } catch(e) {}
+  try { if (window.Notification && Notification.permission === "granted") new Notification(title, {body: text, icon: "icone.png"}); } catch(e) {}
+  if (typeof sayParts === "function" && HAS_TTS) setTimeout(() => sayParts([[title + ". " + text, "pt-PT"]]), 2900);
+  toast(title + " " + text); let k = 0; clearInterval(ringT); const old = document.title; ringT = setInterval(() => { document.title = k++ % 2 ? old : "⏰ " + title; if (k > 20) { clearInterval(ringT); document.title = old; } }, 800);
+  TMR.open = true; tmrDraw(); }
+function tmrStart(){ beep(0); TMR.mode = "study"; TMR.t0 = Date.now(); TMR.held = 0; lastTick = Date.now(); tmrSave(); tmrDraw(); }
+function tmrTick(){
+  const now = Date.now(), dt = Math.min(120, (now - lastTick) / 1000); lastTick = now;
+  if (TMR.mode === "study") { tdayAdd(dt); if ((now - TMR.t0) / 1000 >= TMR.study * 60) { TMR.cycles++; TMR.mode = "break"; TMR.t0 = now; tmrSave(); alarm("Hora da pausa! ☕", `Estudaste ${TMR.study} minutos. Levanta-te, bebe água e descansa ${TMR.brk} minutos.`); } }
+  else if (TMR.mode === "break" && (now - TMR.t0) / 1000 >= TMR.brk * 60) { TMR.mode = "back"; TMR.t0 = now; tmrSave(); alarm("Acabou a pausa! 📚", "Está na hora de voltar a estudar."); }
+  else if (TMR.mode === "back" && (now - TMR.t0) / 1000 >= 60 && !TMR.nag) { TMR.nag = 1; alarm("Ainda estás na pausa?", "Carrega em voltar a estudar quando estiveres pronta."); }
+  tmrDraw();
+}
+function tmrDraw(){
+  let pill = document.getElementById("tmrPill"); if (!pill) { pill = document.createElement("button"); pill.id = "tmrPill"; pill.className = "tmrpill"; pill.onclick = () => { TMR.open = !TMR.open; tmrDraw(); }; document.body.appendChild(pill); }
+  const el = (Date.now() - TMR.t0) / 1000, today = (tday()[dkey(new Date())] || 0);
+  const lab = {idle: "⏱️", study: "📚 " + mmss(TMR.study * 60 - el), held: "⏸ " + mmss(TMR.study * 60 - TMR.held), "break": "☕ " + mmss(TMR.brk * 60 - el), back: "⏰ Volta!"}[TMR.mode];
+  pill.textContent = lab; pill.className = "tmrpill " + TMR.mode; pill.setAttribute("aria-label", "Cronómetro de estudo");
+  let p = document.getElementById("tmrPanel");
+  if (!TMR.open) { if (p) p.remove(); return; }
+  if (!p) { p = document.createElement("div"); p.id = "tmrPanel"; p.className = "tmrpanel panel"; document.body.appendChild(p); }
+  const big = {idle: ["Pronta para estudar?", "0:00"], study: ["📚 A estudar", mmss(el)], held: ["⏸ Em pausa (parado)", mmss(TMR.held)], "break": ["☕ Pausa", mmss(TMR.brk * 60 - el)], back: ["⏰ Acabou a pausa!", "Volta a estudar"]}[TMR.mode];
+  const sub = TMR.mode === "study" ? `Pausa daqui a <b>${mmss(TMR.study * 60 - el)}</b>` : TMR.mode === "break" ? `Voltas a estudar daqui a <b>${mmss(TMR.brk * 60 - el)}</b>` : TMR.mode === "held" ? "Carrega em ▶ para continuar" : TMR.mode === "back" ? "Carrega em ▶ quando estiveres pronta" : `Estudas ${TMR.study} min, o alarme toca para a pausa de ${TMR.brk} min, e toca outra vez quando a pausa acabar.`;
+  const key = TMR.mode + "|" + TMR.study + "|" + TMR.brk + "|" + (window.Notification ? Notification.permission : "");
+  if (p.dataset.k !== key) { p.dataset.k = key;
+    p.innerHTML = `<div class="row"><h3 class="grow" style="margin:0">⏱️ Cronómetro de estudo</h3><button class="btn sm" id="tmX" aria-label="Fechar">✕</button></div>
+      <div class="tmbig"><span id="tmL"></span><b id="tmB"></b><span class="muted" id="tmS"></span></div>
+      <div class="row tmbtns">${TMR.mode === "idle" ? `<button class="btn fill grow" id="tmGo">▶ Começar a estudar</button>`
+        : TMR.mode === "study" ? `<button class="btn grow" id="tmHold">⏸ Parar um bocadinho</button><button class="btn" id="tmBrk">☕ Pausa já</button><button class="btn danger" id="tmEnd">⏹ Terminar</button>`
+        : TMR.mode === "held" ? `<button class="btn fill grow" id="tmRes">▶ Continuar</button><button class="btn danger" id="tmEnd">⏹ Terminar</button>`
+        : TMR.mode === "break" ? `<button class="btn grow" id="tmMore">+5 min de pausa</button><button class="btn fill" id="tmBack">▶ Voltar já</button><button class="btn danger" id="tmEnd">⏹ Terminar</button>`
+        : `<button class="btn fill grow" id="tmBack">▶ Voltar a estudar</button><button class="btn danger" id="tmEnd">⏹ Terminar</button>`}</div>
+      <div class="row tmset"><label class="muted">Estudar<select id="tmSt">${[15, 20, 25, 30, 40, 45, 50, 60, 90].map(m => `<option value="${m}" ${m === TMR.study ? "selected" : ""}>${m} min</option>`).join("")}</select></label>
+        <label class="muted">Pausa<select id="tmBr">${[3, 5, 10, 15, 20, 30].map(m => `<option value="${m}" ${m === TMR.brk ? "selected" : ""}>${m} min</option>`).join("")}</select></label>
+        <button class="btn sm" id="tmT">🔔 Testar alarme</button></div>
+      ${window.Notification && Notification.permission === "default" ? `<button class="linkbtn" id="tmN">🔔 Avisar-me mesmo quando o site estiver noutra janela</button>` : ""}
+      <p class="muted tmday" id="tmD"></p>`;
+    const on = (id, f) => { const b = p.querySelector(id); if (b) b.onclick = f; };
+    on("#tmX", () => { TMR.open = false; tmrDraw(); });
+    on("#tmGo", tmrStart);
+    on("#tmHold", () => { TMR.held = (Date.now() - TMR.t0) / 1000; TMR.mode = "held"; tmrSave(); tmrDraw(); });
+    on("#tmRes", () => { TMR.t0 = Date.now() - TMR.held * 1000; TMR.mode = "study"; lastTick = Date.now(); tmrSave(); tmrDraw(); });
+    on("#tmBrk", () => { TMR.cycles++; TMR.mode = "break"; TMR.t0 = Date.now(); tmrSave(); tmrDraw(); });
+    on("#tmMore", () => { TMR.t0 += 5 * 60000; tmrSave(); tmrDraw(); });
+    on("#tmBack", () => { clearInterval(ringT); TMR.nag = 0; tmrStart(); });
+    on("#tmEnd", () => { clearInterval(ringT); TMR.mode = "idle"; TMR.nag = 0; tmrSave(); toast(`Sessão terminada. Hoje estudaste ${hmin(tday()[dkey(new Date())] || 0)} 💜`); tmrDraw(); });
+    on("#tmT", () => beep(2));
+    on("#tmN", async () => { try { await Notification.requestPermission(); } catch(e) {} p.dataset.k = ""; tmrDraw(); });
+    p.querySelector("#tmSt").onchange = e => { TMR.study = +e.target.value; tmrSave(); tmrDraw(); };
+    p.querySelector("#tmBr").onchange = e => { TMR.brk = +e.target.value; tmrSave(); tmrDraw(); };
+  }
+  p.querySelector("#tmL").textContent = big[0]; p.querySelector("#tmB").textContent = big[1]; p.querySelector("#tmS").innerHTML = sub;
+  const T = tday(), wk = Array.from({length: 7}, (_, i) => { const d = new Date(); d.setDate(d.getDate() - i); return T[dkey(d)] || 0; }).reduce((a, b) => a + b, 0);
+  p.querySelector("#tmD").innerHTML = `Hoje estudaste <b>${hmin(today)}</b> · nos últimos 7 dias: <b>${hmin(wk)}</b>${TMR.cycles ? ` · ${TMR.cycles} ${TMR.cycles === 1 ? "pausa feita" : "pausas feitas"}` : ""}`;
+}
+setInterval(tmrTick, 1000); document.addEventListener("visibilitychange", () => { if (!document.hidden) tmrTick(); });
+setTimeout(tmrDraw, 0);
 
 // ----- partilhar
 function tabShare(nb){
@@ -2523,7 +2779,7 @@ function wireShare(nb){
     render(); };
   const off = $("#shOff"); if (off) off.onclick = async () => { if (!off.dataset.sure) { off.dataset.sure = 1; off.textContent = "Carrega outra vez para confirmar"; return; }
     off.disabled = true; try { await unshareNb(nb); toast("Já não está partilhado"); } catch(err) { toast("Não foi possível agora."); } render(); };
-  const e = $("#exp"); if (e) e.onclick = async () => { const data = JSON.parse(JSON.stringify(nb)); data.prog = {}; data.log = {}; delete data.goal; delete data.synced; delete data.errs; delete data.errDone; delete data.cnotes; delete data.quick; delete data.sims;
+  const e = $("#exp"); if (e) e.onclick = async () => { const data = JSON.parse(JSON.stringify(nb)); data.prog = {}; data.log = {}; delete data.goal; delete data.synced; delete data.errs; delete data.errDone; delete data.chats; delete data.errHelp; delete data.plans; delete data.cnotes; delete data.quick; delete data.sims;
     try { await CAP.dl.save({filename: nb.name.replace(/[^\p{L}\p{N} _-]/gu, "").trim() + ".estojo.json", data: JSON.stringify({estojo: 1, nb: data})}); toast("Ficheiro guardado"); } catch(err) { if (err && err.code !== "cancelled") toast("Não foi possível guardar o ficheiro."); } };
   const p = $("#pub"); if (p) p.onclick = async () => { p.disabled = true; p.textContent = "A publicar…"; try { await publish(nb); } catch(err) { toast("Não foi possível publicar."); } p.disabled = false; p.textContent = "⭐ Publicar em destaque"; };
 }
