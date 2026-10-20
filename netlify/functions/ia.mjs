@@ -15,15 +15,25 @@ async function callGemini(prompt, wantJson, deadline) {
   // primeiro o modelo rápido; se falhar ou estiver ocupado, tenta o seguinte — sempre dentro do tempo limite
   const models = (process.env.GEMINI_MODEL || "gemini-flash-lite-latest,gemini-flash-latest").split(",").map(s => s.trim()).filter(Boolean);
   let last = "";
-  for (const model of models) {
-    const left = deadline - Date.now(); if (left < 3000) break;
-    try {
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-        method: "POST", signal: AbortSignal.timeout(left - 1000), headers: { "content-type": "application/json" },
-        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: wantJson ? { responseMimeType: "application/json" } : {} }) });
-      if (r.ok) { const j = await r.json(); const t = (j.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join(""); if (t) return t; last = model + " vazio"; continue; }
-      last = model + " " + r.status + " " + (await r.text()).slice(0, 160).replace(/\s+/g, " ");
-    } catch (e) { last = model + " " + (e.name === "TimeoutError" || e.name === "AbortError" ? "demorou demasiado" : e.message); }
+  for (let i = 0; i < models.length; i++) {
+    const model = models[i], left = deadline - Date.now(); if (left < 3000) break;
+    // o primeiro modelo não pode gastar o tempo todo: deixa tempo para o seguinte
+    const budget = i < models.length - 1 ? Math.max(9000, Math.round(left * 0.6)) : left - 1000;
+    // «pensar» deixa o Gemini muito lento: desligamos (se o modelo não aceitar, tentamos sem)
+    for (const think of [true, false]) {
+      const gen = wantJson ? { responseMimeType: "application/json" } : {};
+      if (think) gen.thinkingConfig = { thinkingBudget: 0 };
+      try {
+        const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+          method: "POST", signal: AbortSignal.timeout(Math.max(1000, Math.min(budget, deadline - Date.now() - 1000))), headers: { "content-type": "application/json" },
+          body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: gen }) });
+        if (r.ok) { const j = await r.json(); const t = (j.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || "").join(""); if (t) return t; last = model + " vazio"; break; }
+        const err = (await r.text()).slice(0, 200).replace(/\s+/g, " ");
+        last = model + " " + r.status + " " + err;
+        if (think && r.status === 400 && /think/i.test(err)) continue; // este modelo não deixa desligar: repete sem isso
+        break;
+      } catch (e) { last = model + " " + (e.name === "TimeoutError" || e.name === "AbortError" ? "demorou demasiado" : e.message); break; }
+    }
   }
   throw new Error("gemini " + last);
 }
