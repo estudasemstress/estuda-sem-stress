@@ -13,16 +13,18 @@ const json = (o, status = 200) => new Response(JSON.stringify(o), { status, head
 async function callGemini(prompt, wantJson, deadline) {
   const key = process.env.GEMINI_API_KEY; if (!key) throw new Error("sem chave");
   // primeiro o modelo rápido; se falhar ou estiver ocupado, tenta o seguinte — sempre dentro do tempo limite
-  const models = (process.env.GEMINI_MODEL || "gemini-flash-lite-latest,gemini-flash-latest,gemini-2.5-flash-lite").split(",").map(s => s.trim()).filter(Boolean);
+  const models = (process.env.GEMINI_MODEL || "gemini-flash-lite-latest,gemini-flash-latest").split(",").map(s => s.trim()).filter(Boolean);
   let last = "";
   for (let i = 0; i < models.length; i++) {
     const model = models[i], left = deadline - Date.now(); if (left < 3000) break;
     // o primeiro modelo não pode gastar o tempo todo: deixa tempo para o seguinte
     const budget = i < models.length - 1 ? Math.max(9000, Math.round(left * 0.6)) : left - 1000;
     // «pensar» deixa o Gemini muito lento: desligamos (se o modelo não aceitar, tentamos sem)
-    for (const think of [true, false]) {
-      const gen = wantJson ? { responseMimeType: "application/json" } : {};
-      if (think) gen.thinkingConfig = { thinkingBudget: 0 };
+    // modelos antigos aceitam thinkingBudget 0; os novos aceitam thinkingLevel; se nenhum servir, vai sem nada
+    const THINK = [{ thinkingBudget: 0 }, { thinkingLevel: "low" }, null];
+    for (let k = 0; k < THINK.length; k++) {
+      const think = THINK[k], gen = wantJson ? { responseMimeType: "application/json" } : {};
+      if (think) gen.thinkingConfig = think;
       try {
         const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
           method: "POST", signal: AbortSignal.timeout(Math.max(1000, Math.min(budget, deadline - Date.now() - 1000))), headers: { "content-type": "application/json" },
@@ -30,7 +32,7 @@ async function callGemini(prompt, wantJson, deadline) {
         if (r.ok) { const j = await r.json(); const t = (j.candidates?.[0]?.content?.parts || []).filter(p => !p.thought).map(p => p.text || "").join(""); if (t) return t; last = model + " vazio"; break; }
         const err = (await r.text()).slice(0, 200).replace(/\s+/g, " ");
         last = (last ? last + " ; " : "") + model + " " + r.status + " " + err.slice(0, 90);
-        if (think && r.status === 400 && /think/i.test(err)) continue; // este modelo não deixa desligar: repete sem isso
+        if (think && r.status === 400) continue; // este modelo não aceita esta forma de pensar menos: tenta a seguinte
         break;
       } catch (e) { last = (last ? last + " ; " : "") + model + " " + (e.name === "TimeoutError" || e.name === "AbortError" ? "demorou demasiado" : e.message); break; }
     }
