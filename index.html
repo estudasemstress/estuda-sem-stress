@@ -82,6 +82,11 @@ input[type=text],input[type=search],input[type=date],select,textarea{border:1px 
 .nb span{font-size:.8rem;padding-left:10px;opacity:.8}
 .nb .meter{margin-top:auto;margin-left:10px;height:6px;border-radius:99px;background:rgba(255,255,255,.7);overflow:hidden;display:flex}
 .nb .meter i{display:block;height:100%}
+.nb .nbcd{display:flex;flex-wrap:wrap;gap:6px;opacity:1;padding-left:10px}
+.nb .cdi{display:inline-flex;align-items:baseline;gap:4px;background:rgba(255,255,255,.78);border-radius:10px;padding:4px 9px;opacity:1;padding-left:9px;max-width:100%;min-width:0}
+.nb .cdi b{font-family:var(--display);font-size:1.35rem;color:var(--ci);padding:0;line-height:1!important} .nb .cdi small{font-size:.72rem;color:var(--ci);font-weight:700}
+.nb .cdi em{font-style:normal;font-size:.75rem;color:#2A2840;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.nb .cdi.sm b{font-size:1rem} .nb .cdi.soon{box-shadow:0 0 0 2px var(--ci) inset}
 .nb.add{background:var(--soft);color:var(--muted);border:1.5px dashed var(--line);align-items:center;justify-content:center;font-weight:700}
 .nb.add::before{display:none}
 .fold{display:flex;flex-direction:column;gap:10px}
@@ -473,7 +478,7 @@ const dkey = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"
 const parseD = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
 const daysTo = s => Math.round((parseD(s) - today0()) / 86400000);
 const fmtD = s => { const [y,m,d] = s.split("-"); return d+"/"+m; };
-const PAL = [["#DCEEFC","#B7D9F5"],["#F7E3E8","#EDC0CC"],["#D6F0E8","#A6DCCB"],["#EFE8FB","#D6C9F2"],["#FFF1D6","#F2D9A6"],["#FCE5EE","#F3C1D5"],["#E3F3F3","#B9E3E3"],["#FCEAE1","#F2C9B6"],["#E8EEFC","#C9D3F2"],["#EEF6E0","#D3E8B5"]];
+const PAL = [["#DCEEFC","#B7D9F5"],["#F7E3E8","#EDC0CC"],["#D6F0E8","#A6DCCB"],["#EFE8FB","#D6C9F2"],["#FFF1D6","#F2D9A6"],["#FCE5EE","#F3C1D5"],["#E3F3F3","#B9E3E3"],["#FCEAE1","#F2C9B6"],["#E8EEFC","#C9D3F2"],["#EEF6E0","#D3E8B5"],["#FAF6DB","#EDE5B6"],["#DBFADE","#B6EDBA"],["#DBFAE8","#B6EDCD"],["#DBF2FA","#B6DFED"],["#DEDBFA","#BAB6ED"],["#F1DBFA","#DCB6ED"],["#FADBFA","#EDB6ED"],["#FADBF1","#EDB6DC"],["#FADFDB","#EDBDB6"],["#FAEBDB","#EDD1B6"],["#F6FADB","#E5EDB6"],["#DBFAF6","#B6EDE5"]];
 function toast(msg){ document.querySelectorAll(".toast").forEach(x=>x.remove()); const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(), 2600); }
 function plain(html){ const d = document.createElement("div"); d.innerHTML = sanitize(html); return d.textContent || ""; }
 
@@ -1077,19 +1082,23 @@ function viewHome(){
       return `<div class="ex" style="background:${PAL[nb.color%PAL.length][0]};color:#2A2840"><span class="d">${n}</span><span class="n">${esc(e.n)}<small>${n===0?"Hoje":n===1?"Amanhã":"dias · "+fmtD(e.d)} · ${esc(nb.name)}</small></span><span class="g">${g.done ? `Hoje já: <b>${g.done}</b> ✨` : "Bora? 💪"}<br><button class="btn sm" data-open="${nb.id}">Estudar</button></span></div>`; }).join("")
     : `<p class="muted">Ainda sem testes marcados. Abre um caderno e acrescenta as datas em «Plano».</p>`;
   const folders = S.folders.map(f => {
-    const nbs = S.notebooks.filter(n => n.folder === f.id);
+    const nbs = S.notebooks.filter(n => n.folder === f.id).sort(byTest);
     return `<section class="fold"><header><span class="dot" style="background:${PAL[f.color%PAL.length][1]}"></span><h2>${esc(f.name)}</h2><span class="muted">${nbs.length} ${nbs.length===1?"caderno":"cadernos"}</span><button class="btn sm" data-ren="${f.id}" style="margin-left:auto">✎</button></header>
       <div class="shelf">${nbs.map(nbTile).join("")}<button class="nb add" data-new="${f.id}">+ Novo caderno</button></div></section>`;
   }).join("");
-  const loose = S.notebooks.filter(n => !S.folders.some(f => f.id === n.folder));
+  const loose = S.notebooks.filter(n => !S.folders.some(f => f.id === n.folder)).sort(byTest);
   return `<div class="hero"><h1>Os teus cadernos</h1><p class="slogan">Estudar sem stress começa aqui.</p>${(() => { const L = elogios(), e = L[L.length - 1]; return e ? `<button class="elgday" id="elgDay">💜 Hoje disseste: <b>«${esc(e.t)}»</b> É verdade!</button>` : ""; })()}<p>Põe os teus PDF, slides ou apontamentos e cria flashcards e esquemas, com ou sem IA, com a página de onde vem cada resposta.</p></div>
     <div class="lock">🔒 <span>Os teus cadernos são privados: só tu os vês. Partilhas apenas o que escolheres, em «🔗 Partilhar» dentro de cada caderno.</span></div>
     ${folders}
     ${loose.length ? `<section class="fold"><header><h2>Sem pasta</h2></header><div class="shelf">${loose.map(nbTile).join("")}</div></section>` : ""}
     <div class="row"><button class="btn pri" id="newF">+ Nova pasta</button><button class="btn" id="impB">⬆ Importar caderno</button><span class="muted grow">${CAP.canWrite ? "Guardado na tua conta: aparece no telemóvel e no computador." : "Sem conta: está guardado só neste navegador. Entra na tua conta para não perderes nada."}</span></div>`;
 }
-function nbTile(nb){ const s = nbStats(nb), c = PAL[nb.color%PAL.length];
-  return `<button class="nb" data-open="${nb.id}" style="background:${c[0]}"><b>${esc(nb.name)}</b><span>${nb.cards.length} flashcards · ${(nb.notes||[]).length} resumos · ${(nb.docs||[]).length} doc.</span>${nb.example?'<span><span class="ex-tag">exemplo</span></span>':""}${nb.share&&nb.share.on?'<span>👥 partilhado</span>':'<span>🔒 privado</span>'}
+const nextTests = nb => (nb.exams || []).filter(e => /^\d{4}-\d{2}-\d{2}$/.test(e.d) && daysTo(e.d) >= 0).sort((a, b) => a.d < b.d ? -1 : 1);
+const byTest = (a, b) => { const x = nextTests(a)[0], y = nextTests(b)[0]; if (x && y) return x.d < y.d ? -1 : x.d > y.d ? 1 : 0; if (x) return -1; if (y) return 1; return (b.updated || 0) - (a.updated || 0); };
+const cdTxt = n => n === 0 ? "É hoje! 💪" : n === 1 ? "Amanhã" : `${n} dias`;
+function nbTile(nb){ const s = nbStats(nb), c = PAL[nb.color%PAL.length], T = nextTests(nb), th = THEMES[(nb.color || 0) % THEMES.length];
+  const cd = T.length ? `<span class="nbcd">${T.slice(0, 3).map((e, i) => { const n = daysTo(e.d); return `<span class="cdi${i ? " sm" : ""}${n <= 3 ? " soon" : ""}" style="--ci:${th[5]}"><b>${n === 0 ? "Hoje" : n}</b>${n === 0 ? "" : `<small>${n === 1 ? "dia" : "dias"}</small>`}<em>${esc(e.n)}</em></span>`; }).join("")}</span>` : "";
+  return `<button class="nb" data-open="${nb.id}" style="background:${c[0]}"><b>${esc(nb.name)}</b>${cd}<span>${nb.cards.length} flashcards · ${(nb.notes||[]).length} resumos · ${(nb.docs||[]).length} doc.</span>${nb.example?'<span><span class="ex-tag">exemplo</span></span>':""}${nb.share&&nb.share.on?'<span>👥 partilhado</span>':'<span>🔒 privado</span>'}
     <span class="meter"><i style="width:${s.ok/s.n*100}%;background:var(--ok-bar)"></i><i style="width:${s.r/s.n*100}%;background:var(--rev-bar)"></i></span></button>`; }
 function wireHome(){
   const ed = $("#elgDay"); if (ed) ed.onclick = elogiosDialog;
@@ -1105,7 +1114,7 @@ function dialog(html, wire){ const d = document.createElement("div"); d.classNam
 const swatches = (sel) => `<div class="swatches" id="sw">${PAL.map((c,i)=>`<button type="button" data-c="${i}" aria-pressed="${i===sel}" style="background:${c[1]}" aria-label="Cor ${i+1}"></button>`).join("")}</div>`;
 function wireSw(d, get, set){ d.querySelectorAll("#sw button").forEach(b => b.onclick = () => { set(+b.dataset.c); d.querySelectorAll("#sw button").forEach(x => x.setAttribute("aria-pressed", x===b)); }); }
 function folderDialog(f){
-  let color = f ? f.color : S.folders.length % PAL.length;
+  let color = f ? f.color : freeColor(S.folders.map(x => x.color));
   dialog(`<h3>${f ? "Editar pasta" : "Nova pasta"}</h3><input type="text" id="fn" value="${esc(f?f.name:"")}" placeholder="Ex.: 1.º semestre, 12.º ano…" maxlength="60">${swatches(color)}
     <div class="row">${f ? `<button class="btn danger" id="del">Apagar pasta</button>` : ""}<span class="grow"></span><button class="btn" id="cx">Cancelar</button><button class="btn fill" id="ok">Guardar</button></div>`, (d, close) => {
     wireSw(d, () => color, c => color = c);
@@ -1114,8 +1123,9 @@ function folderDialog(f){
     const del = d.querySelector("#del"); if (del) del.onclick = () => { del.textContent = "Os cadernos ficam em «Sem pasta». Carrega outra vez para apagar."; del.onclick = () => { S.folders = S.folders.filter(x => x !== f); S.metaUpdated = Date.now(); save(); close(); render(); }; };
   });
 }
+function freeColor(used){ const cnt = PAL.map((_, i) => used.filter(u => (u || 0) % PAL.length === i).length), min = Math.min(...cnt); const free = cnt.map((n, i) => n === min ? i : -1).filter(i => i >= 0); return free[Math.floor(Math.random() * free.length)]; }
 function nbDialog(nb, folder){
-  let color = nb ? nb.color : S.notebooks.length % PAL.length;
+  let color = nb ? nb.color : freeColor(S.notebooks.filter(x => !folder || x.folder === folder).map(x => x.color));
   dialog(`<h3>${nb ? "Editar caderno" : "Novo caderno"}</h3><input type="text" id="nn" value="${esc(nb?nb.name:"")}" placeholder="Ex.: Anatomia, Matemática A, Inglês…" maxlength="80">
     <label class="muted">Pasta <select id="nf">${S.folders.map(f => `<option value="${f.id}" ${f.id===(nb?nb.folder:folder)?"selected":""}>${esc(f.name)}</option>`).join("")}</select></label>${swatches(color)}
     <div class="row">${nb ? `<button class="btn danger" id="del">Apagar caderno</button>` : ""}<span class="grow"></span><button class="btn" id="cx">Cancelar</button><button class="btn fill" id="ok">Guardar</button></div>`, (d, close) => {
@@ -1793,7 +1803,19 @@ const THEMES = [
   ["#1E3E3E","#557878","#BFE3E3","#B9E3E3","#E3F3F3","#2C6E6E"],
   ["#4A2A1E","#866050","#F0CDBD","#F2C9B6","#FCEAE1","#A0583A"],
   ["#232E55","#5E6890","#CDD6F2","#C9D3F2","#E8EEFC","#4A5BA0"],
-  ["#2C3A1A","#66784A","#D6E8BE","#D3E8B5","#EEF6E0","#55702C"]];
+  ["#2C3A1A","#66784A","#D6E8BE","#D3E8B5","#EEF6E0","#55702C"],
+  ["#47421F","#7E7958","#EDE7C0","#EDE5B6","#FAF8E5","#857A32"],
+  ["#1F4722","#587E5B","#C0EDC3","#B6EDBA","#E5FAE7","#328539"],
+  ["#1F4730","#587E68","#C0EDD2","#B6EDCD","#E5FAEE","#328555"],
+  ["#1F3D47","#58757E","#C0E1ED","#B6DFED","#E5F5FA","#327085"],
+  ["#221F47","#5B587E","#C3C0ED","#BAB6ED","#E7E5FA","#393285"],
+  ["#3B1F47","#73587E","#DFC0ED","#DCB6ED","#F4E5FA","#6C3285"],
+  ["#471F47","#7E587E","#EDC0ED","#EDB6ED","#FAE5FA","#853285"],
+  ["#471F3B","#7E5873","#EDC0DF","#EDB6DC","#FAE5F4","#85326C"],
+  ["#47241F","#7E5D58","#EDC6C0","#EDBDB6","#FAE8E5","#853E32"],
+  ["#47331F","#7E6B58","#EDD6C0","#EDD1B6","#FAF0E5","#855C32"],
+  ["#42471F","#797E58","#E7EDC0","#E5EDB6","#F8FAE5","#7A8532"],
+  ["#1F4742","#587E79","#C0EDE7","#B6EDE5","#E5FAF8","#32857A"]];
 const themeVars = nb => { const t = THEMES[(nb.color || 0) % THEMES.length];
   return `--th-ink:${t[0]};--th-muted:${t[1]};--th-line:${t[2]};--th-acc:${t[3]};--th-soft:${t[4]};--th-aink:${t[5]}`; };
 const GEN_TIPS = [["Testa-te antes de ler","Tenta sempre responder antes de virar o cartão. O esforço de lembrar é o que fixa a matéria."],["Pouco e muitas vezes","15–20 minutos por dia funcionam melhor do que 3 horas na véspera. Segue o objetivo do dia lá em cima."],["Volta aos «Rever»","Os cartões marcados como Rever são os que mais precisas. Faz o filtro «A rever» no fim de cada sessão."],["Explica em voz alta","Diz a resposta como se estivesses a explicar a uma colega. Se conseguires explicar, sabes."],["Cria imagens malucas","Imagens engraçadas ou exageradas ficam na memória."],["Mistura a ordem","Usa «Baralhar» quando já souberes um módulo: assim não decoras só a sequência."]];
