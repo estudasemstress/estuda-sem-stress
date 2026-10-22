@@ -64,7 +64,7 @@ textarea{min-height:90px}
 <script>
 /* LIGAÇÃO À IA: põe aqui o endereço da IA do teu site.
    Recebe POST JSON {system, user} e deve devolver JSON {text:"..."} com a resposta da IA. */
-const CONFIG={endpoint:""};
+const CONFIG={endpoint:"/.netlify/functions/gerar"};
 
 const SYS={
 resumo:`És o gerador de resumos do Estojo. Usa SÓ o material fornecido; não inventes. Português de Portugal, frases curtas e claras, termos-chave a **negrito**. Não copies manuais. Devolve APENAS JSON, sem texto extra, assim:
