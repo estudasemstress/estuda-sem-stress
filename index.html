@@ -568,10 +568,10 @@ html.dys body :is(.errhead,.errhead *){line-height:1.8!important}
 .m-img.none{background:var(--bg2)}
 .m-band{background:var(--bg2);border-radius:2px}
 .m-s.bg2 .m-band{background:var(--bg)}
-.m-capa-t{font-family:'Cormorant Garamond',Georgia,serif;font-size:76px;font-weight:600;line-height:1.08;color:var(--ink);display:flex;align-items:center}
-.m-capa-s{font-size:24px;font-weight:700}
-.m-capa-x{font-size:24px}
-.m-capa-a{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:30px;color:var(--b)}
+.m-capa-t{font-family:'Cormorant Garamond',Georgia,serif;font-size:74px;font-weight:500;line-height:1.1;color:var(--ink)}
+.m-capa-s{font-size:23px;font-weight:700}
+.m-capa-x{font-size:23px}
+.m-capa-a{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:26px;color:var(--b)}
 .m-capa-fade{position:absolute;top:0;left:840px;width:160px;height:1080px;background:linear-gradient(90deg,var(--bg2),transparent)}
 .m-line{position:absolute;background:var(--ln)}
 .m-line.a{background:var(--a)}.m-line.b{background:var(--b)}
@@ -3851,10 +3851,10 @@ function slideHtml(s, pal, i, n, edit){
   const head = () => `${dEd("titulo", s.titulo, "h2", "m-h fit", edit, pos(70, 100, 1600, 80))}<i class="m-rule"></i>`;
   let b = "", bg = (i % 2 ? "bg2" : "bg");
   if (L === "capa") { bg = "bg2";
-    b = `${dImg("img", s.img, 0, 840, 1080, 1080, "full")}<div class="m-capa-fade"></div>
-      ${dEd("titulo", s.titulo, "h1", "m-capa-t fit", edit, pos(110, 100, 700, 420))}
-      ${dEd("sub", s.sub, "div", "m-capa-s fit", edit, pos(560, 100, 700, 40))}${dEd("temas", s.temas, "div", "m-capa-x fit", edit, pos(615, 100, 700, 70))}
-      ${dEd("autor", s.autor, "div", "m-capa-a fit", edit, pos(760, 100, 700, 50))}`; }
+    b = `${dImg("img", s.img, 0, 1180, 740, 1080, "full")}
+      ${dEd("titulo", s.titulo, "h1", "m-capa-t fit", edit, pos(110, 70, 740, 300))}
+      ${dEd("sub", s.sub, "div", "m-capa-s fit", edit, pos(470, 75, 960, 40))}${dEd("temas", s.temas, "div", "m-capa-x fit", edit, pos(525, 75, 960, 70))}
+      ${dEd("autor", s.autor, "div", "m-capa-a fit", edit, pos(670, 75, 700, 50))}`; }
   else if (L === "roteiro") { const P2 = A2(s, "passos").slice(0, 6), k = Math.max(1, P2.length), x0 = 300, x1 = 1620, step = k > 1 ? (x1 - x0) / (k - 1) : 0;
     b = `${head()}${k > 1 ? `<i class="m-line" style="${pos(330, x0, x1 - x0, 2)}"></i>` : ""}
       ${P2.map((p, j) => { const cx = k > 1 ? x0 + j * step : 960; return `<div class="m-circ${j === k - 1 ? " last" : ""}" style="${pos(280, cx - 50, 100, 100)}">${j + 1}</div>${dEd("passos." + j, p, "div", "m-cap fit", edit, pos(410, cx - 130, 260, 90))}`; }).join("")}
@@ -3921,7 +3921,9 @@ function tintImg(src, pal){
   const pr = new Promise(ok => { const im = new Image(); im.crossOrigin = "anonymous";
     im.onload = () => { try { const W = Math.min(1100, im.naturalWidth), H = Math.round(im.naturalHeight * W / im.naturalWidth), c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
         if (P.dark) { x.filter = "sepia(.55) brightness(.92)"; x.drawImage(im, 0, 0, W, H); }
-        else { x.fillStyle = P.bg; x.fillRect(0, 0, W, H); x.filter = "sepia(.45) saturate(.85) contrast(1.02)"; x.globalCompositeOperation = "multiply"; x.drawImage(im, 0, 0, W, H); }
+        else { // só as gravuras com fundo branco recebem o tom do papel; as que já têm cor ficam como estão
+          x.drawImage(im, 0, 0, W, H); let white = 0; [[2, 2], [W - 3, 2], [2, H - 3], [W - 3, H - 3]].forEach(([px, py]) => { const d = x.getImageData(px, py, 1, 1).data; if (d[0] > 225 && d[1] > 225 && d[2] > 225) white++; });
+          if (white >= 3) { x.globalCompositeOperation = "source-over"; x.filter = "none"; x.fillStyle = P.bg; x.fillRect(0, 0, W, H); x.filter = "sepia(.25) contrast(1.02)"; x.globalCompositeOperation = "multiply"; x.drawImage(im, 0, 0, W, H); } }
         ok(c.toDataURL("image/jpeg", .86)); } catch(e) { ok(src); } };
     im.onerror = () => ok(null); im.src = src; });
   IMG_PROC.set(key, pr); return pr;
@@ -3996,6 +3998,34 @@ function cleanDeck(j){
     return o; });
   return {titulo: S(j && j.titulo, 120) || (slides[0] && slides[0].titulo) || "Apresentação", anat: !(j && j.anat === false), slides};
 }
+const REVIEW_PROMPT = (mat, deck) => `És um professor exigente a rever uma apresentação de um aluno antes do teste. Compara cada slide com a MATÉRIA e corrige:
+1) erros científicos ou frases que digam algo diferente da matéria;
+2) termos: usa exatamente os nomes da matéria (ex.: se a matéria diz "peróneo", não escrevas só "fíbula");
+3) coisas importantes da matéria que faltam no slide desse tema (acrescenta sem passar os limites de texto);
+4) no verdadeiro ou falso, confirma se cada "v" está certo;
+5) texto demasiado longo: encurta (frases curtas, cabe no slide).
+Mantém o número de slides, os layouts, os campos e as imagens ("img") iguais. Não inventes nada que não esteja na matéria.
+Responde APENAS com o JSON completo corrigido, no mesmo formato: {"titulo": "...", "anat": ..., "slides": [...]}
+
+MATÉRIA:
+${mat}
+
+APRESENTAÇÃO:
+${JSON.stringify(deck)}`;
+async function reviewDeck(nb, D, mat){
+  if (!CAP.sample || ACC_LIMIT || !mat) return false;
+  const strip = JSON.parse(JSON.stringify({titulo: D.title, anat: D.anat, slides: D.slides}));
+  const walk = o => { if (o && typeof o === "object") { if (o.q != null && ("u" in o || "d" in o || "i" in o || "src" in o)) { delete o.u; delete o.d; delete o.i; delete o.src; } Object.values(o).forEach(walk); } }; walk(strip);
+  try { const r = await CAP.sample(REVIEW_PROMPT(mat.slice(0, 12000), strip), {modelTier: "default"}); iaUse("corrigir");
+    const d = cleanDeck(parseJsonLoose(r.text)); if (d.slides.length !== D.slides.length) return false;
+    // as imagens já escolhidas ficam: a revisão só mexe no texto
+    const keepImg = (a, b) => { if (!a || !b || typeof a !== "object") return; if (a.img && b.img && (b.img.q === a.img.q || !b.img.q)) b.img = a.img; else if (a.img && b.img && !a.img.u && !a.img.d) b.img = Object.assign({}, b.img);
+      if (Array.isArray(a.itens) && Array.isArray(b.itens)) b.itens.forEach((x, k) => { if (x && typeof x === "object" && a.itens[k] && a.itens[k].img && x.img && x.img.q === a.itens[k].img.q) x.img = a.itens[k].img; }); };
+    D.slides = d.slides.map((ns, k) => { const os = D.slides[k]; if (ns.layout !== os.layout) return os; keepImg(os, ns); if (!ns.img && os.img) ns.img = os.img; ns.notas = ns.notas || os.notas; if (os.layout === "capa" && os.autor) ns.autor = os.autor; return ns; });
+    D.title = d.titulo || D.title; D.reviewed = Date.now(); return true; }
+  catch(e) { if (e && e.code === "rate_limited") accLimit(); return false; }
+}
+const deckMat = (nb, cfg) => (deckMaterial(nb, cfg.src) + (cfg.txt ? "\n\nO que o estudante escreveu sobre o tema:\n" + cfg.txt.slice(0, 4000) : "")).trim();
 async function makeDeck(nb, cfg){
   const mat = (deckMaterial(nb, cfg.src) + (cfg.txt ? "\n\nO que o estudante escreveu sobre o tema:\n" + cfg.txt.slice(0, 4000) : "")).trim();
   if (!mat) throw {code: "nomat"};
@@ -4003,7 +4033,7 @@ async function makeDeck(nb, cfg){
   const r = await CAP.sample(DECK_PROMPT(cfg, mat), {modelTier: "default"}); iaUse("criar");
   const d = cleanDeck(parseJsonLoose(r.text)); if (d.slides.length < 3) throw {code: "bad"};
   if (cfg.autor) d.slides.forEach(s => { if (s.layout === "capa") s.autor = cfg.autor; });
-  return {id: uid(), title: d.titulo, theme: cfg.theme, anat: d.anat, slides: d.slides, at: Date.now(), model: "vintage"};
+  return {id: uid(), title: d.titulo, theme: cfg.theme, anat: d.anat, slides: d.slides, at: Date.now(), model: "vintage", src: {src: cfg.src, txt: cfg.txt || ""}};
 }
 let deckOpen = null, deckSel = 0;
 const stageWrap = (s, D, i, edit) => `<div data-si="${i}" class="m-wrap">${slideHtml(s, D.theme, i + 1, D.slides.length, edit)}</div>`;
@@ -4017,7 +4047,8 @@ function tabDecks(nb){
 }
 function deckEditor(nb, D){
   deckSel = Math.min(deckSel, D.slides.length - 1); const s = D.slides[deckSel];
-  return `<div class="deckbar"><button class="btn sm" id="dkBack">← Apresentações</button><input type="text" id="dkTitle" class="grow" value="${dEsc(D.title)}" aria-label="Título da apresentação"><button class="btn sm fill" id="dkPlay">▶ Apresentar</button><button class="btn sm" id="dkPptx">⬇ PowerPoint</button><button class="btn sm" id="dkPrint">🖨️ PDF</button></div>
+  return `<div class="deckbar"><button class="btn sm" id="dkBack">← Apresentações</button><input type="text" id="dkTitle" class="grow" value="${dEsc(D.title)}" aria-label="Título da apresentação"><button class="btn sm fill" id="dkPlay">▶ Apresentar</button><button class="btn sm" id="dkPptx">⬇ PowerPoint</button><button class="btn sm" id="dkPrint">🖨️ PDF</button><button class="btn sm" id="dkRev" title="A IA compara todos os slides com a matéria e corrige">🔎 Rever com a matéria</button></div>
+    ${D.reviewed ? `<p class="muted" style="margin:0;font-size:.82rem">✅ Revista com a matéria. Mesmo assim, lê antes de apresentar.</p>` : ""}
     <div class="deckthemes" role="group" aria-label="Cores">${Object.entries(DPAL).map(([k, T]) => `<button class="dth${D.theme === k ? " on" : ""}" data-dth="${k}" style="background:${T.bg};color:${T.ink};border-color:${T.a}"><i style="background:${T.a}"></i><i style="background:${T.b}"></i>${T.n}</button>`).join("")}</div>
     <div class="deckwrap"><div class="decknav">${D.slides.map((x, i) => `<div class="dnav${i === deckSel ? " on" : ""}" data-dks="${i}" role="button" tabindex="0" aria-label="Slide ${i + 1}"><div class="dk-scale">${stageWrap(x, D, i)}</div><span>${i + 1}</span></div>`).join("")}<button class="dnav add" id="dkAdd">＋ Slide</button></div>
       <div class="deckmain"><div class="dk-stage" id="dkStage">${stageWrap(s, D, deckSel, true)}</div>
@@ -4066,6 +4097,9 @@ function wireDecks(nb){
   $("#dkPlay").onclick = () => deckPresent(D, deckSel, nb);
   $("#dkPptx").onclick = () => deckPptx(D, nb);
   $("#dkPrint").onclick = () => deckPrint(D, nb);
+  $("#dkRev").onclick = async () => { const b = $("#dkRev"), mat = deckMat(nb, D.src || {src: "all"}); if (!mat) return toast("Não encontrei a matéria desta apresentação.");
+    if (!CAP.sample || ACC_LIMIT) return fail({code: ACC_LIMIT ? "rate_limited" : "no_ai"}); b.disabled = true; b.textContent = "🔎 A rever…";
+    const ok = await reviewDeck(nb, D, mat); if (ok) { save(nb); render(); toast("Revista ✅ Corrigi o que estava diferente da matéria."); } else { b.disabled = false; b.textContent = "🔎 Rever com a matéria"; toast("A revisão não respondeu bem. Tenta outra vez."); } };
   document.querySelectorAll("[data-dth]").forEach(b => b.onclick = () => { D.theme = b.dataset.dth; save(nb); render(); });
   document.querySelectorAll("[data-dks]").forEach(b => { b.onclick = () => { deckSel = +b.dataset.dks; render(); }; b.onkeydown = e => { if (e.key === "Enter") b.click(); }; });
   document.querySelectorAll("#dkStage [data-p]").forEach(el => { el.addEventListener("blur", () => { setPath(s(), el.dataset.p, el.innerText.trim()); save(nb); const t = document.querySelector(`[data-dks="${deckSel}"] .dk-scale`); if (t) { t.innerHTML = stageWrap(s(), D, deckSel); fitText(t); hydrateImgs(t, D); } });
@@ -4119,7 +4153,9 @@ function deckDialog(nb){
       const cfg = {src, theme, tone, n: +d.querySelector("#dkN").value, autor: d.querySelector("#dkAut").value.trim().slice(0, 60), ind: src === "txt" ? "" : ind, txt: src === "txt" ? ind : "", quiz: d.querySelector("#dkQ").checked, notes: d.querySelector("#dkNo").checked};
       g.disabled = true; g.textContent = "A criar… (15 a 30 s)"; d.querySelector("#dkMsg").textContent = "🎨 A IA está a escrever os slides e a escolher as ilustrações…";
       try { let D; try { D = await makeDeck(nb, cfg); } catch(e) { if (e && (e.code === "rate_limited" || e.code === "no_ai" || e.code === "nomat")) throw e; if (cfg.n > 10) { d.querySelector("#dkMsg").textContent = "Demorou: a tentar com menos slides…"; D = await makeDeck(nb, Object.assign({}, cfg, {n: 10})); } else throw e; }
-        nb.decks = (nb.decks || []).concat([D]); save(nb); close(); deckOpen = D.id; deckSel = 0; render(); toast("Apresentação pronta! 🎤"); }
+        d.querySelector("#dkMsg").textContent = "🔎 A rever o texto com a matéria (termos, erros e o que falta)…"; g.textContent = "A rever…";
+        await reviewDeck(nb, D, deckMat(nb, cfg));
+        nb.decks = (nb.decks || []).concat([D]); save(nb); close(); deckOpen = D.id; deckSel = 0; render(); toast(D.reviewed ? "Apresentação pronta e revista! 🎤" : "Apresentação pronta! 🎤"); }
       catch(e) { g.disabled = false; g.textContent = "✨ Tentar outra vez"; d.querySelector("#dkMsg").textContent = ""; const f = e && e.code; if (f === "rate_limited") { accLimit(); toast("Chegaste ao limite de IA de hoje."); } else if (f === "no_ai") toast("Entra na tua conta para usar a IA."); else if (f === "nomat") toast("Escolhe a matéria ou escreve sobre o tema."); else toast("A IA não respondeu bem. Tenta outra vez."); } };
   });
 }
@@ -4168,7 +4204,7 @@ async function deckPptx(D, nb){
     const head = () => { txt(s.titulo, 70, 100, 1600, 80, {fontFace: TF, fontSize: 30, bold: true}); sl.addShape(P.ShapeType.rect, {x: X(100), y: X(160), w: X(150), h: X(5), fill: {color: h(T.b)}, line: {color: h(T.b)}}); };
     const av = (v, top, left, w) => { if (!v) return; sl.addShape(P.ShapeType.rect, {x: X(left), y: X(top), w: X(w), h: X(106), fill: {color: h(T.a)}, line: {color: h(T.a)}}); txt(v, top + 18, left + 26, w - 52, 74, {fontSize: 13, bold: true, color: h(T.lt), valign: "middle"}); };
     const A = k => Array.isArray(s[k]) ? s[k] : [];
-    if (L === "capa") { await pic(s.img, 0, 840, 1080, 1080); txt(s.titulo, 110, 100, 700, 420, {fontFace: TF, fontSize: 40, valign: "middle"}); txt(s.sub, 560, 100, 700, 40, {fontSize: 12, bold: true}); txt(s.temas, 615, 100, 700, 70, {fontSize: 12}); txt(s.autor, 760, 100, 700, 50, {fontFace: TF, fontSize: 14, italic: true, color: h(T.b)}); }
+    if (L === "capa") { await pic(s.img, 0, 1180, 740, 1080); txt(s.titulo, 110, 70, 740, 300, {fontFace: TF, fontSize: 38}); txt(s.sub, 470, 75, 960, 40, {fontSize: 12, bold: true}); txt(s.temas, 525, 75, 960, 70, {fontSize: 12}); txt(s.autor, 670, 75, 700, 50, {fontFace: TF, fontSize: 14, italic: true, color: h(T.b)}); }
     else if (L === "fim") { await pic(s.img, 0, 1080, 840, 1080); txt(s.titulo, 380, 120, 900, 120, {fontFace: TF, fontSize: 44, color: h(T.lt === T.bg ? T.ink : "FFF9E9")}); txt(s.sub, 510, 120, 900, 70, {fontFace: TF, fontSize: 22, italic: true, color: "E9E1CC"}); sl.addShape(P.ShapeType.rect, {x: X(120), y: X(640), w: X(90), h: X(3), fill: {color: h(T.b)}, line: {color: h(T.b)}}); txt(s.linha, 700, 120, 900, 40, {fontSize: 12, bold: true, color: "E9E1CC"}); }
     else { head();
       if (L === "roteiro") { const R = A("passos").slice(0, 6), k = Math.max(1, R.length), x0 = 300, step = k > 1 ? 1320 / (k - 1) : 0; if (k > 1) sl.addShape(P.ShapeType.line, {x: X(x0), y: X(330), w: X(1320), h: 0, line: {color: h(T.ln), width: 1}});
