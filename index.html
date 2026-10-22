@@ -454,6 +454,9 @@ body.hfon{overflow:hidden}
 .elglist{display:flex;flex-direction:column;gap:8px;max-height:55vh;overflow:auto} .elgi{background:var(--accent-soft);border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:2px} .elgi small{color:var(--muted)}
 .elgday{display:block;margin:6px 0 0;border:0;background:var(--accent-soft);color:var(--ink);border-radius:12px;padding:9px 13px;text-align:left;font:inherit;cursor:pointer;max-width:100%}
 .cheer{margin:6px 0 8px;line-height:1.5} .plok{margin:0;background:var(--ok-soft);border-radius:10px;padding:8px 11px}
+/* sebenta */
+.c3 .sebtag{font-style:normal;margin-left:auto;font-size:.85rem} .sebrow{margin:2px 0 8px;font-size:.85rem}
+.sbl{display:flex;flex-direction:column;gap:8px;max-height:55vh;overflow:auto} .sbi{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--tline);border-radius:12px;padding:9px 11px;line-height:1.45} .sbi select{max-width:100%}
 /* leitura fácil (dislexia): espaçamento 2,0 em todos os textos */
 html.dys body :is(p,li,span,div,td,th,label,blockquote,textarea,input,select,b,i,em,strong,a,h1,h2,h3,h4,.rich,[contenteditable]){line-height:2!important}
 html.dys body :is(p,li,td,.rich,.eb,.cmsg,.term,.tip,textarea,[contenteditable]){word-spacing:.12em}
@@ -1880,7 +1883,8 @@ function wireNb(){
 // ----- estudar
 let openDet = {};
 function deckOf(nb){ const st = studyState, M = modsOf(nb), q = st.q.trim().toLowerCase();
-  let d = nb.cards.filter(c => (st.mod === "all" || M.of(c) === +st.mod) && (st.f === "all" || (st.f === "todo" && !nb.prog[c.id]) || (st.f === "r" && nb.prog[c.id] === "r"))
+  const SB0 = sebIds(nb); if (st.f === "seb" && !SB0.size) st.f = "all";
+  let d = nb.cards.filter(c => (st.mod === "all" || M.of(c) === +st.mod) && (st.f === "all" || (st.f === "todo" && !nb.prog[c.id]) || (st.f === "r" && nb.prog[c.id] === "r") || (st.f === "seb" && inSeb(nb, c, SB0)))
     && (!q || plain(c.f + " " + c.r + " " + (c.pt||"")).toLowerCase().includes(q)));
   if (st.shuf) d = st.order.map(id => d.find(c => c.id === id)).filter(Boolean).concat(d.filter(c => !st.order.includes(c.id)));
   return d; }
@@ -1967,7 +1971,7 @@ function tabStudy(nb){
   const top = countdownHtml(nb) + modsHtml(nb, M) + tricksHtml(nb, M) + dictHtml(nb);
   const ctrl = `<div class="controls"><div class="row"><select id="smod" aria-label="Módulo"><option value="all">Todos os módulos (${nb.cards.length})</option>${M.names.map((n, i) => { const k = nb.cards.filter(c => M.of(c) === i).length; return k ? `<option value="${i}" ${st.mod === String(i) ? "selected" : ""}>${i+1}. ${esc(n)} (${k})</option>` : ""; }).join("")}</select>
       <input type="search" id="sq" placeholder="Procurar termo…" value="${esc(st.q)}" aria-label="Procurar termo"></div>
-    <div class="row"><div class="seg">${[["all","Todos"],["todo","Por estudar"],["r","A rever"]].map(([k,l]) => `<button data-f="${k}" aria-pressed="${st.f===k}">${l}</button>`).join("")}</div>
+    <div class="row"><div class="seg">${[["all","Todos"],["todo","Por estudar"],["r","A rever"]].concat(hasSeb(nb) ? [["seb","📌 Matéria do teste"]] : []).map(([k,l]) => `<button data-f="${k}" aria-pressed="${st.f===k}">${l}</button>`).join("")}</div>
       <button class="btn sm tog" id="shuf" aria-pressed="${st.shuf}">Baralhar</button><button class="btn sm tog" id="inv" aria-pressed="${st.inv}">Inverter</button><button class="btn sm tog" id="wr" aria-pressed="${st.write}">✍️ Responder</button>${HAS_TTS ? `<button class="btn sm tog" id="audB" aria-pressed="${!!AUD}">${AUD ? "⏹ Parar áudio" : "🎧 Modo áudio"}</button>` : ""}${CAP.dl && nb.cards.length ? `<button class="btn sm" id="pdfB">⬇ PDF / Word</button>` : ""}
       ${nb.cases && nb.cases.length ? `<button class="btn sm tog" id="ppB" aria-pressed="${st.pp}">🩹 Modo prova prática</button>` : ""}</div></div>`;
   if (st.pp && nb.cases && nb.cases.length) return top + ctrl + ppHtml(nb);
@@ -1975,7 +1979,7 @@ function tabStudy(nb){
   if (!deck.length) return top + ctrl + `<div class="empty"><strong>${st.f === "r" ? "Nada para rever" : st.q ? "Nada encontrado" : "Tudo estudado! 🎉"}</strong>Muda o filtro ou o módulo em cima.</div>`;
   if (st.pos >= deck.length) st.pos = deck.length - 1;
   const c = deck[st.pos], mi = M.of(c), col = M.col[mi], p = nb.prog[c.id], num = cardNum(nb, M, c);
-  const tag = `<div class="tag"><b style="background:${col[1]}">${esc(num)}</b><span>${esc(M.names[mi])}</span>${p ? `<em class="state ${p}">${p === "s" ? "✓ Sabido" : "↺ Rever"}</em>` : ""}</div>`;
+  const tag = `<div class="tag"><b style="background:${col[1]}">${esc(num)}</b><span>${esc(M.names[mi])}</span>${inSeb(nb, c) ? `<em class="sebtag" title="Sai no teste">📌</em>` : ""}${p ? `<em class="state ${p}">${p === "s" ? "✓ Sabido" : "↺ Rever"}</em>` : ""}</div>`;
   const src = c.doc ? `<button class="src" data-src="${c.doc}" data-pg="${c.pg||""}">📖 ${esc(docName(nb, c.doc))}${c.pg ? " · pág. " + c.pg : ""}</button>` : (c.src ? `<span class="src">📖 ${esc(c.src)}</span>` : "");
   const isQ = /\?\s*$/.test(plain(c.f)) || plain(c.f).length > 60;
   if (st.hintFor !== c.id) { st.hintFor = c.id; st.hint = 0; }
@@ -2426,7 +2430,7 @@ function tabDocs(nb){
   return `<div class="drop" id="drop"><b>Põe aqui os teus ficheiros</b><br><span>PDF, PowerPoint (.pptx), Word (.docx) ou texto (.txt). O texto fica guardado por página, para cada flashcard dizer de onde vem.</span><br><br><label class="btn fill">Escolher ficheiros<input type="file" id="fi" multiple accept=".pdf,.pptx,.docx,.txt,.md" hidden></label></div>
     <div id="docProg"></div>
     <div class="list">${(nb.docs||[]).map(d => `<div class="li"><div class="grow"><b>📄 ${esc(d.name)}</b><span class="muted">${d.pages ? d.pages.length + (d.kind==="pptx"?" slides":" páginas") : "texto noutro dispositivo"} · ${nb.cards.filter(c => c.doc === d.id).length} flashcards</span></div>
-      <button class="btn sm pri" data-auto="${d.id}">⚙️ Flashcards sem IA</button><button class="btn sm" data-out="${d.id}">⚙️ Esquema sem IA</button>${CAP.sample ? `<button class="btn sm pri" data-gen="${d.id}">✨ Flashcards com IA</button><button class="btn sm" data-sum="${d.id}">✨ Resumo com IA</button>` : ""}<button class="btn sm" data-oai="${d.id}">🤖 Com outra IA</button><button class="btn sm" data-view="${d.id}">Ver</button><button class="btn sm danger" data-deld="${d.id}" aria-label="Apagar documento">🗑</button></div>`).join("") || `<p class="muted">Ainda não puseste documentos neste caderno.</p>`}</div>
+      <button class="btn sm pri" data-auto="${d.id}">⚙️ Flashcards sem IA</button><button class="btn sm" data-out="${d.id}">⚙️ Esquema sem IA</button>${CAP.sample ? `<button class="btn sm pri" data-gen="${d.id}">✨ Flashcards com IA</button><button class="btn sm" data-sum="${d.id}">✨ Resumo com IA</button>` : ""}<button class="btn sm" data-oai="${d.id}">🤖 Com outra IA</button><button class="btn sm" data-seb="${d.id}">📌 ${upExams(nb).some(e => e.seb && e.seb.doc === d.id) ? "Sebenta de " + esc(upExams(nb).filter(e => e.seb && e.seb.doc === d.id).map(e => e.n).join(", ")) : "É a sebenta de um teste"}</button><button class="btn sm" data-view="${d.id}">Ver</button><button class="btn sm danger" data-deld="${d.id}" aria-label="Apagar documento">🗑</button></div>`).join("") || `<p class="muted">Ainda não puseste documentos neste caderno.</p>`}</div>
     <p class="muted"><b>⚙️ Sem IA</b>: grátis e instantâneo. O site procura no texto definições («X é…», «X: …»), listas dos slides e números importantes, e cria cartões com a página de onde vêm. Revê-os em «✎ Flashcards». ${CAP.sample ? `<b>✨ Com IA</b>: cartões mais completos, com a IA do site (cada pessoa tem um limite de usos por dia). Cada criação lê até ${IA_PAGES} páginas.` : "Os botões ✨ com IA aparecem quando entras na tua conta."} <b>🤖 Com outra IA</b>: usa o ChatGPT, o Gemini ou outra IA de graça, mesmo quando a IA do site acabou: copias o pedido, colas lá e trazes a resposta.</p>`;
 }
 async function readFile(file){
@@ -2458,6 +2462,7 @@ function wireDocs(nb){
   drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); }; drop.ondragleave = () => drop.classList.remove("over");
   drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); take([...e.dataTransfer.files]); };
   document.querySelectorAll("[data-view]").forEach(b => b.onclick = () => showPage(nb, b.dataset.view, 1));
+  document.querySelectorAll("[data-seb]").forEach(b => b.onclick = () => sebDialog(nb, nb.docs.find(d => d.id === b.dataset.seb)));
   document.querySelectorAll("[data-deld]").forEach(b => b.onclick = () => { if (b.dataset.sure) { nb.docs = nb.docs.filter(d => d.id !== b.dataset.deld); save(nb); render(); } else { b.dataset.sure = 1; b.textContent = "Apagar?"; } });
   document.querySelectorAll("[data-auto]").forEach(b => b.onclick = () => { const d = nb.docs.find(x => x.id === b.dataset.auto); if (!d.pages) return toast("O texto deste documento não está neste dispositivo.");
     const old = nb.cards.filter(c => c.auto && c.doc === d.id && !nb.prog[c.id]).length;
@@ -2732,13 +2737,14 @@ function tabPlan(nb){
   let goal = "";
   if (next) { const g = goalFor(nb, next), n = daysTo(next.d); goal = `<div class="panel"><h3>${n===0?"É hoje":`Faltam <b>${n}</b> dias`}: ${esc(next.n)} (${fmtD(next.d)})</h3>
     <p class="cheer">${cheerLine(g, nb)}</p><button class="btn pri" id="goS">▶ Estudar agora</button></div>`; }
-  return goal + planHtml(nb) + `<div class="panel"><h3>Datas dos testes</h3><div class="list" id="exl">${ex.map((e, i) => `<div class="row"><input type="text" class="grow" value="${esc(e.n)}" data-i="${i}" data-k="n" aria-label="Nome do teste"><input type="date" value="${e.d}" data-i="${i}" data-k="d" aria-label="Data"><button class="btn sm danger" data-x="${i}" aria-label="Apagar">🗑</button></div>`).join("") || `<p class="muted">Sem datas.</p>`}</div>
+  return goal + planHtml(nb) + `<div class="panel"><h3>Datas dos testes</h3><div class="list" id="exl">${ex.map((e, i) => `<div class="row"><input type="text" class="grow" value="${esc(e.n)}" data-i="${i}" data-k="n" aria-label="Nome do teste"><input type="date" value="${e.d}" data-i="${i}" data-k="d" aria-label="Data"><button class="btn sm danger" data-x="${i}" aria-label="Apagar">🗑</button></div>${e.seb ? `<p class="muted sebrow">📌 Sebenta: <b>${esc(e.seb.name)}</b> · ${e.seb.ids.length} cartões saem neste teste · <button class="linkbtn" data-sbx="${i}">tirar a sebenta</button></p>` : `<p class="muted sebrow">Tens a sebenta deste teste? Põe-na em «📄 Documentos» e carrega em «📌 É a sebenta de um teste».</p>`}`).join("") || `<p class="muted">Sem datas.</p>`}</div>
     <div class="row" style="margin-top:10px"><button class="btn" id="addE">+ Acrescentar teste</button><span class="grow"></span><button class="btn fill" id="saveE">Guardar datas</button></div></div>`;
 }
 function wirePlan(nb){
   const ex = (nb.exams||[]).sort((a,b) => a.d < b.d ? -1 : 1); nb.exams = ex;
   document.querySelectorAll("#exl input").forEach(inp => inp.oninput = () => { ex[+inp.dataset.i][inp.dataset.k] = inp.value; });
   document.querySelectorAll("[data-x]").forEach(b => b.onclick = () => { ex.splice(+b.dataset.x, 1); save(nb); render(); });
+  document.querySelectorAll("[data-sbx]").forEach(b => b.onclick = () => { if (!b.dataset.sure) { b.dataset.sure = 1; b.textContent = "tens a certeza? (os cartões ficam)"; return; } delete ex[+b.dataset.sbx].seb; save(nb); render(); });
   $("#addE").onclick = () => { ex.push({n: "Teste", d: dkey(new Date(Date.now() + 7*86400000))}); render(); };
   $("#saveE").onclick = () => { nb.exams = ex.filter(e => e.n && /^\d{4}-\d{2}-\d{2}$/.test(e.d)); save(nb); toast("Datas guardadas"); render(); };
   const g = $("#goS"); if (g) g.onclick = () => { route.tab = "study"; studyState = null; render(); studyState.f = nb.cards.some(c => !nb.prog[c.id]) ? "todo" : "r"; render(); };
@@ -2752,7 +2758,8 @@ let planSel = null, planForm = null, planJust = {};
 function buildPlan(nb, e, cfg){
   const M = modsOf(nb), days = [];
   for (let d = today0(); d < parseD(e.d); d.setDate(d.getDate() + 1)) if (!cfg.off.includes(d.getDay())) days.push(dkey(d));
-  const mods = cfg.mods.map(mi => { const cs = nb.cards.filter(c => M.of(c) === mi); return {mi, name: M.names[mi], total: cs.length, left: cs.filter(c => nb.prog[c.id] !== "s").length}; }).filter(m => m.total);
+  const S0 = e.seb ? new Set(e.seb.ids) : null;
+  const mods = cfg.mods.map(mi => { const cs = nb.cards.filter(c => M.of(c) === mi && (!S0 || S0.has(c.id))); return {mi, name: M.names[mi], total: cs.length, left: cs.filter(c => nb.prog[c.id] !== "s").length}; }).filter(m => m.total);
   const N = days.length, out = days.map(d => ({d, tasks: []}));
   const T = (t, k, min, extra) => Object.assign({id: uid(), t, k, min, done: false}, extra || {});
   if (N) {
@@ -2760,7 +2767,7 @@ function buildPlan(nb, e, cfg){
     const left = mods.reduce((s, m) => s + m.left, 0), q = Math.max(1, Math.ceil(left / learnN));
     let di = 0, room = q;
     mods.forEach(m => { let n = m.left; if (!n) { out[Math.min(di, learnN - 1)].tasks.push(T(`Revisão rápida do módulo ${m.mi + 1}: ${m.name} (já sabes tudo!)`, "learn", 10, {mi: m.mi, f: "all"})); return; }
-      while (n > 0) { const take = Math.min(n, room); out[di].tasks.push(T(`Estudar o módulo ${m.mi + 1}: ${m.name} — ${take} ${take === 1 ? "cartão" : "cartões"}`, "learn", Math.ceil(take * 1.5), {mi: m.mi, f: "todo", n: take}));
+      while (n > 0) { const take = Math.min(n, room); out[di].tasks.push(T(`Estudar o módulo ${m.mi + 1}: ${m.name} — ${take} ${take === 1 ? "cartão" : "cartões"}`, "learn", Math.ceil(take * 1.5), {mi: m.mi, f: S0 ? "seb" : "todo", n: take}));
         n -= take; room -= take; if (room <= 0 && di < learnN - 1) { di++; room = q; } else if (room <= 0) room = Infinity; } });
     for (let i = 1; i < learnN; i++) out[i].tasks.unshift(T("Rever os cartões «A rever» dos dias anteriores", "rev", 10));
     for (let i = 0; i < learnN; i++) out[i].tasks.push(T("Escrever 1 ou 2 ideias-chave na ✏️ nota dos cartões mais difíceis", "note", 5));
@@ -2782,9 +2789,10 @@ function planHtml(nb){
   if (!planSel || !ex.some(e => planKey(e) === planSel)) planSel = planKey(ex[0]);
   const e = ex.find(x => planKey(x) === planSel), M = modsOf(nb); let P = (nb.plans || {})[planSel];
   const pick = ex.length > 1 ? `<label class="muted">Para que teste?<select id="plSel">${ex.map(x => `<option value="${esc(planKey(x))}" ${planKey(x) === planSel ? "selected" : ""}>${esc(x.n)} (${fmtD(x.d)})</option>`).join("")}</select></label>` : `<p style="margin:0"><b>${esc(e.n)}</b> · ${fmtD(e.d)} · ${daysTo(e.d) === 0 ? "é hoje" : `faltam ${daysTo(e.d)} dias`}</p>`;
-  if (!P || planForm === planSel) { const c = (P && P.cfg) || {mods: M.names.map((_, i) => i), mins: 60, off: []};
+  if (!P || planForm === planSel) { const S1 = e.seb ? new Set(e.seb.ids) : null; const c = (P && P.cfg) || {mods: M.names.map((_, i) => i).filter(i => !S1 || nb.cards.some(k => M.of(k) === i && S1.has(k.id))), mins: 60, off: []};
     return `<div class="panel plan">${head}${pick}
-      <p class="muted" style="margin:0">Responde a 3 perguntas e eu faço o plano dia a dia até ao teste. Primeiro aprendes a matéria aos bocadinhos, depois revês os erros e na véspera fazes uma simulação.</p>
+      ${e.seb ? `<p class="plok">📌 Este teste tem sebenta («${esc(e.seb.name)}»): o plano usa só os <b>${e.seb.ids.length}</b> cartões que saem. Já marquei os módulos onde eles estão.</p>` : ""}
+      <p class="muted" style="margin:0">Responde a estas perguntas e eu faço o plano dia a dia até ao teste. Primeiro aprendes a matéria aos bocadinhos, depois revês os erros e na véspera fazes uma simulação.</p>
       <div><b>1. Que módulos saem no teste?</b><div class="checks plmods">${M.names.map((n, i) => `<label><input type="checkbox" data-plm="${i}" ${c.mods.includes(i) ? "checked" : ""}> <span>${i + 1}. ${esc(n)} <span class="muted">(${nb.cards.filter(x => M.of(x) === i).length})</span></span></label>`).join("")}</div></div>
       <label><b>2. Quanto tempo consegues estudar por dia?</b><select id="plMin">${[20, 30, 45, 60, 90, 120, 180].map(m => `<option value="${m}" ${c.mins === m ? "selected" : ""}>${m < 60 ? m + " minutos" : m / 60 + (m === 60 ? " hora" : " horas").replace(".5", ",5")}</option>`).join("")}</select></label>
       <div><b>3. Há dias em que NÃO podes estudar?</b> <span class="muted">(por exemplo, dias de trabalho)</span><div class="row wdays">${[1,2,3,4,5,6,0].map(d => `<button type="button" class="btn sm tog" data-plo="${d}" aria-pressed="${c.off.includes(d)}">${WD[d]}</button>`).join("")}</div></div>
@@ -2897,7 +2905,7 @@ setInterval(tmrTick, 1000); document.addEventListener("visibilitychange", () => 
 setTimeout(tmrDraw, 0);
 
 // ---------- 📗 Respostas: a ficha com todas as respostas, em linguagem simples (feita a partir dos cartões)
-let ansQ = "", ansOpen = {}, ansOrig = {};
+let ansQ = "", ansOpen = {}, ansOrig = {}, ansSeb = false;
 const SIMPLE_PROMPT = `És um professor que explica muito bem. Recebes flashcards (id, pergunta/termo, resposta oficial). Para cada um, reescreve a resposta em português de Portugal, de forma SIMPLES e fácil de perceber, mas 100% CERTA para um teste:
 - mantém todas as ideias e todos os termos técnicos que o professor espera (se a resposta tiver uma lista, mantém a lista completa);
 - frases curtas e claras, como se explicasses a um colega; podes explicar entre parênteses uma palavra difícil;
@@ -2934,17 +2942,19 @@ function tabAns(nb){
   const done = nb.cards.filter(c => c.rs).length;
   const mods = M.names.map((name, i) => {
     const all = nb.cards.filter(c => M.of(c) === i); if (!all.length) return "";
-    const cs = q ? all.filter(c => nzE(plain(c.f) + " " + plain(c.rs || c.r)).includes(q)) : all; if (!cs.length) return "";
+    const SB = sebIds(nb); const cs0 = ansSeb && SB.size ? all.filter(c => SB.has(c.id)) : all;
+    const cs = q ? cs0.filter(c => nzE(plain(c.f) + " " + plain(c.rs || c.r)).includes(q)) : cs0; if (!cs.length) return "";
     const miss = all.filter(c => !c.rs).length, open = q || ansOpen[i] || M.names.length === 1;
     return `<details class="ansmod" data-am="${i}" style="--ml:${M.col[i][0]};--mc:${M.col[i][1]}" ${open ? "open" : ""}><summary><span class="mnum">${i + 1}</span><b>${esc(name)}</b><span class="muted">${cs.length}</span></summary>
       ${miss && hasAI ? `<button class="btn sm" data-asimp="${i}">✨ Pôr as ${miss} respostas deste módulo em linguagem simples</button>` : ""}
       <div class="anslist">${cs.map(c => { const h = hardOf(nb, c), help = (nb.errHelp || {})[c.id], orig = ansOrig[c.id];
-        return `<div class="ans${h ? " hard" : ""}"><p><b>${esc(plain(c.f))}:</b> ${esc(orig || !c.rs ? plain(c.r) : c.rs)}</p>
+        return `<div class="ans${h ? " hard" : ""}"><p>${SB.has(c.id) ? "📌 " : ""}<b>${esc(plain(c.f))}:</b> ${esc(orig || !c.rs ? plain(c.r) : c.rs)}</p>
           ${h ? `<span class="hardtag">🔁 Custa-te um bocadinho: ${h} ${h === 1 ? "vez" : "vezes"}</span>` : ""}
           ${help ? `<div class="ansh">${help.s ? `<p><i>Por palavras simples:</i> ${esc(help.s)}</p>` : ""}${help.e ? `<p><i>🏠 No dia a dia:</i> ${esc(help.e)}</p>` : ""}${help.m ? `<p><i>🔤 Para lembrar:</i> ${esc(help.m)}</p>` : ""}${help.r ? `<p><i>✍️ No teste responde assim:</i> ${esc(help.r)}</p>` : ""}</div>` : ""}
-          <div class="row ansb">${HAS_TTS ? `<button class="linkbtn" data-asay="${c.id}">🔊 Ouvir</button>` : ""}${hasAI ? `<button class="linkbtn" data-ahelp="${c.id}">💡 ${help ? "Explica de outra forma" : h ? "Ajuda-me a perceber" : "Explica de outra forma"}</button>` : ""}${c.rs ? `<button class="linkbtn" data-aorig="${c.id}">${orig ? "Ver versão simples" : "Ver resposta original"}</button>` : ""}</div></div>`; }).join("")}</div></details>`; }).join("");
+          <div class="row ansb">${HAS_TTS ? `<button class="linkbtn" data-asay="${c.id}">🔊 Ouvir</button>` : ""}${hasAI ? `<button class="linkbtn" data-ahelp="${c.id}">💡 ${help ? "Explica de outra forma" : h ? "Ajuda-me a perceber" : "Explica de outra forma"}</button>` : ""}${sebExam(nb) ? `<button class="linkbtn" data-aseb="${c.id}">${SB.has(c.id) ? "Tirar 📌" : "📌 Sai no teste"}</button>` : ""}${c.rs ? `<button class="linkbtn" data-aorig="${c.id}">${orig ? "Ver versão simples" : "Ver resposta original"}</button>` : ""}</div></div>`; }).join("")}</div></details>`; }).join("");
   return `<div class="panel anstop"><h3>📗 As respostas todas</h3>
       <p class="muted" style="margin:0">Aqui tens cada termo e o que quer dizer, organizado por módulos, como uma ficha de estudo. Aparece sozinha a partir dos teus flashcards.${hasAI ? " Com ✨ a IA põe as respostas em linguagem simples (sem deixar nada de fora) e com 💡 explica-te de outra forma o que te custa mais." : ""}</p>
+      ${hasSeb(nb) ? `<label class="muted"><input type="checkbox" id="ansSeb" ${ansSeb ? "checked" : ""}> 📌 Mostrar só a matéria do teste (${sebIds(nb).size} cartões)</label>` : ""}
       <div class="row"><button class="btn fill" id="hfGo">🛁 Modo mãos livres</button><input type="search" id="ansQ" class="grow" placeholder="Procurar um termo…" value="${esc(ansQ)}" aria-label="Procurar"></div>
       <p class="muted" style="margin:0;font-size:.85rem">🛁 <b>Mãos livres:</b> pousa o telemóvel ou o computador longe (por exemplo, quando estás no banho). O site diz o termo, dá-te uns segundos para pensares e depois explica, com letras grandes para leres de longe. Os que te custam mais voltam a aparecer.</p>
       ${done ? `<p class="muted" style="margin:0;font-size:.85rem">${done} de ${nb.cards.length} respostas já em linguagem simples.</p>` : ""}</div>
@@ -2965,6 +2975,9 @@ function wireAns(nb){
       toast("Respostas em linguagem simples ✨"); render(); }
     catch(e) { fail(e); if (done) render(); else { b.disabled = false; b.textContent = "✨ Tentar outra vez"; } } });
   const hf = $("#hfGo"); if (hf) hf.onclick = () => handsFree(nb);
+  const as = $("#ansSeb"); if (as) as.onchange = () => { ansSeb = as.checked; render(); };
+  document.querySelectorAll("[data-aseb]").forEach(b => b.onclick = () => { const e = sebExam(nb); if (!e) return; const id = b.dataset.aseb, L = e.seb.ids, k = L.indexOf(id);
+    if (k >= 0) L.splice(k, 1); else L.push(id); save(nb); render(); });
 }
 
 // ---------- 🛁 modo mãos livres: ouve, pensa, percebe — de longe e sem tocar
@@ -2974,13 +2987,14 @@ function handsFree(nb){
   const M = modsOf(nb);
   dialog(`<h3>🛁 Modo mãos livres</h3><p class="muted" style="margin:0">O site diz o termo, espera uns segundos para pensares na resposta e depois explica-a. De 5 em 5 faz uma revisão rápida. Os que te custam mais voltam a aparecer.</p>
     <label class="muted">O quê?<select id="hfM"><option value="all">Todos os módulos (${nb.cards.length})</option>${M.names.map((n, i) => `<option value="${i}">${i + 1}. ${esc(n)}</option>`).join("")}</select></label>
+    ${hasSeb(nb) ? `<label class="muted"><input type="checkbox" id="hfS" checked> 📌 Só a matéria do teste (${sebIds(nb).size})</label>` : ""}
     <label class="muted"><input type="checkbox" id="hfH"> Só os que me custam mais (${nb.cards.filter(c => hardOf(nb, c)).length})</label>
     <label class="muted">Tempo para pensar<select id="hfP"><option value="3">3 segundos</option><option value="5" selected>5 segundos</option><option value="8">8 segundos</option><option value="12">12 segundos</option></select></label>
     <label class="muted"><input type="checkbox" id="hfX" checked> Dizer também o exemplo do dia a dia e o truque (quando existirem)</label>
     <div class="row"><span class="grow"></span><button class="btn" id="cx">Fechar</button><button class="btn fill" id="go">▶ Começar</button></div>`, (d, close) => {
     d.querySelector("#cx").onclick = close;
-    d.querySelector("#go").onclick = () => { const m = d.querySelector("#hfM").value, only = d.querySelector("#hfH").checked;
-      let L = nb.cards.filter(c => (m === "all" || M.of(c) === +m) && (!only || hardOf(nb, c)));
+    d.querySelector("#go").onclick = () => { const m = d.querySelector("#hfM").value, only = d.querySelector("#hfH").checked, sb = d.querySelector("#hfS") && d.querySelector("#hfS").checked, SB = sebIds(nb);
+      let L = nb.cards.filter(c => (m === "all" || M.of(c) === +m) && (!only || hardOf(nb, c)) && (!sb || SB.has(c.id)));
       if (!L.length) return toast("Não há cartões nessa escolha.");
       close(); hfStart(nb, L, +d.querySelector("#hfP").value, d.querySelector("#hfX").checked); };
   });
@@ -3065,6 +3079,90 @@ function elogiosDialog(){
     <div class="row"><span class="grow"></span><button class="btn fill" id="cx">Fechar</button></div>`, (d, close) => { d.querySelector("#cx").onclick = close; });
 }
 const elogioDoDia = () => { const L = elogios(); if (!L.length) return null; const d = new Date(), k = d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate(); return L[k % L.length]; };
+
+// ---------- 📌 sebenta do teste: diz ao site que matéria sai em cada teste (os flashcards ficam iguais)
+const SEB_STOP = new Set("para como pela pelo pelas pelos entre sobre outro outra outros outras parte partes forma osso ossos".split(" "));
+const upExams = nb => (nb.exams || []).filter(e => /^\d{4}-\d{2}-\d{2}$/.test(e.d) && daysTo(e.d) >= 0).sort((a, b) => a.d < b.d ? -1 : 1);
+const sebIds = nb => { const s = new Set(); upExams(nb).forEach(e => { if (e.seb) (e.seb.ids || []).forEach(i => s.add(i)); }); return s; };
+const hasSeb = nb => upExams(nb).some(e => e.seb);
+const inSeb = (nb, c, S0) => (S0 || sebIds(nb)).has(c.id);
+const sebExam = nb => upExams(nb).find(e => e.seb);
+// sem IA: um cartão é da matéria se o termo (ou o outro nome entre parênteses) aparece na sebenta
+function sebMatch(nb, doc){
+  const T = " " + nzE(doc.pages.join(" ")) + " ";
+  // as palavras do termo têm de aparecer juntas na mesma frase (assim «cartilagem» + «articular» soltas não contam)
+  const L = doc.pages.join("\n").split(/\n|[.;:!?]\s/).map(l => new Set(nzE(l).split(" ").map(w => w.slice(0, 7)))).filter(x => x.size > 1);
+  return nb.cards.filter(c => { const f = plain(c.f);
+    const names = [f.replace(/\(.*?\)/g, " ")].concat((f.match(/\(([^)]*)\)/g) || []).map(x => x.slice(1, -1))).map(nzE).filter(x => x.length >= 3);
+    if (names.some(n => T.includes(" " + n + " "))) return true;
+    const w = nzE(f.replace(/\(.*?\)/g, " ")).split(" ").filter(x => x.length >= 4 && !SEB_STOP.has(x));
+    return w.length >= 2 && L.some(W => w.every(x => W.has(x.slice(0, 7))));
+  }).map(c => c.id);
+}
+const SEB_PROMPT = `És um professor que prepara alunos para testes. Recebes a SEBENTA do teste (a matéria que sai) e a lista dos flashcards que o estudante JÁ tem. Encontra os conceitos importantes da sebenta que NÃO estão em nenhum desses flashcards (nem com outro nome) e cria um flashcard para cada um.
+Regras: usa só o que está na sebenta; não repitas nada que já exista; não inventes; resposta simples mas 100% certa para o teste (1 a 3 frases, mantém listas completas); no máximo 15 cartões; se não faltar nada, devolve [].
+Para cada cartão diz em que módulo encaixa melhor (número da lista de módulos).
+Responde APENAS com JSON: [{"f": "termo ou pergunta", "r": "resposta", "m": número do módulo}]`;
+async function sebMissing(nb, doc, onStep){
+  const M = modsOf(nb), have = nb.cards.map(c => plain(c.f)).join(" | ").slice(0, 7000);
+  const known = new Set(nb.cards.map(c => nzE(plain(c.f)))), out = [];
+  let parts = [], cur = ""; doc.pages.forEach(p => { p = String(p || "").trim(); if (!p) return; if (cur.length + p.length > 10000 && cur) { parts.push(cur); cur = ""; } cur += p.slice(0, 10000) + "\n\n"; }); if (cur) parts.push(cur);
+  parts = parts.slice(0, 6);
+  for (let i = 0; i < parts.length; i++) { onStep && onStep(i + 1, parts.length);
+    const r = await CAP.sample(SEB_PROMPT + `\n\nMódulos:\n${M.names.map((n, k) => `${k + 1}. ${n}`).join("\n")}\n\nFlashcards que já existem:\n${have}\n\nSebenta (parte ${i + 1} de ${parts.length}):\n${parts[i]}`, {modelTier: "default"});
+    iaUse("criar"); let a = parseJsonLoose(r.text); if (a && !Array.isArray(a)) a = a.cards || a.cartoes || Object.values(a).find(Array.isArray);
+    (Array.isArray(a) ? a : []).forEach(x => { if (!x || !x.f || !x.r) return; const k = nzE(String(x.f)); if (!k || known.has(k)) return; known.add(k);
+      const m = Math.max(0, Math.min(M.names.length - 1, (parseInt(x.m) || 1) - 1)); out.push({f: String(x.f).slice(0, 200), r: String(x.r).slice(0, 1200), m}); });
+  }
+  return out;
+}
+function sebDialog(nb, doc){
+  if (!doc.pages) return toast("O texto deste documento não está neste dispositivo.");
+  const ex = upExams(nb), M = modsOf(nb);
+  dialog(`<h3>📌 «${esc(doc.name)}» é a sebenta de que teste?</h3>
+    <p class="muted" style="margin:0">Os teus flashcards <b>ficam todos iguais</b>. O site só marca com 📌 os que saem neste teste, para os estudares primeiro, e o plano passa a usar só essa matéria.</p>
+    ${ex.length ? `<label class="muted">Teste<select id="sbE">${ex.map((e, i) => `<option value="${i}">${esc(e.n)} (${fmtD(e.d)})${e.seb ? " · já tem sebenta" : ""}</option>`).join("")}<option value="new">+ Outro teste…</option></select></label>` : ""}
+    <div id="sbN" ${ex.length ? "hidden" : ""} class="row"><input type="text" id="sbNn" class="grow" placeholder="Nome do teste (ex.: 1.ª Frequência)" aria-label="Nome do teste"><input type="date" id="sbNd" aria-label="Data do teste"></div>
+    <div class="row"><span class="grow"></span><button class="btn" id="cx">Cancelar</button><button class="btn fill" id="go">📌 Usar esta sebenta</button></div>`, (d, close) => {
+    const sel = d.querySelector("#sbE"); if (sel) sel.onchange = () => { d.querySelector("#sbN").hidden = sel.value !== "new"; };
+    d.querySelector("#cx").onclick = close;
+    d.querySelector("#go").onclick = () => { let e;
+      if (!sel || sel.value === "new") { const n = d.querySelector("#sbNn").value.trim(), dt = d.querySelector("#sbNd").value;
+        if (!n || !/^\d{4}-\d{2}-\d{2}$/.test(dt)) return toast("Escreve o nome e a data do teste.");
+        e = {n, d: dt}; nb.exams = (nb.exams || []).concat([e]); }
+      else e = ex[+sel.value];
+      const ids = sebMatch(nb, doc); e.seb = {doc: doc.id, name: doc.name, ids, at: Date.now()}; save(nb); close(); sebResult(nb, doc, e, ids.length); };
+  });
+}
+function sebResult(nb, doc, e, n){
+  dialog(`<h3>📌 Pronto!</h3>
+    <p style="margin:0">Encontrei <b>${n}</b> dos teus ${nb.cards.length} flashcards na sebenta de <b>${esc(e.n)}</b>. Ficam marcados com 📌 «Sai no teste».</p>
+    <p class="muted" style="margin:0">Em «🃏 Estudar» há o filtro <b>📌 Matéria do teste</b>, e em «📗 Respostas» podes pôr ou tirar o 📌 de qualquer cartão, se o site se enganar.</p>
+    ${CAP.sample ? `<p class="muted" style="margin:0">Queres que a IA veja se a sebenta tem matéria que <b>ainda não está em nenhum cartão</b>? Ela só sugere cartões novos e tu escolhes quais entram (os que já tens não mudam).</p>` : ""}
+    <div class="row"><span class="grow"></span><button class="btn" id="cx">Fechar</button>${CAP.sample ? `<button class="btn fill" id="go">✨ Ver o que falta</button>` : ""}</div>`, (d, close) => {
+    d.querySelector("#cx").onclick = () => { close(); render(); };
+    const g = d.querySelector("#go"); if (g) g.onclick = async () => { g.disabled = true;
+      try { const L = await sebMissing(nb, doc, (i, t) => { g.textContent = `A ler a sebenta… ${i} de ${t}`; }); close(); sebPick(nb, doc, e, L); }
+      catch(err) { if (err && err.code === "rate_limited") { accLimit(); toast("Chegaste ao limite de IA de hoje. Tenta amanhã."); } else toast("A IA não respondeu agora. Tenta daqui a pouco."); g.disabled = false; g.textContent = "✨ Tentar outra vez"; } };
+  });
+}
+function sebPick(nb, doc, e, L){
+  const M = modsOf(nb);
+  if (!L.length) { toast("Boa! Os teus flashcards já cobrem a matéria da sebenta 🎉"); render(); return; }
+  dialog(`<h3>✨ A sebenta tem ${L.length} ${L.length === 1 ? "coisa" : "coisas"} sem cartão</h3>
+    <p class="muted" style="margin:0">Escolhe as que queres acrescentar. Entram como cartões novos com 📌, no fim do módulo certo. Os teus cartões não mudam.</p>
+    <div class="sbl">${L.map((x, i) => `<label class="sbi"><input type="checkbox" data-sp="${i}" checked><span><b>${esc(x.f)}</b><br>${esc(x.r)}<br><span class="muted">Módulo: <select data-sm="${i}">${M.names.map((n, k) => `<option value="${k}" ${k === x.m ? "selected" : ""}>${k + 1}. ${esc(n)}</option>`).join("")}</select></span></span></label>`).join("")}</div>
+    <div class="row"><span class="grow"></span><button class="btn" id="cx">Não acrescentar</button><button class="btn fill" id="go">+ Acrescentar os escolhidos</button></div>`, (d, close) => {
+    d.querySelector("#cx").onclick = () => { close(); render(); };
+    d.querySelector("#go").onclick = () => { let n = 0;
+      L.forEach((x, i) => { if (!d.querySelector(`[data-sp="${i}"]`).checked) return; const mi = +d.querySelector(`[data-sm="${i}"]`).value;
+        const c = {id: uid(), f: x.f, r: x.r, p: "", d: "", doc: doc.id, fromSeb: 1};
+        if (nb.mods && nb.mods.length) c.m = mi; else { const same = nb.cards.find(k => M.of(k) === mi); if (same && same.doc) c.doc = same.doc; }
+        // fica logo a seguir ao último cartão desse módulo
+        let at = -1; nb.cards.forEach((k, j) => { if (M.of(k) === mi) at = j; }); nb.cards.splice(at + 1, 0, c); e.seb.ids.push(c.id); n++; });
+      save(nb); close(); toast(n ? `${n} ${n === 1 ? "cartão novo" : "cartões novos"} com 📌 ${n === 1 ? "acrescentado" : "acrescentados"}` : "Nada acrescentado"); render(); };
+  });
+}
 
 // ----- partilhar
 function tabShare(nb){
