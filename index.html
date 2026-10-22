@@ -2802,7 +2802,7 @@ function tabPlan(nb){
   let goal = "";
   if (next) { const g = goalFor(nb, next), n = daysTo(next.d); goal = `<div class="panel"><h3>${n===0?"É hoje":`Faltam <b>${n}</b> dias`}: ${esc(next.n)} (${fmtD(next.d)})</h3>
     <p class="cheer">${cheerLine(g, nb)}</p><button class="btn pri" id="goS">▶ Estudar agora</button></div>`; }
-  return goal + planHtml(nb) + `<div class="panel"><h3>Datas dos testes</h3><div class="list" id="exl">${ex.map((e, i) => `<div class="row"><input type="text" class="grow" value="${esc(e.n)}" data-i="${i}" data-k="n" aria-label="Nome do teste"><input type="date" value="${e.d}" data-i="${i}" data-k="d" aria-label="Data"><button class="btn sm danger" data-x="${i}" aria-label="Apagar">🗑</button></div>${e.seb ? `<p class="muted sebrow">📌 Sai: <b>${esc(e.seb.name)}</b> · ${sebOf(nb, e).size} cartões · <button class="linkbtn" data-sbe="${i}">mudar</button> · <button class="linkbtn" data-sbx="${i}">tirar</button></p>` : `<p class="muted sebrow"><button class="linkbtn" data-sbe="${i}">📌 Dizer o que sai neste teste</button> (por módulos, colando o que o professor disse, ou com a sebenta)</p>`}`).join("") || `<p class="muted">Sem datas.</p>`}</div>
+  return goal + planHtml(nb) + `<div class="panel"><h3>Datas dos testes</h3><div class="list" id="exl">${ex.map((e, i) => `<div class="row"><input type="text" class="grow" value="${esc(e.n)}" data-i="${i}" data-k="n" aria-label="Nome do teste"><input type="date" value="${e.d}" data-i="${i}" data-k="d" aria-label="Data"><button class="btn sm danger" data-x="${i}" aria-label="Apagar">🗑</button></div>${e.seb ? `<p class="muted sebrow">📌 Sai: <b>${esc(e.seb.name)}</b> · <button class="linkbtn" data-sbv="${i}">${sebOf(nb, e).size} cartões 👀</button> · <button class="linkbtn" data-sbe="${i}">mudar</button> · <button class="linkbtn" data-sbx="${i}">tirar</button></p>` : `<p class="muted sebrow"><button class="linkbtn" data-sbe="${i}">📌 Dizer o que sai neste teste</button> (por módulos, colando o que o professor disse, ou com a sebenta)</p>`}`).join("") || `<p class="muted">Sem datas.</p>`}</div>
     <div class="row" style="margin-top:10px"><button class="btn" id="addE">+ Acrescentar teste</button><span class="grow"></span><button class="btn fill" id="saveE">Guardar datas</button></div></div>`;
 }
 function wirePlan(nb){
@@ -2810,6 +2810,7 @@ function wirePlan(nb){
   document.querySelectorAll("#exl input").forEach(inp => inp.oninput = () => { ex[+inp.dataset.i][inp.dataset.k] = inp.value; });
   document.querySelectorAll("[data-x]").forEach(b => b.onclick = () => { ex.splice(+b.dataset.x, 1); save(nb); render(); });
   document.querySelectorAll("[data-sbe]").forEach(b => b.onclick = () => { const e = ex[+b.dataset.sbe]; if (!e.n || !/^\d{4}-\d{2}-\d{2}$/.test(e.d)) return toast("Guarda primeiro o nome e a data do teste."); nb.exams = ex; save(nb); whatDialog(nb, e); });
+  document.querySelectorAll("[data-sbv]").forEach(b => b.onclick = () => sebReview(nb, ex[+b.dataset.sbv]));
   document.querySelectorAll("[data-sbx]").forEach(b => b.onclick = () => { if (!b.dataset.sure) { b.dataset.sure = 1; b.textContent = "tens a certeza? (os cartões ficam)"; return; } delete ex[+b.dataset.sbx].seb; save(nb); render(); });
   $("#addE").onclick = () => { ex.push({n: "Teste", d: dkey(new Date(Date.now() + 7*86400000))}); render(); };
   $("#saveE").onclick = () => { nb.exams = ex.filter(e => e.n && /^\d{4}-\d{2}-\d{2}$/.test(e.d)); save(nb); toast("Datas guardadas"); render(); };
@@ -3214,18 +3215,23 @@ function whatDialog(nb, e){
     <p class="muted" style="margin:0">Escolhe a maneira mais fácil para ti. Os teus flashcards ficam todos iguais, e podes mudar isto sempre que quiseres (por exemplo, se o professor mudar a matéria).</p>
     <div class="seg" id="wW" role="group" aria-label="Maneira"><button type="button" data-w="mods" aria-pressed="true">Por módulos</button><button type="button" data-w="txt" aria-pressed="false">Colar texto</button>${docs.length ? `<button type="button" data-w="doc" aria-pressed="false">Documento</button>` : ""}</div>
     <div data-wp="mods"><p class="muted" style="margin:0 0 6px">Marca os módulos que saem:</p><div class="checks">${M.names.map((n, i) => `<label><input type="checkbox" data-wm="${i}" ${curMods.has(i) ? "checked" : ""}> <span>${i + 1}. ${esc(n)} <span class="muted">(${nb.cards.filter(c => M.of(c) === i).length})</span></span></label>`).join("")}</div></div>
-    <div data-wp="txt" hidden><p class="muted" style="margin:0 0 6px">Cola aqui o que o professor disse que sai (uma mensagem, a lista do Moodle, uma foto que passaste a texto…). O site encontra os cartões dessa matéria.</p><textarea id="wT" style="width:100%;min-height:140px" placeholder="Ex.: Sai a cabeça óssea (ossos, suturas, buracos), a coluna vertebral e a caixa torácica."></textarea></div>
+    <div data-wp="txt" hidden><p class="muted" style="margin:0 0 6px">Cola aqui o que o professor disse que sai (uma mensagem, a lista do Moodle, uma foto que passaste a texto…). O site encontra os cartões dessa matéria.</p><textarea id="wT" style="width:100%;min-height:140px" placeholder="Ex.: Sai a cabeça óssea (ossos, suturas, buracos), a coluna vertebral e a caixa torácica.">${esc(cur.txt || "")}</textarea>${CAP.sample ? `<p class="muted" style="margin:4px 0 0;font-size:.82rem">✨ A IA lê o que escreveste e escolhe só os cartões dessa matéria (gasta 1 uso).</p>` : ""}</div>
     ${docs.length ? `<div data-wp="doc" hidden><label class="muted">Documento<select id="wD">${docs.map(d => `<option value="${d.id}" ${cur.doc === d.id ? "selected" : ""}>${esc(d.name)}</option>`).join("")}</select></label></div>` : ""}
     <div class="row"><span class="grow"></span><button class="btn" id="cx">Cancelar</button><button class="btn fill" id="go">📌 Guardar</button></div>`, (d, close) => {
     let w = "mods"; d.querySelectorAll("[data-w]").forEach(b => b.onclick = () => { w = b.dataset.w; d.querySelectorAll("[data-w]").forEach(x => x.setAttribute("aria-pressed", x === b)); d.querySelectorAll("[data-wp]").forEach(x => x.hidden = x.dataset.wp !== w); });
+    { const w0 = cur.txt ? "txt" : cur.doc ? "doc" : "mods", b0 = d.querySelector(`[data-w="${w0}"]`); if (b0) b0.click(); }
     d.querySelector("#cx").onclick = close;
     d.querySelector("#go").onclick = () => {
       if (w === "mods") { const mods = [...d.querySelectorAll("[data-wm]:checked")].map(x => +x.dataset.wm); if (!mods.length) return toast("Marca pelo menos um módulo.");
         e.seb = {mods, ids: [], out: [], name: mods.length === M.names.length ? "toda a matéria" : "módulos " + mods.map(i => i + 1).join(", "), at: Date.now()}; save(nb); close(); toast(`📌 Pronto: ${sebOf(nb, e).size} cartões saem neste teste`); render(); return; }
       const doc = w === "txt" ? {id: null, name: "o que o professor disse", pages: [d.querySelector("#wT").value]} : nb.docs.find(x => x.id === d.querySelector("#wD").value);
       if (!doc || !String(doc.pages.join("")).trim()) return toast("Cola primeiro o texto.");
-      const ids = sebMatch(nb, doc), mods = w === "txt" ? sebMods(nb, doc.pages[0]) : [];
-      e.seb = {doc: doc.id, name: w === "txt" ? "o que colaste" : doc.name, ids, mods, out: [], at: Date.now()}; save(nb); close(); sebResult(nb, doc, e, sebOf(nb, e).size, mods); };
+      const finish = (ids, mods, how) => { e.seb = {doc: doc.id, name: w === "txt" ? "o que colaste" : doc.name, txt: w === "txt" ? doc.pages[0].slice(0, 4000) : "", ids, mods, out: [], how, at: Date.now()}; save(nb); close(); sebResult(nb, doc, e, sebOf(nb, e).size, mods); };
+      // com texto do professor: a IA escolhe só os cartões dessa matéria (mais certo do que procurar palavras)
+      if (w === "txt" && CAP.sample && !ACC_LIMIT) { const g = d.querySelector("#go"); g.disabled = true; g.textContent = "✨ A escolher os cartões…";
+        aiPick(nb, doc.pages[0]).then(ids => finish(ids, [], "ia")).catch(err => { if (err && err.code === "rate_limited") accLimit(); toast("A IA não respondeu: escolhi pelas palavras."); finish(sebMatch(nb, doc), sebMods(nb, doc.pages[0]), "palavras"); });
+        return; }
+      finish(sebMatch(nb, doc), w === "txt" ? sebMods(nb, doc.pages[0]) : [], "palavras"); };
   });
 }
 // num texto curto («sai a cabeça óssea e a coluna»), os nomes dos módulos também contam: entra o módulo inteiro
@@ -3234,14 +3240,46 @@ function sebMods(nb, text){
   return M.names.map((n, i) => { const w = nzE(n.split(":")[0]).split(" ").filter(x => x.length >= 4 && !SEB_STOP.has(x) && !["sistema", "anatomia"].includes(x));
     return w.length && L.some(S => w.filter(x => S.has(x.slice(0, 7))).length >= Math.min(2, w.length)) ? i : -1; }).filter(i => i >= 0);
 }
+async function aiPick(nb, text){
+  const M = modsOf(nb), list = nb.cards.map(c => `${c.id} | ${M.of(c) + 1} | ${plain(c.f).slice(0, 70)} | ${plain(c.r).slice(0, 50)}`).join("\n");
+  const r = await CAP.sample(`És um professor. Um estudante escreveu o que vai sair no teste. Escolhe da lista SÓ os flashcards cuja matéria sai, segundo o que ele escreveu.
+Sê exato: se o texto fala só de certas partes (por exemplo, só alguns ossos, só um tema), escolhe só essas; não metas módulos inteiros a não ser que o texto diga que sai o módulo todo; se o texto disser que algo NÃO sai, deixa isso de fora.
+Módulos: ${M.names.map((n, k) => `${k + 1}. ${n}`).join(" · ")}
+
+O que o estudante escreveu:
+"""${String(text).slice(0, 4000)}"""
+
+Flashcards (id | módulo | termo | início da resposta):
+${list}
+
+Responde APENAS com JSON: {"ids": ["id1", "id2", ...]}`, {modelTier: "default"});
+  iaUse("corrigir"); let j = parseJsonLoose(r.text); const raw = Array.isArray(j) ? j : j && (j.ids || j.cartoes || j.cards) || [];
+  const ok = new Set(nb.cards.map(c => c.id)), ids = [...new Set(raw.map(x => String(x && x.id || x).trim()).filter(x => ok.has(x)))];
+  if (!ids.length) throw {code: "bad"}; return ids;
+}
+// rever um a um o que ficou marcado, e tirar o que não sai
+function sebReview(nb, e){
+  const M = modsOf(nb), on = sebOf(nb, e);
+  dialog(`<h3>📌 O que sai em «${esc(e.n)}»</h3><p class="muted" style="margin:0">Tira o visto ao que <b>não</b> sai. Para pôr mais cartões, usa «📌 Sai no teste» em «📗 Respostas».</p>
+    <div class="sbl">${M.names.map((n, i) => { const cs = nb.cards.filter(c => M.of(c) === i && on.has(c.id)); if (!cs.length) return "";
+      return `<p class="mtk" style="margin:6px 0 0">${i + 1}. ${esc(n)} <span class="muted">(${cs.length})</span></p>${cs.map(c => `<label class="sbi"><input type="checkbox" data-rv="${c.id}" checked><span>${esc(plain(c.f))}</span></label>`).join("")}`; }).join("") || `<p class="muted">Nenhum cartão marcado.</p>`}</div>
+    <div class="row"><span class="grow"></span><button class="btn" id="cx">Fechar</button><button class="btn fill" id="go">Guardar</button></div>`, (d, close) => {
+    d.querySelector("#cx").onclick = close;
+    d.querySelector("#go").onclick = () => { const off = [...d.querySelectorAll("[data-rv]")].filter(x => !x.checked).map(x => x.dataset.rv);
+      e.seb.ids = (e.seb.ids || []).filter(x => !off.includes(x)); e.seb.out = [...new Set((e.seb.out || []).concat(off.filter(x => sebOf(nb, Object.assign({}, e, {seb: Object.assign({}, e.seb, {out: []})})).has(x))))];
+      save(nb); close(); toast(`📌 Ficam ${sebOf(nb, e).size} cartões`); render(); };
+  });
+}
 function sebResult(nb, doc, e, n, mods){
   dialog(`<h3>📌 Pronto!</h3>
-    <p style="margin:0">Encontrei <b>${n}</b> dos teus ${nb.cards.length} flashcards ${doc.id ? "na sebenta" : "no que colaste"} para <b>${esc(e.n)}</b>. Ficam marcados com 📌 «Sai no teste».</p>
+    <p style="margin:0">${e.seb.how === "ia" ? "✨ A IA leu o que escreveste e escolheu" : "Encontrei"} <b>${n}</b> dos teus ${nb.cards.length} flashcards ${doc.id ? "na sebenta" : "no que colaste"} para <b>${esc(e.n)}</b>. Ficam marcados com 📌 «Sai no teste».</p>
+    <p style="margin:0"><button class="linkbtn" id="rvGo">👀 Ver e corrigir a lista</button></p>
     ${mods && mods.length ? `<p class="muted" style="margin:0">Módulos inteiros que reconheci: ${mods.map(i => `<b>${i + 1}. ${esc(modsOf(nb).names[i])}</b>`).join(", ")}.</p>` : ""}
     <p class="muted" style="margin:0">Em «🃏 Estudar» há o filtro <b>📌 Matéria do teste</b>. Em «📗 Respostas» podes pôr ou tirar o 📌 de qualquer cartão, e em «⏳ Plano» podes mudar o que sai quando quiseres.</p>
     ${CAP.sample ? `<p class="muted" style="margin:0">Queres que a IA veja se a sebenta tem matéria que <b>ainda não está em nenhum cartão</b>? Ela só sugere cartões novos e tu escolhes quais entram (os que já tens não mudam).</p>` : ""}
     <div class="row"><span class="grow"></span><button class="btn" id="cx">Fechar</button>${CAP.sample ? `<button class="btn fill" id="go">✨ Ver o que falta</button>` : ""}</div>`, (d, close) => {
     d.querySelector("#cx").onclick = () => { close(); render(); };
+    d.querySelector("#rvGo").onclick = () => { close(); sebReview(nb, e); };
     const g = d.querySelector("#go"); if (g) g.onclick = async () => { g.disabled = true;
       try { const L = await sebMissing(nb, doc, (i, t) => { g.textContent = `A ler a sebenta… ${i} de ${t}`; }); close(); sebPick(nb, doc, e, L); }
       catch(err) { if (err && err.code === "rate_limited") { accLimit(); toast("Chegaste ao limite de IA de hoje. Tenta amanhã."); } else toast("A IA não respondeu agora. Tenta daqui a pouco."); g.disabled = false; g.textContent = "✨ Tentar outra vez"; } };
